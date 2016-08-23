@@ -96,8 +96,12 @@ public class AppsList extends ListFragment {
         int theme=Integer.parseInt(Sp.getString(Constant.THEME,"0"));
         theme1 = theme==2 ? PreferenceUtils.hourOfDay() : theme;
         vl.setDivider(null);
-        if(theme1==1)getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
-        if(savedInstanceState==null)loadlist(false);
+        if(theme1==1) {
+            getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
+        }
+        if(savedInstanceState==null) {
+            loadlist(false);
+        }
         else{
             c=savedInstanceState.getParcelableArrayList("c");
             a=savedInstanceState.getParcelableArrayList("list");
@@ -142,7 +146,8 @@ public class AppsList extends ListFragment {
             index = vl.getFirstVisiblePosition();
             View vi = vl.getChildAt(0);
             top = (vi == null) ? 0 : vi.getTop();
-        } new LoadListTask(save,top,index).execute();
+        }
+        new LoadListTask(save,top,index).execute();
     }
     public static int getToolbarHeight(Context context) {
         final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
@@ -258,7 +263,8 @@ public class AppsList extends ListFragment {
         if (t <= 2) {
             sortby = t;
             asc = 1;
-        } else if (t > 2) {
+        }
+        else if (t > 2) {
             asc = -1;
             sortby = t - 3;
         }

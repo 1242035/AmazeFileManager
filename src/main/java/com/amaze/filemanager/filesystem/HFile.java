@@ -5,6 +5,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.utils.Futils;
 import com.amaze.filemanager.utils.Logger;
 import com.amaze.filemanager.utils.RootUtils;
@@ -51,19 +52,28 @@ public class HFile {
                 mode=LOCAL_MODE;
                 return;
             }
-            boolean rootmode=PreferenceManager.getDefaultSharedPreferences(context).getBoolean("rootMode",false);
+            boolean rootmode=PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constant.ROOT_MODE,false);
             if(Build.VERSION.SDK_INT<Build.VERSION_CODES.KITKAT)
-            {   mode=LOCAL_MODE;
-                if(rootmode){
-                    if(!getFile().canRead())mode=ROOT_MODE;
+            {
+                mode=LOCAL_MODE;
+                if( rootmode ) {
+                    if(!getFile().canRead()) {
+                        mode=ROOT_MODE;
+                    }
                 }
                 return;
             }
-            if(FileUtil.isOnExtSdCard(getFile(),context))mode=LOCAL_MODE;
-            else if(rootmode){
-                if(!getFile().canRead())mode=ROOT_MODE;
+            if(FileUtil.isOnExtSdCard(getFile(),context)){
+                mode=LOCAL_MODE;
             }
-            if(mode==UNKNOWN)mode=LOCAL_MODE;
+            else if(rootmode){
+                if(!getFile().canRead()){
+                    mode=ROOT_MODE;
+                }
+            }
+            if(mode==UNKNOWN){
+                mode=LOCAL_MODE;
+            }
         }
 
     }

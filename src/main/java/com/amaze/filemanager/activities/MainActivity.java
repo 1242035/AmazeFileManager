@@ -85,6 +85,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.DrawerAdapter;
 import com.amaze.filemanager.database.Tab;
@@ -1584,7 +1585,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         hidemode = Sp.getInt("hidemode", 0);
         showHidden = Sp.getBoolean("showHidden", false);
         aBoolean = Sp.getBoolean("view", true);
-        currentTab = Sp.getInt(PreferenceUtils.KEY_CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
+        currentTab = Sp.getInt(Constant.CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
         skinStatusBar = (PreferenceUtils.getStatusColor((currentTab==1 ? skinTwo : skin)));
 
         colourednavigation = Sp.getBoolean("colorednavigation", false);

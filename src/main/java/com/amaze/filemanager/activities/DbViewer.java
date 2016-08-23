@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.fragments.DbViewerFragment;
@@ -102,8 +103,9 @@ public class DbViewer extends BaseActivity {
             FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.parentdb).getLayoutParams();
             SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
             p.setMargins(0, config.getStatusBarHeight(), 0, 0);
-        }else if(Build.VERSION.SDK_INT>=21){
-            boolean colourednavigation=Sp.getBoolean("colorednavigation",true);
+        }
+        else if(Build.VERSION.SDK_INT>=21) {
+            boolean colourednavigation=Sp.getBoolean(Constant.COLORED_NAVIGATION,true);
             Window window =getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

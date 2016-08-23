@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.ui.views.CheckBx;
@@ -27,6 +26,8 @@ import com.amaze.filemanager.utils.PreferenceUtils;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.amaze.filemanager.Constant.*;
 
 /**
  * Created by Arpit on 21-06-2015.
@@ -44,10 +45,10 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         addPreferencesFromResource(R.xml.color_prefs);
         preferences=(com.amaze.filemanager.activities.Preferences)getActivity();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final int th1 = Integer.parseInt(sharedPref.getString(Constant.THEME, "0"));
+        final int th1 = Integer.parseInt(sharedPref.getString(THEME, "0"));
         theme = th1==2 ? PreferenceUtils.hourOfDay() : th1;
 
-        final CheckBx checkBoxPreference = (CheckBx) findPreference(Constant.RANDOM_CHECKBOX);
+        final CheckBx checkBoxPreference = (CheckBx) findPreference(RANDOM_CHECKBOX);
         checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -56,7 +57,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
                 return true;
             }
         });
-        CheckBx preference8 = (CheckBx) findPreference(Constant.COLORED_NAVIGATION);
+        CheckBx preference8 = (CheckBx) findPreference(COLORED_NAVIGATION);
         preference8.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -64,23 +65,23 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
                 return true;
             }
         });
-        if (Build.VERSION.SDK_INT >= 21)
+        if (Build.VERSION.SDK_INT >= 21) {
             preference8.setEnabled(true);
-
-        findPreference(PreferenceUtils.KEY_PRIMARY).setOnPreferenceClickListener(this);
-        findPreference(PreferenceUtils.KEY_PRIMARY_TWO).setOnPreferenceClickListener(this);
-        findPreference(PreferenceUtils.KEY_ACCENT).setOnPreferenceClickListener(this);
-        findPreference(PreferenceUtils.KEY_ICON_SKIN).setOnPreferenceClickListener(this);
+        }
+        findPreference(SKIN).setOnPreferenceClickListener(this);
+        findPreference(SKIN_TWO).setOnPreferenceClickListener(this);
+        findPreference(ACCENT_SKIN).setOnPreferenceClickListener(this);
+        findPreference(ICON_SKIN).setOnPreferenceClickListener(this);
     }
     @Override
     public boolean onPreferenceClick(final Preference preference) {
-        if(preferences!=null)preferences.changed=1;
+        if(preferences!=null){ preferences.changed=1;}
         final MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
         a.positiveText(R.string.cancel);
         a.title(R.string.choose_color);
-        if(theme==1)
+        if(theme==1) {
             a.theme(Theme.DARK);
-
+        }
         a.autoDismiss(true);
         int fab_skin=Color.parseColor(BaseActivity.accentSkin);
         int fab_skin_pos=PreferenceUtils.getAccent(sharedPref);
@@ -97,21 +98,22 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         ColorAdapter adapter = null;
         String[] colors=PreferenceUtils.colors;
         List<String> arrayList = Arrays.asList(colors);
-        switch (preference.getKey()) {
-            case PreferenceUtils.KEY_PRIMARY:
-                adapter = new ColorAdapter(getActivity(), arrayList, PreferenceUtils.KEY_PRIMARY,
+        switch (preference.getKey())
+        {
+            case SKIN:
+                adapter = new ColorAdapter(getActivity(), arrayList, SKIN,
                         PreferenceUtils.getPrimaryColor(sharedPref));
                 break;
-            case PreferenceUtils.KEY_PRIMARY_TWO:
-                adapter = new ColorAdapter(getActivity(), arrayList, PreferenceUtils.KEY_PRIMARY_TWO,
+            case SKIN_TWO:
+                adapter = new ColorAdapter(getActivity(), arrayList, SKIN_TWO,
                         PreferenceUtils.getPrimaryTwoColor(sharedPref));
                 break;
-            case PreferenceUtils.KEY_ACCENT:
-                adapter = new ColorAdapter(getActivity(), arrayList, PreferenceUtils.KEY_ACCENT,
+            case ACCENT_SKIN:
+                adapter = new ColorAdapter(getActivity(), arrayList, ACCENT_SKIN,
                         fab_skin_pos);
                 break;
-            case PreferenceUtils.KEY_ICON_SKIN:
-                adapter = new ColorAdapter(getActivity(), arrayList, PreferenceUtils.KEY_ICON_SKIN,
+            case ICON_SKIN:
+                adapter = new ColorAdapter(getActivity(), arrayList, ICON_SKIN,
                         PreferenceUtils.getFolderColor(sharedPref));
                 break;
         }

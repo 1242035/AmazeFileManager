@@ -16,12 +16,6 @@ public class PreferenceUtils {
 
     static int primary=-1,accent=-1,folder=-1,theme=-1, primaryTwo=-1;
 
-    public static final String KEY_PRIMARY_TWO = Constant.SKIN_TWO;
-    public static final String KEY_PRIMARY     = Constant.SKIN;
-    public static final String KEY_ACCENT      = Constant.ACCENT_SKIN;
-    public static final String KEY_ICON_SKIN   = Constant.ICON_SKIN;
-    public static final String KEY_CURRENT_TAB = "current_tab";
-
     public static final int DEFAULT_PRIMARY = 4;
     public static final int DEFAULT_ACCENT = 1;
     public static final int DEFAULT_ICON = -1;
@@ -54,21 +48,21 @@ public class PreferenceUtils {
         Random random = new Random();
         int[] pos =combinations[ random.nextInt(combinations.length - 1)];
         int primary=pos[0],accent=pos[1],icon=pos[2];
-        Sp.edit().putInt(KEY_PRIMARY, primary).apply();
-        Sp.edit().putInt(KEY_PRIMARY_TWO, primary).apply();
-        Sp.edit().putInt(KEY_ACCENT, accent).apply();
-        Sp.edit().putInt(KEY_ICON_SKIN, icon).apply();
+        Sp.edit().putInt(Constant.SKIN, primary).apply();
+        Sp.edit().putInt(Constant.SKIN_TWO, primary).apply();
+        Sp.edit().putInt(Constant.ACCENT_SKIN, accent).apply();
+        Sp.edit().putInt(Constant.ICON_SKIN, icon).apply();
         return colors[primary];
     }
     public static int getAccent(SharedPreferences Sp){
         if(accent==-1)
-        accent=Sp.getInt(KEY_ACCENT, DEFAULT_ACCENT);
+        accent=Sp.getInt(Constant.ACCENT_SKIN, DEFAULT_ACCENT);
         return accent;
     }
 
     public static int getPrimaryColor(SharedPreferences Sp){
         if(primary==-1)
-        primary=Sp.getInt(KEY_PRIMARY, DEFAULT_PRIMARY);
+        primary=Sp.getInt(Constant.SKIN, DEFAULT_PRIMARY);
         return primary;
     }
 
@@ -77,13 +71,13 @@ public class PreferenceUtils {
      * @return the color position in color array; from the preferences
      */
     public static int getPrimaryTwoColor(SharedPreferences Sp) {
-        return primaryTwo==-1 ? Sp.getInt(KEY_PRIMARY_TWO, DEFAULT_PRIMARY) : null;
+        return primaryTwo==-1 ? Sp.getInt(Constant.SKIN, DEFAULT_PRIMARY) : null;
     }
 
     public static int getFolderColor(SharedPreferences Sp){
         if(folder==DEFAULT_ICON) {
-            int icon = Sp.getInt(KEY_ICON_SKIN, DEFAULT_ICON);
-            folder = icon == DEFAULT_ICON ? Sp.getInt(KEY_ACCENT, DEFAULT_ACCENT) : icon;
+            int icon = Sp.getInt(Constant.ICON_SKIN, DEFAULT_ICON);
+            folder = icon == DEFAULT_ICON ? Sp.getInt(Constant.ACCENT_SKIN, DEFAULT_ACCENT) : icon;
         }
         return folder;
     }

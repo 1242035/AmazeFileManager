@@ -60,6 +60,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.filesystem.RootHelper;
@@ -175,8 +176,9 @@ public class TextReader extends BaseActivity
             FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.texteditor).getLayoutParams();
             SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
             p.setMargins(0, config.getStatusBarHeight(), 0, 0);
-        } else if (Build.VERSION.SDK_INT >= 21) {
-            boolean colourednavigation = Sp.getBoolean("colorednavigation", true);
+        }
+        else if (Build.VERSION.SDK_INT >= 21) {
+            boolean colourednavigation = Sp.getBoolean(Constant.COLORED_NAVIGATION, true);
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -190,13 +192,13 @@ public class TextReader extends BaseActivity
         scrollView=(ScrollView)findViewById(R.id.editscroll);
 
         try {
-            if (getIntent().getData() != null){
+            if (getIntent().getData() != null) {
                 uri=getIntent().getData();
-
                 mFile = new File(getIntent().getData().getPath());
             }
-            else
+            else {
                 mFile = new File(getIntent().getStringExtra("path"));
+            }
         } catch (Exception e) {
             mFile = null;
         }
@@ -224,12 +226,15 @@ public class TextReader extends BaseActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(fileName==null || fileName.trim().length()==0)fileName=f.getName();
+        if(fileName==null || fileName.trim().length()==0) {
+            fileName=f.getName();
+        }
         getSupportActionBar().setTitle(fileName);
         mInput.addTextChangedListener(this);
         try {
-            if (theme1 == 1)
+            if (theme1 == 1) {
                 mInput.setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
+            }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (Exception e) {
 
@@ -242,7 +247,6 @@ public class TextReader extends BaseActivity
             mInput.setText(savedInstanceState.getString(KEY_MODIFIED_TEXT));
             mInput.setScrollY(index);
         } else {
-
             load(mFile);
         }
     }

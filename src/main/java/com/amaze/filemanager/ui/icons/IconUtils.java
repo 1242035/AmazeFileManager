@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.utils.PreferenceUtils;
 
@@ -32,7 +33,7 @@ public class IconUtils {
 
     public IconUtils(SharedPreferences Sp, Context c) {
 
-        rand = Integer.parseInt(Sp.getString("theme", "0"));
+        rand = Integer.parseInt(Sp.getString(Constant.THEME, "0"));
         CURRENT = rand==2 ? PreferenceUtils.hourOfDay() : rand;
         this.c = c;
     }

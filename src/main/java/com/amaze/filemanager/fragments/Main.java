@@ -70,6 +70,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.IMyAidlInterface;
 import com.amaze.filemanager.Loadlistener;
 import com.amaze.filemanager.R;
@@ -194,23 +195,23 @@ public class Main extends android.support.v4.app.Fragment {
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         fabSkin = PreferenceUtils.getAccentString(Sp);
-        int icon = Sp.getInt(PreferenceUtils.KEY_ICON_SKIN, PreferenceUtils.DEFAULT_ICON);
+        int icon = Sp.getInt(Constant.ICON_SKIN, PreferenceUtils.DEFAULT_ICON);
         iconskin = PreferenceUtils.getFolderColorString(Sp);
         skin_color = Color.parseColor(BaseActivity.skin);
         skinTwoColor = Color.parseColor(BaseActivity.skinTwo);
         icon_skin_color = Color.parseColor(iconskin);
         Calendar calendar = Calendar.getInstance();
         year = ("" + calendar.get(Calendar.YEAR)).substring(2, 4);
-        theme = Integer.parseInt(Sp.getString("theme", "0"));
+        theme = Integer.parseInt(Sp.getString(Constant.THEME, "0"));
         theme1 = theme == 2 ? PreferenceUtils.hourOfDay() : theme;
-        hidemode = Sp.getInt("hidemode", 0);
+        hidemode = Sp.getInt(Constant.SHOW_HIDDEN, 0);
 
-        SHOW_PERMISSIONS = Sp.getBoolean("showPermissions", false);
-        SHOW_SIZE = Sp.getBoolean("showFileSize", false);
-        SHOW_DIVIDERS = Sp.getBoolean("showDividers", true);
-        GO_BACK_ITEM = Sp.getBoolean("goBack_checkbox", false);
-        CIRCULAR_IMAGES = Sp.getBoolean("circularimages", true);
-        SHOW_LAST_MODIFIED = Sp.getBoolean("showLastModified", true);
+        SHOW_PERMISSIONS = Sp.getBoolean(Constant.SHOW_PERMISSIONS, false);
+        SHOW_SIZE = Sp.getBoolean(Constant.SHOW_FILE_SIZE, false);
+        SHOW_DIVIDERS = Sp.getBoolean(Constant.SHOW_DIVIDERS, true);
+        GO_BACK_ITEM = Sp.getBoolean(Constant.GO_BACK_CHECK_BOX, false);
+        CIRCULAR_IMAGES = Sp.getBoolean(Constant.CIRCULAR_IMAGES, true);
+        SHOW_LAST_MODIFIED = Sp.getBoolean(Constant.SHOW_LAST_MODIFIED, true);
         icons = new IconUtils(Sp, getActivity());
     }
 
@@ -269,7 +270,7 @@ public class Main extends android.support.v4.app.Fragment {
         });
         buttons = (LinearLayout) getActivity().findViewById(R.id.buttons);
         pathbar = (LinearLayout) getActivity().findViewById(R.id.pathbar);
-        SHOW_THUMBS = Sp.getBoolean("showThumbs", true);
+        SHOW_THUMBS = Sp.getBoolean(Constant.SHOW_THUMB, true);
         res = getResources();
         pathname = (TextView) getActivity().findViewById(R.id.pathname);
         mFullPath = (TextView) getActivity().findViewById(R.id.fullpath);
@@ -301,9 +302,9 @@ public class Main extends android.support.v4.app.Fragment {
         color = PreferenceUtils.calculatevalues(x);
         ColorMatrix colorMatrix = new ColorMatrix(PreferenceUtils.calculatefilter(color));
         colorMatrixColorFilter = new ColorMatrixColorFilter(colorMatrix);
-        ROOT_MODE = Sp.getBoolean("rootmode", false);
-        SHOW_HIDDEN = Sp.getBoolean("showHidden", false);
-        COLORISE_ICONS = Sp.getBoolean("coloriseIcons", true);
+        ROOT_MODE = Sp.getBoolean(Constant.ROOT_MODE, false);
+        SHOW_HIDDEN = Sp.getBoolean(Constant.SHOW_HIDDEN, false);
+        COLORISE_ICONS = Sp.getBoolean(Constant.COLOR_ICONS, true);
         folder = res.getDrawable(R.drawable.ic_grid_folder_new);
         getSortModes();
         DARK_IMAGE = res.getDrawable(R.drawable.ic_doc_image_dark);
@@ -327,7 +328,7 @@ public class Main extends android.support.v4.app.Fragment {
         else    listView.setBackgroundDrawable(null);
 
         listView.setHasFixedSize(true);
-        columns = Integer.parseInt(Sp.getString("columns", "-1"));
+        columns = Integer.parseInt(Sp.getString(Constant.COLUMNS, "-1"));
         if (IS_LIST) {
             mLayoutManager = new LinearLayoutManager(getActivity());
             listView.setLayoutManager(mLayoutManager);

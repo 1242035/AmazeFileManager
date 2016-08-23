@@ -111,7 +111,7 @@ public class TabFragment extends android.support.v4.app.Fragment
         mSectionsPagerAdapter = new ScreenSlidePagerAdapter(
                 getActivity().getSupportFragmentManager());
         if (savedInstanceState == null) {
-            int l = Sp.getInt(PreferenceUtils.KEY_CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
+            int l = Sp.getInt(Constant.CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
             MainActivity.currentTab = l;
             TabHandler tabHandler=new TabHandler(getActivity(),null,null,1);
             List<Tab> tabs1=tabHandler.getAllTabs();
@@ -203,7 +203,7 @@ public class TabFragment extends android.support.v4.app.Fragment
     }
     @Override
     public void onDestroyView(){
-        Sp.edit().putInt(PreferenceUtils.KEY_CURRENT_TAB, MainActivity.currentTab).apply();
+        Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).apply();
         super.onDestroyView();
         try {
             if(tabHandler!=null)
@@ -267,7 +267,7 @@ public class TabFragment extends android.support.v4.app.Fragment
         try {
             int i = 0;
             if(Sp!=null)
-            Sp.edit().putInt(PreferenceUtils.KEY_CURRENT_TAB, MainActivity.currentTab).commit();
+            Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).commit();
             if (fragments != null && fragments.size() !=0) {
                 if(fragmentManager==null)return;
                 for (Fragment fragment : fragments) {
@@ -301,7 +301,7 @@ public class TabFragment extends android.support.v4.app.Fragment
         mToolBarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         MainActivity.currentTab=p1;
-        if (Sp!=null) Sp.edit().putInt(PreferenceUtils.KEY_CURRENT_TAB, MainActivity.currentTab).commit();
+        if (Sp!=null) Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).commit();
         Log.d(getClass().getSimpleName(), "Page Selected: " + MainActivity.currentTab);
 
         Fragment fragment=fragments.get(p1);
