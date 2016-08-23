@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.HFile;
 
@@ -26,9 +27,9 @@ public class SearchAsyncHelper extends Fragment {
     public static final String KEY_PATH = "path";
     public static final String KEY_INPUT = "input";
     public static final String KEY_OPEN_MODE = "open_mode";
-    public static final String KEY_ROOT_MODE = "root_mode";
-    public static final String KEY_REGEX = "regex";
-    public static final String KEY_REGEX_MATCHES = "matches";
+    public static final String KEY_ROOT_MODE = Constant.ROOT_MODE;
+    public static final String KEY_REGEX = Constant.REGEX;
+    public static final String KEY_REGEX_MATCHES = Constant.MATCHES;
 
     // interface for activity to communicate with asynctask
     public interface HelperCallbacks {

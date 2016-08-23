@@ -34,6 +34,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.utils.DataPackage;
@@ -78,7 +79,7 @@ public class ExtractService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle b = new Bundle();
         b.putInt("id", startId);
-        epath= PreferenceManager.getDefaultSharedPreferences(this).getString("extractpath", "");
+        epath= PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.EXTRACT_PATH, "");
         mNotifyManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String file = intent.getStringExtra("zip");

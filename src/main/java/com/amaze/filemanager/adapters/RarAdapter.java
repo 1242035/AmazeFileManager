@@ -297,7 +297,7 @@ public class RarAdapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHo
                 zipViewer.theme1, zipViewer.getResources().getDisplayMetrics()));
 
         if(rowItem.getEntry()==null){
-            holder.genericIcon.setImageDrawable(zipViewer.getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+            holder.genericIcon.setImageDrawable(zipViewer.getResources().getDrawable(R.drawable.abc_ic_ab_back_material));
             gradientDrawable.setColor(Color.parseColor("#757575"));
             holder.txtTitle.setText("..");
             holder.txtDesc.setText("");

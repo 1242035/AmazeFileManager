@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
@@ -92,10 +93,10 @@ public class TabFragment extends android.support.v4.app.Fragment
         }
 
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        savepaths=Sp.getBoolean("savepaths", true);
-        coloredNavigation = Sp.getBoolean("colorednavigation", true);
+        savepaths=Sp.getBoolean(Constant.SAVE_PATH, true);
+        coloredNavigation = Sp.getBoolean(Constant.COLORED_NAVIGATION, true);
 
-        int theme=Integer.parseInt(Sp.getString("theme","0"));
+        int theme=Integer.parseInt(Sp.getString(Constant.THEME,"0"));
         theme1 = theme==2 ? PreferenceUtils.hourOfDay() : theme;
         mViewPager = (CustomViewPager) rootView.findViewById(R.id.pager);
 

@@ -3,6 +3,8 @@ package com.amaze.filemanager.utils;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
+import com.amaze.filemanager.Constant;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
@@ -14,10 +16,10 @@ public class PreferenceUtils {
 
     static int primary=-1,accent=-1,folder=-1,theme=-1, primaryTwo=-1;
 
-    public static final String KEY_PRIMARY_TWO = "skin_two";
-    public static final String KEY_PRIMARY = "skin";
-    public static final String KEY_ACCENT = "accent_skin";
-    public static final String KEY_ICON_SKIN = "icon_skin";
+    public static final String KEY_PRIMARY_TWO = Constant.SKIN_TWO;
+    public static final String KEY_PRIMARY     = Constant.SKIN;
+    public static final String KEY_ACCENT      = Constant.ACCENT_SKIN;
+    public static final String KEY_ICON_SKIN   = Constant.ICON_SKIN;
     public static final String KEY_CURRENT_TAB = "current_tab";
 
     public static final int DEFAULT_PRIMARY = 4;
@@ -52,10 +54,10 @@ public class PreferenceUtils {
         Random random = new Random();
         int[] pos =combinations[ random.nextInt(combinations.length - 1)];
         int primary=pos[0],accent=pos[1],icon=pos[2];
-        Sp.edit().putInt(KEY_PRIMARY, primary).commit();
-        Sp.edit().putInt(KEY_PRIMARY_TWO, primary).commit();
-        Sp.edit().putInt(KEY_ACCENT, accent).commit();
-        Sp.edit().putInt(KEY_ICON_SKIN, icon).commit();
+        Sp.edit().putInt(KEY_PRIMARY, primary).apply();
+        Sp.edit().putInt(KEY_PRIMARY_TWO, primary).apply();
+        Sp.edit().putInt(KEY_ACCENT, accent).apply();
+        Sp.edit().putInt(KEY_ICON_SKIN, icon).apply();
         return colors[primary];
     }
     public static int getAccent(SharedPreferences Sp){
@@ -106,7 +108,7 @@ public class PreferenceUtils {
     }
     public static int getTheme(SharedPreferences Sp){
         if(theme==-1){
-            int th = Integer.parseInt(Sp.getString("theme", "0"));
+            int th = Integer.parseInt(Sp.getString(Constant.THEME, "0"));
             theme = th == 2 ? PreferenceUtils.hourOfDay() : th;
         }
         return theme;

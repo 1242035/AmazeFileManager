@@ -19,40 +19,29 @@
 
 package com.amaze.filemanager.fragments.preference_fragments;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.amaze.filemanager.BuildConfig;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.activities.AboutActivity;
-import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.ui.views.CheckBx;
-import com.amaze.filemanager.utils.Futils;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.stericson.RootTools.RootTools;
 
 public class Preffrag extends PreferenceFragment{
 
-    private static final CharSequence PREFERENCE_KEY_ABOUT = "about";
+    private static final CharSequence PREFERENCE_KEY_ABOUT = Constant.ABOUT;
 
     int theme;
     SharedPreferences sharedPref;
-    CheckBx gplus;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,23 +51,23 @@ public class Preffrag extends PreferenceFragment{
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        final int th1 = Integer.parseInt(sharedPref.getString("theme", "0"));
+        final int th1 = Integer.parseInt(sharedPref.getString(Constant.THEME, "0"));
         theme = th1==2 ? PreferenceUtils.hourOfDay() : th1;
 
-        findPreference("columns").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference(Constant.COLUMNS).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final String[] sort = getResources().getStringArray(R.array.columns);
                 MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
                 if(theme==1)a.theme(Theme.DARK);
                 a.title(R.string.gridcolumnno);
-                int current = Integer.parseInt(sharedPref.getString("columns", "-1"));
+                int current = Integer.parseInt(sharedPref.getString(Constant.COLUMNS, "-1"));
                 current=current==-1?0:current;
                 if(current!=0)current=current-1;
                 a.items(sort).itemsCallbackSingleChoice(current, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        sharedPref.edit().putString("columns", "" + (which!=0?sort[which]:""+-1)).commit();
+                        sharedPref.edit().putString(Constant.COLUMNS, "" + (which!=0?sort[which]:""+-1)).commit();
                         dialog.dismiss();
                         return true;
                     }
@@ -88,17 +77,17 @@ public class Preffrag extends PreferenceFragment{
             }
         });
 
-        findPreference("theme").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference(Constant.THEME).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 String[] sort = getResources().getStringArray(R.array.theme);
-                int current = Integer.parseInt(sharedPref.getString("theme", "0"));
+                int current = Integer.parseInt(sharedPref.getString(Constant.THEME, "0"));
                 MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
                 if(theme==1)a.theme(Theme.DARK);
                 a.items(sort).itemsCallbackSingleChoice(current, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        sharedPref.edit().putString("theme", "" + which).commit();
+                        sharedPref.edit().putString(Constant.THEME, "" + which).commit();
                         dialog.dismiss();
                         restartPC(getActivity());
                         return true;
@@ -109,7 +98,7 @@ public class Preffrag extends PreferenceFragment{
                 return true;
             }
         });
-        findPreference("colors").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference(Constant.COLORS).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 ((com.amaze.filemanager.activities.Preferences) getActivity()).selectItem(1);
@@ -119,11 +108,11 @@ public class Preffrag extends PreferenceFragment{
 
 
 
-        final CheckBx rootmode = (CheckBx) findPreference("rootmode");
+        final CheckBx rootmode = (CheckBx) findPreference(Constant.ROOT_MODE);
         rootmode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                boolean b = sharedPref.getBoolean("rootmode", false);
+                boolean b = sharedPref.getBoolean(Constant.ROOT_MODE, false);
                 if (b) {
                     if (RootTools.isAccessGiven()) {
                         rootmode.setChecked(true);
@@ -141,46 +130,16 @@ public class Preffrag extends PreferenceFragment{
                 return false;
             }
         });
-
-        // Feedback
-        Preference preference3 = (Preference) findPreference("feedback");
-        preference3.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","vishalmeham2@gmail.com", null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback : Amaze File Manager");
-                startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.feedback)));
-                return false;
-            }
-        });
-
         // About
         Preference aboutPreference = findPreference(PREFERENCE_KEY_ABOUT);
         aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), AboutActivity.class));
+                //startActivity(new Intent(getActivity(), AboutActivity.class));
                 return false;
             }
         });
 
-        // G+
-        gplus = (CheckBx) findPreference("plus_pic");
-        gplus.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if(gplus.isChecked()){
-                    boolean b=checkGplusPermission();
-                    if(!b)requestGplusPermission();
-                }
-                return false;
-            }
-        });
-        if (BuildConfig.IS_VERSION_FDROID)
-            gplus.setEnabled(false);
-
-        // Colored navigation bar
     }
 
     public static void restartPC(final Activity activity) {
@@ -193,52 +152,4 @@ public class Preffrag extends PreferenceFragment{
         activity.overridePendingTransition(enter_anim, exit_anim);
         activity.startActivity(activity.getIntent());
     }
-
-    public void invalidateGplus(){
-        boolean a=checkGplusPermission();
-        if(!a)gplus.setChecked(false);
-    }
-    public boolean checkGplusPermission() {
-        // Verify that all required contact permissions have been granted.
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.GET_ACCOUNTS)
-                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        }
-        return true;
-    }
-    private void requestGplusPermission() {
-        final String[] PERMISSIONS = {Manifest.permission.GET_ACCOUNTS,
-                Manifest.permission.INTERNET};
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                Manifest.permission.GET_ACCOUNTS) || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                Manifest.permission.INTERNET)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // For example, if the request has been denied previously.
-
-            String fab_skin = (BaseActivity.accentSkin);
-            final MaterialDialog materialDialog=new Futils().showBasicDialog(getActivity(),fab_skin,theme, new String[]{getResources().getString(R.string.grantgplus), getResources().getString(R.string.grantper), getResources().getString(R.string.grant), getResources().getString(R.string.cancel),null});
-            materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ActivityCompat
-                            .requestPermissions(getActivity(),PERMISSIONS, 66);
-                    materialDialog.dismiss();
-                }
-            });
-            materialDialog.getActionButton(DialogAction.NEGATIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().finish();
-                }
-            });
-            materialDialog.setCancelable(false);
-            materialDialog.show();
-
-        } else {
-            // Contact permissions have not been granted yet. Request them directly.
-            ActivityCompat
-                    .requestPermissions(getActivity(), PERMISSIONS, 66);
-        }
-    }}
+}

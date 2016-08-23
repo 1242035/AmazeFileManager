@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.ui.views.CheckBx;
@@ -43,10 +44,10 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         addPreferencesFromResource(R.xml.color_prefs);
         preferences=(com.amaze.filemanager.activities.Preferences)getActivity();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final int th1 = Integer.parseInt(sharedPref.getString("theme", "0"));
+        final int th1 = Integer.parseInt(sharedPref.getString(Constant.THEME, "0"));
         theme = th1==2 ? PreferenceUtils.hourOfDay() : th1;
 
-        final CheckBx checkBoxPreference = (CheckBx) findPreference("random_checkbox");
+        final CheckBx checkBoxPreference = (CheckBx) findPreference(Constant.RANDOM_CHECKBOX);
         checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -55,7 +56,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
                 return true;
             }
         });
-        CheckBx preference8 = (CheckBx) findPreference("colorednavigation");
+        CheckBx preference8 = (CheckBx) findPreference(Constant.COLORED_NAVIGATION);
         preference8.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

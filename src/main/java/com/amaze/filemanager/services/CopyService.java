@@ -38,6 +38,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.ProgressListener;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.RegisterCallback;
@@ -77,7 +78,7 @@ public class CopyService extends Service {
         c = getApplicationContext();
         utils=new Futils();
         SharedPreferences Sp=PreferenceManager.getDefaultSharedPreferences(this);
-        rootmode=Sp.getBoolean("rootmode",false);
+        rootmode=Sp.getBoolean(Constant.ROOT_MODE,false);
         registerReceiver(receiver3, new IntentFilter("copycancel"));
     }
 

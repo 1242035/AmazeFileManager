@@ -986,7 +986,7 @@ public class Main extends android.support.v4.app.Fragment {
                 if (GO_BACK_ITEM)
                     if (!f.equals("/") && (openMode == 0 || openMode == 3)) {
                         if (bitmap.size() == 0 || !bitmap.get(0).getSize().equals(goback))
-                            bitmap.add(0, utils.newElement(res.getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha), "..", "", "", goback, 0, false, true, ""));
+                            bitmap.add(0, utils.newElement(res.getDrawable(R.drawable.abc_ic_ab_back_material), "..", "", "", goback, 0, false, true, ""));
                     }
 
                 if (bitmap.size() == 0 && !results) {

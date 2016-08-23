@@ -76,8 +76,7 @@ import com.amaze.filemanager.ui.icons.Icons;
 import com.amaze.filemanager.ui.icons.MimeTypes;
 import com.amaze.filemanager.utils.share.ShareTask;
 import com.stericson.RootTools.RootTools;
-import com.stericson.RootTools.execution.Command;
-
+import com.stericson.RootShell.execution.Command;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.text.DecimalFormat;

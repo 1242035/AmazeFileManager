@@ -33,6 +33,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.BaseFile;
@@ -74,7 +75,7 @@ boolean foreground=true;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle b = new Bundle();
-        zpath= PreferenceManager.getDefaultSharedPreferences(this).getString("zippath","");
+        zpath= PreferenceManager.getDefaultSharedPreferences(this).getString(Constant.ZIP_PATH,"");
         mNotifyManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String name = intent.getStringExtra("name");

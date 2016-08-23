@@ -18,14 +18,9 @@
  */
 
 package com.amaze.filemanager.filesystem;
-
-import android.util.Log;
-
-import com.amaze.filemanager.filesystem.BaseFile;
-import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.utils.Futils;
 import com.stericson.RootTools.RootTools;
-import com.stericson.RootTools.execution.Command;
+import com.stericson.RootShell.execution.Command;
 
 import java.io.File;
 import java.util.ArrayList;

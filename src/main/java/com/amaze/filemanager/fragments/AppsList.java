@@ -40,6 +40,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.AppsAdapter;
@@ -92,7 +93,7 @@ public class AppsList extends ListFragment {
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         getSortModes();
         ListView vl = getListView();
-        int theme=Integer.parseInt(Sp.getString("theme","0"));
+        int theme=Integer.parseInt(Sp.getString(Constant.THEME,"0"));
         theme1 = theme==2 ? PreferenceUtils.hourOfDay() : theme;
         vl.setDivider(null);
         if(theme1==1)getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));

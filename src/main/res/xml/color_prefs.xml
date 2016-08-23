@@ -19,12 +19,12 @@
             android:title="@string/icon_color_title"
             android:summary="@string/icon_color_summary"/>
         <com.amaze.filemanager.ui.views.CheckBx
-            android:key="coloriseIcons"
+            android:key="color_icons"
             android:defaultValue="true"
             android:title="@string/colorize"
             android:summary="@string/colorize_summary" />
         <com.amaze.filemanager.ui.views.CheckBx
-            android:key="colorednavigation"
+            android:key="colored_navigation"
             android:defaultValue="false"
             android:title="@string/colourednavigation"
             android:summary="@string/colourednavigationsum"

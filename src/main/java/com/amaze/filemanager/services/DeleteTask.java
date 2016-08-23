@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.fragments.ZipViewer;
 import com.amaze.filemanager.filesystem.BaseFile;
@@ -53,12 +54,12 @@ public class DeleteTask extends AsyncTask<ArrayList<BaseFile>, String, Boolean> 
 
     public DeleteTask(ContentResolver c, Context cd) {
         this.cd = cd;
-        rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean("rootmode", false);
+        rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(Constant.ROOT_MODE, false);
     }
 
     public DeleteTask(ContentResolver c, Context cd, ZipViewer zipViewer) {
         this.cd = cd;
-        rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean("rootmode", false);
+        rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(Constant.ROOT_MODE, false);
         this.zipViewer = zipViewer;
     }
 

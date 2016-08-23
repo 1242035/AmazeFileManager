@@ -51,6 +51,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
@@ -173,29 +174,30 @@ public class ZipViewer extends Fragment {
                 return false;
             }
         });
-        hidemode = Sp.getInt("hidemode", 0);
+        hidemode = Sp.getInt(Constant.SHOW_HIDDEN, 0);
         listView.setVisibility(View.VISIBLE);
         mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
         res = getResources();
         mainActivity.supportInvalidateOptionsMenu();
-        if (mainActivity.theme1 == 1)
+        if (mainActivity.theme1 == 1) {
             rootView.setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
-        else
+        }
+        else {
             listView.setBackgroundColor(getResources().getColor(android.R.color.background_light));
-
-        gobackitem = Sp.getBoolean("goBack_checkbox", false);
-        coloriseIcons = Sp.getBoolean("coloriseIcons", true);
+        }
+        gobackitem = Sp.getBoolean(Constant.GO_BACK_CHECK_BOX, false);
+        coloriseIcons = Sp.getBoolean(Constant.COLOR_ICONS, true);
         Calendar calendar = Calendar.getInstance();
-        showSize = Sp.getBoolean("showFileSize", false);
-        showLastModified = Sp.getBoolean("showLastModified", true);
-        showDividers = Sp.getBoolean("showDividers", true);
+        showSize = Sp.getBoolean(Constant.SHOW_FILE_SIZE, false);
+        showLastModified = Sp.getBoolean(Constant.SHOW_LAST_MODIFIED, true);
+        showDividers = Sp.getBoolean(Constant.SHOW_DIVIDERS, true);
         year = ("" + calendar.get(Calendar.YEAR)).substring(2, 4);
         skin = PreferenceUtils.getPrimaryColorString(Sp);
         accentColor = PreferenceUtils.getAccentString(Sp);
         iconskin = PreferenceUtils.getFolderColorString(Sp);
 
-        theme = Integer.parseInt(Sp.getString("theme", "0"));
+        theme = Integer.parseInt(Sp.getString(Constant.THEME, "0"));
         theme1 = theme == 2 ? PreferenceUtils.hourOfDay() : theme;
 
         //mainActivity.findViewById(R.id.buttonbarframe).setBackgroundColor(Color.parseColor(skin));
