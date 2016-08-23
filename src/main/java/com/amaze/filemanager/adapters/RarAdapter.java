@@ -158,13 +158,13 @@ public class RarAdapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHo
 
         public ViewHolder(View view) {
             super(view);
-            txtTitle = (TextView) view.findViewById(R.id.firstline);
+            txtTitle = (TextView) view.findViewById(R.id.first_line);
             pictureIcon = (RoundedImageView) view.findViewById(R.id.picture_icon);
             genericIcon = (ImageView) view.findViewById(R.id.generic_icon);
             rl = view.findViewById(R.id.second);
-            perm = (TextView) view.findViewById(R.id.permis);
+            perm = (TextView) view.findViewById(R.id.permission);
             date = (TextView) view.findViewById(R.id.date);
-            txtDesc = (TextView) view.findViewById(R.id.secondLine);
+            txtDesc = (TextView) view.findViewById(R.id.second_line);
             apkIcon=(ImageView)view.findViewById(R.id.apk_icon);
             checkImageView = (ImageView) view.findViewById(R.id.check_icon);
         }
@@ -194,13 +194,13 @@ public class RarAdapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHo
         public HeaderViewHolder(View view) {
             super(view);
 
-            ext = (TextView) view.findViewById(R.id.headertext);
+            ext = (TextView) view.findViewById(R.id.header_text);
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup) {
-        View  view = mInflater.inflate(R.layout.listheader, viewGroup, false);
+        View  view = mInflater.inflate(R.layout.list_header, viewGroup, false);
         /*if(zipViewer.mainActivity.theme1==1)
             view.setBackgroundResource(R.color.holo_dark_background);*/
         HeaderViewHolder holder = new HeaderViewHolder(view);
@@ -225,12 +225,12 @@ public class RarAdapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType==0){
-            View v= mInflater.inflate(R.layout.rowlayout, parent, false);
+            View v= mInflater.inflate(R.layout.row_layout, parent, false);
             v.findViewById(R.id.picture_icon).setVisibility(View.INVISIBLE);
             return new ViewHolder(v);
 
         }
-        View v= mInflater.inflate(R.layout.rowlayout,parent, false);
+        View v= mInflater.inflate(R.layout.row_layout,parent, false);
         ViewHolder vh = new ViewHolder(v);
         if(zipViewer.mainActivity.theme1==1)
             vh.txtTitle.setTextColor(zipViewer.getActivity().getResources().getColor(android.R.color.white));
@@ -301,7 +301,7 @@ public class RarAdapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHo
             gradientDrawable.setColor(Color.parseColor("#757575"));
             holder.txtTitle.setText("..");
             holder.txtDesc.setText("");
-            holder.date.setText(R.string.goback);
+            holder.date.setText(R.string.go_back);
         }
         else {
             holder.genericIcon.setImageDrawable(Icons.loadMimeIcon(zipViewer.getActivity(), rowItem.getName(), false,zipViewer.res));

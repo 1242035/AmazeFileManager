@@ -19,7 +19,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:id="@+id/texteditor"
+    android:id="@+id/text_editor"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
     android:layout_height="match_parent" >
@@ -43,10 +43,10 @@
         android:focusableInTouchMode="true" />
     <ScrollView
         android:layout_width="match_parent"
-        android:id="@+id/editscroll"
+        android:id="@+id/edit_scroll"
         android:layout_height="match_parent">
     <EditText
-            android:id="@+id/fname"
+            android:id="@+id/file_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

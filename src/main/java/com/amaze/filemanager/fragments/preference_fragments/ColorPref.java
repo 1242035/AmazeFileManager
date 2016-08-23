@@ -53,7 +53,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if(preferences!=null)preferences.changed=1;
-                Toast.makeText(getActivity(), R.string.setRandom, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.set_random, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
@@ -141,7 +141,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
          * @param pos the position of the selected value in the array
          */
         public ColorAdapter(Context context, List<String> arrayList, String key, int pos) {
-            super(context, R.layout.rowlayout, arrayList);
+            super(context, R.layout.row_layout, arrayList);
             this.prefKey = key;
             this.pos=pos;
         }

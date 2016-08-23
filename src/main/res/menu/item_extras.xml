@@ -27,5 +27,5 @@
         android:visible="false"/>
     <item
         android:id="@+id/book"
-        android:title="@string/addtobook" />
+        android:title="@string/add_to_bookmark" />
 </menu>

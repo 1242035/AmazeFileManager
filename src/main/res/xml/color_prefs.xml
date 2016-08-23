@@ -26,8 +26,8 @@
         <com.amaze.filemanager.ui.views.CheckBx
             android:key="colored_navigation"
             android:defaultValue="false"
-            android:title="@string/colourednavigation"
-            android:summary="@string/colourednavigationsum"
+            android:title="@string/coloured_navigation"
+            android:summary="@string/coloured_navigation_sum"
             android:enabled="false" />
         <com.amaze.filemanager.ui.views.CheckBx
             android:key="random_checkbox"

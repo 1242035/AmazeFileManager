@@ -84,17 +84,7 @@ public class DeleteTask extends AsyncTask<ArrayList<BaseFile>, String, Boolean> 
         Intent intent = new Intent("loadlist");
         cd.sendBroadcast(intent);
 
-        if(!files.get(0).isSmb()) {
-            try {
-                for (BaseFile f : files) {
-                delete(cd,f.getPath());
-                }
-            } catch (Exception e) {
-                for (BaseFile f : files) {
-                    utils.scanFile(f.getPath(), cd);
-                }
-            }
-        }if (!b) {
+        if (!b) {
             Toast.makeText(cd, utils.getString(cd, R.string.error), Toast.LENGTH_SHORT).show();
         } else if (zipViewer==null) {
             Toast.makeText(cd, utils.getString(cd, R.string.done), Toast.LENGTH_SHORT).show();

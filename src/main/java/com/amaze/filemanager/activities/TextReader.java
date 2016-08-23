@@ -138,7 +138,7 @@ public class TextReader extends BaseActivity
             getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
         }
         setContentView(R.layout.search);
-        searchViewLayout = (RelativeLayout) findViewById(R.id.searchview);
+        searchViewLayout = (RelativeLayout) findViewById(R.id.search_view);
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //findViewById(R.id.lin).setBackgroundColor(Color.parseColor(skin));
@@ -173,7 +173,7 @@ public class TextReader extends BaseActivity
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintColor(Color.parseColor(MainActivity.currentTab==1?skinTwo:skin));
-            FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.texteditor).getLayoutParams();
+            FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.text_editor).getLayoutParams();
             SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
             p.setMargins(0, config.getStatusBarHeight(), 0, 0);
         }
@@ -188,8 +188,8 @@ public class TextReader extends BaseActivity
                         .getStatusColor(MainActivity.currentTab==1?skinTwo:skin)));
 
         }
-        mInput = (EditText) findViewById(R.id.fname);
-        scrollView=(ScrollView)findViewById(R.id.editscroll);
+        mInput = (EditText) findViewById(R.id.file_name);
+        scrollView=(ScrollView)findViewById(R.id.edit_scroll);
 
         try {
             if (getIntent().getData() != null) {
@@ -274,8 +274,8 @@ public class TextReader extends BaseActivity
     private void checkUnsavedChanges() {
         if (mOriginal != null && mInput.isShown() && !mOriginal.equals(mInput.getText().toString())) {
             new MaterialDialog.Builder(this)
-                    .title(R.string.unsavedchanges)
-                    .content(R.string.unsavedchangesdesc)
+                    .title(R.string.unsaved_changes)
+                    .content(R.string.unsaved_changes_desc)
                     .positiveText(R.string.yes)
                     .negativeText(R.string.no)
                     .positiveColor(Color.parseColor(accentSkin))
@@ -472,7 +472,7 @@ public class TextReader extends BaseActivity
                     utils.showProps(hFile, this, theme1);
                 }else Toast.makeText(this,R.string.not_allowed,Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.openwith:
+            case R.id.open_with:
                 if(mFile.canRead()){
                     utils.openunknown(mFile, c, false);
                 }else Toast.makeText(this,R.string.not_allowed,Toast.LENGTH_SHORT).show();
@@ -699,7 +699,7 @@ public class TextReader extends BaseActivity
                 break;
             case R.id.close:
                 // closeButton
-                findViewById(R.id.searchview).setVisibility(View.GONE);
+                findViewById(R.id.search_view).setVisibility(View.GONE);
                 cleanSpans();
                 break;
             default:

@@ -16,9 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-
 /**
  * Created by arpitkh996 on 13-01-2016.
  */
@@ -37,53 +34,43 @@ public class Operations {
             @Override
             protected Void doInBackground(Void... params) {
 
-                if(file.exists())errorCallBack.exists(file);
-                if(file.isSmb()){
-                    try {
-                        file.getSmbFile(2000).mkdirs();
-                    } catch (SmbException e) {
-                        Logger.log(e,file.getPath(),context);
-                        errorCallBack.done(file,false);
+                if(file.exists()) {
+                    errorCallBack.exists(file);
+                }
+
+                if (file.isLocal() || file.isRoot()) {
+                    int mode = checkFolder(new File(file.getParent()), context);
+                    if (mode == 2) {
+                        errorCallBack.launchSAF(file);
                         return null;
                     }
-                    errorCallBack.done(file,file.exists());
-                } else {
-                    if (file.isLocal() || file.isRoot()) {
-                        int mode = checkFolder(new File(file.getParent()), context);
-                        if (mode == 2) {
-                            errorCallBack.launchSAF(file);
-                            return null;
-                        }
-                        if (mode == 1 || mode == 0)
-                            FileUtil.mkdir(file.getFile(), context);
-                        if (!file.exists() && rootMode) {
-                            file.setMode(HFile.ROOT_MODE);
-                            if (file.exists()) errorCallBack.exists(file);
-                            boolean remount = false;
-                            try {
-                                String res;
-                                if (!("rw".equals(res = RootTools.getMountedAs(file.getParent()))))
-                                    remount = true;
-                                if (remount)
-                                    RootTools.remount(file.getParent(), "rw");
-                                RootHelper.runAndWait("mkdir \"" + file.getPath()+"\"", true);
-                                if (remount) {
-                                    if (res == null || res.length() == 0) res = "ro";
-                                    RootTools.remount(file.getParent(), res);
-                                }
-                            } catch (Exception e) {
-                                Logger.log(e, file.getPath(), context);
+                    if (mode == 1 || mode == 0)
+                        FileUtil.mkdir(file.getFile(), context);
+                    if (!file.exists() && rootMode) {
+                        file.setMode(HFile.ROOT_MODE);
+                        if (file.exists()) errorCallBack.exists(file);
+                        boolean remount = false;
+                        try {
+                            String res;
+                            if (!("rw".equals(res = RootTools.getMountedAs(file.getParent()))))
+                                remount = true;
+                            if (remount)
+                                RootTools.remount(file.getParent(), "rw");
+                            RootHelper.runAndWait("mkdir \"" + file.getPath()+"\"", true);
+                            if (remount) {
+                                if (res == null || res.length() == 0) res = "ro";
+                                RootTools.remount(file.getParent(), res);
                             }
-                            errorCallBack.done(file, file.exists());
-                            return null;
+                        } catch (Exception e) {
+                            Logger.log(e, file.getPath(), context);
                         }
                         errorCallBack.done(file, file.exists());
                         return null;
                     }
                     errorCallBack.done(file, file.exists());
-
-
+                    return null;
                 }
+                errorCallBack.done(file, file.exists());
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -95,56 +82,46 @@ public class Operations {
             @Override
             protected Void doInBackground(Void... params) {
 
-                if(file.exists())errorCallBack.exists(file);
-                if(file.isSmb()){
-                    try {
-                        file.getSmbFile(2000).createNewFile();
-                    } catch (SmbException e) {
-                        Logger.log(e,file.getPath(),context);
-                        errorCallBack.done(file,false);
+                if(file.exists()) {
+                    errorCallBack.exists(file);
+                }
+
+                if (file.isLocal() || file.isRoot()) {
+                    int mode = checkFolder(new File(file.getParent()), context);
+                    if (mode == 2) {
+                        errorCallBack.launchSAF(file);
                         return null;
                     }
-                    errorCallBack.done(file,file.exists());
-                } else {
-                    if (file.isLocal() || file.isRoot()) {
-                        int mode = checkFolder(new File(file.getParent()), context);
-                        if (mode == 2) {
-                            errorCallBack.launchSAF(file);
-                            return null;
+                    if (mode == 1 || mode == 0)
+                        try {
+                            FileUtil.mkfile(file.getFile(), context);
+                        } catch (IOException e) {
                         }
-                        if (mode == 1 || mode == 0)
-                            try {
-                                FileUtil.mkfile(file.getFile(), context);
-                            } catch (IOException e) {
+                    if (!file.exists() && rootMode) {
+                        file.setMode(HFile.ROOT_MODE);
+                        if (file.exists()) errorCallBack.exists(file);
+                        boolean remount = false;
+                        try {
+                            String res;
+                            if (!("rw".equals(res = RootTools.getMountedAs(file.getParent()))))
+                                remount = true;
+                            if (remount)
+                                RootTools.remount(file.getParent(), "rw");
+                            RootHelper.runAndWait("touch \"" + file.getPath()+"\"", true);
+                            if (remount) {
+                                if (res == null || res.length() == 0) res = "ro";
+                                RootTools.remount(file.getParent(), res);
                             }
-                        if (!file.exists() && rootMode) {
-                            file.setMode(HFile.ROOT_MODE);
-                            if (file.exists()) errorCallBack.exists(file);
-                            boolean remount = false;
-                            try {
-                                String res;
-                                if (!("rw".equals(res = RootTools.getMountedAs(file.getParent()))))
-                                    remount = true;
-                                if (remount)
-                                    RootTools.remount(file.getParent(), "rw");
-                                RootHelper.runAndWait("touch \"" + file.getPath()+"\"", true);
-                                if (remount) {
-                                    if (res == null || res.length() == 0) res = "ro";
-                                    RootTools.remount(file.getParent(), res);
-                                }
-                            } catch (Exception e) {
-                                Logger.log(e, file.getPath(), context);
-                            }
-                            errorCallBack.done(file, file.exists());
-                            return null;
+                        } catch (Exception e) {
+                            Logger.log(e, file.getPath(), context);
                         }
                         errorCallBack.done(file, file.exists());
                         return null;
                     }
                     errorCallBack.done(file, file.exists());
-
-
+                    return null;
                 }
+                errorCallBack.done(file, file.exists());
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -153,68 +130,50 @@ public class Operations {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                if (f.isSmb()) {
-                    try {
-                        SmbFile smbFile = new SmbFile(f.getPath());
-                        SmbFile smbFile1=new SmbFile(f1.getPath());
-                        if(smbFile1.exists()){
-                            errorCallBack.exists(f1);
-                            return null;
-                        }
-                        smbFile.renameTo(smbFile1);
-                        if(!smbFile.exists() && smbFile1.exists())
-                            errorCallBack.done(f1,true);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (SmbException e) {
-                        e.printStackTrace();
+                    if(f1.exists()){
+                        errorCallBack.launchSAF(f,f1);
+                        return null;
                     }
-                    return null;
-                } else {
-                        if(f1.exists()){
-                            errorCallBack.launchSAF(f,f1);
-                            return null;
-                        }
 
                     File file = new File(f.getPath());
                     File file1 = new File(f1.getPath());
-                        switch (f.getMode()){
-                            case HFile.LOCAL_MODE:
-                                int mode = checkFolder(file.getParentFile(), context);
-                                if (mode == 2) {
-                                    errorCallBack.launchSAF(f,f1);
-                                } else if (mode == 1 || mode==0) {
-                                    boolean b = FileUtil.renameFolder(file, file1, context);
-                                    boolean a = !file.exists() && file1.exists();
-                                    if (!a && rootMode){
-                                        try {
-                                            renameRoot(file, file1.getName());
-                                        } catch (Exception e) {
-                                            Logger.log(e,f.getPath()+"\n"+f1.getPath(),context);
-                                        }
-                                       f.setMode(HFile.ROOT_MODE);
-                                      f1.setMode(HFile.ROOT_MODE);
-                                      a=  !file.exists() && file1.exists();
+                    switch (f.getMode()){
+                        case HFile.LOCAL_MODE:
+                            int mode = checkFolder(file.getParentFile(), context);
+                            if (mode == 2) {
+                                errorCallBack.launchSAF(f,f1);
+                            } else if (mode == 1 || mode==0) {
+                                boolean b = FileUtil.renameFolder(file, file1, context);
+                                boolean a = !file.exists() && file1.exists();
+                                if (!a && rootMode){
+                                    try {
+                                        renameRoot(file, file1.getName());
+                                    } catch (Exception e) {
+                                        Logger.log(e,f.getPath()+"\n"+f1.getPath(),context);
                                     }
-                                    errorCallBack.done(f1,a);
-                                    return null;
+                                   f.setMode(HFile.ROOT_MODE);
+                                  f1.setMode(HFile.ROOT_MODE);
+                                  a=  !file.exists() && file1.exists();
                                 }
-                                break;
-                            case HFile.ROOT_MODE:
-                                try {
-                                    renameRoot(file, file1.getName());
-                                } catch (Exception e) {
-                                    Logger.log(e,f.getPath()+"\n"+f1.getPath(),context);
-                                }
-                                f.setMode(HFile.ROOT_MODE);
-                                f1.setMode(HFile.ROOT_MODE);
-                                boolean a=  !file.exists() && file1.exists();
                                 errorCallBack.done(f1,a);
-                                break;
+                                return null;
+                            }
+                            break;
+                        case HFile.ROOT_MODE:
+                            try {
+                                renameRoot(file, file1.getName());
+                            } catch (Exception e) {
+                                Logger.log(e,f.getPath()+"\n"+f1.getPath(),context);
+                            }
+                            f.setMode(HFile.ROOT_MODE);
+                            f1.setMode(HFile.ROOT_MODE);
+                            boolean a=  !file.exists() && file1.exists();
+                            errorCallBack.done(f1,a);
+                            break;
 
-                        }
-                }
-            return null;
+                    }
+
+                return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

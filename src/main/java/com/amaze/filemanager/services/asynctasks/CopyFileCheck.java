@@ -130,10 +130,10 @@ public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayL
             View view = layoutInflater.inflate(R.layout.copy_dialog, null);
             x.customView(view, true);
             // textView
-            TextView textView = (TextView) view.findViewById(R.id.textView);
-            textView.setText(utils.getString(con, R.string.fileexist) + "\n" + a.get(counter).getName());
+            TextView textView = (TextView) view.findViewById(R.id.text_view);
+            textView.setText(utils.getString(con, R.string.file_exist) + "\n" + a.get(counter).getName());
             // checkBox
-            final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+            final CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_box);
             utils.setTint(checkBox, Color.parseColor(BaseActivity.accentSkin));
             if (mainActivity.theme1 == 1) x.theme(Theme.DARK);
             x.title(utils.getString(con, R.string.paste));

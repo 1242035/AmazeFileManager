@@ -2,7 +2,6 @@ package com.amaze.filemanager.utils.share;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ public class ShareAdapter extends ArrayAdapter<Intent> {
     public void updateMatDialog(MaterialDialog b){this.b=b;}
     public ShareAdapter(Context context, ArrayList<Intent> arrayList,ArrayList<String> labels,
                         ArrayList<Drawable>  arrayList1,int theme) {
-        super(context, R.layout.rowlayout, arrayList);
+        super(context, R.layout.row_layout, arrayList);
         this.labels=labels;
         iconHolder=new IconHolder(context,true,true);
         this.arrayList=arrayList1;
@@ -43,8 +42,8 @@ public class ShareAdapter extends ArrayAdapter<Intent> {
 
         LayoutInflater inflater = (LayoutInflater)getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView =(View) inflater.inflate(R.layout.simplerow, parent, false);
-        TextView a=((TextView) rowView.findViewById(R.id.firstline));
+        View rowView =(View) inflater.inflate(R.layout.simple_row, parent, false);
+        TextView a=((TextView) rowView.findViewById(R.id.first_line));
         ImageView v=(ImageView)rowView.findViewById(R.id.icon);
         if(arrayList.get(position)!=null)
             v.setImageDrawable(arrayList.get(position));

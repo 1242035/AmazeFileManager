@@ -23,7 +23,7 @@
     android:clickable="false"
     android:minHeight="60dp">
     <TextView
-        android:id="@+id/footerText"
+        android:id="@+id/footer_text"
         android:clickable="false"
         android:layout_width="wrap_content"
         android:textStyle="bold"

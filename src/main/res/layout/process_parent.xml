@@ -22,7 +22,7 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
-        android:id="@+id/secondbut"
+        android:id="@+id/second_but"
         android:orientation="vertical"
         android:animateLayoutChanges="true"
         android:layout_width="fill_parent"

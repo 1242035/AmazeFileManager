@@ -36,7 +36,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         />
     <FrameLayout
-        android:id="@+id/prefsfragment"
+        android:id="@+id/prefs_fragment"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

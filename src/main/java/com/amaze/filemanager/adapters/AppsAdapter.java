@@ -137,9 +137,9 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context
                     .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            view = mInflater.inflate(R.layout.rowlayout, null);
+            view = mInflater.inflate(R.layout.row_layout, null);
             final ViewHolder vholder = new ViewHolder();
-            vholder.txtTitle = (TextView) view.findViewById(R.id.firstline);
+            vholder.txtTitle = (TextView) view.findViewById(R.id.first_line);
             if (app.theme1!=0)
                 vholder.txtTitle.setTextColor(Color.WHITE);
             vholder.apkIcon = (ImageView) view.findViewById(R.id.apk_icon);
@@ -271,7 +271,7 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                                                     }
                                                 }).build().show();
                                     } else {
-                                        Toast.makeText(app.getActivity(),app.getResources().getString(R.string.enablerootmde),Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(app.getActivity(),app.getResources().getString(R.string.enable_root_mode),Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     app.unin(rowItem.getPermissions());
@@ -289,7 +289,7 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                                         Uri.parse("package:" + rowItem.getPermissions())));
                                 return true;
                             case R.id.backup:
-                                Toast.makeText(app.getActivity(), new Futils().getString(app.getActivity(), R.string.copyingapk) + Environment.getExternalStorageDirectory().getPath() + "/app_backup", Toast.LENGTH_LONG).show();
+                                Toast.makeText(app.getActivity(), new Futils().getString(app.getActivity(), R.string.copying_apk) + Environment.getExternalStorageDirectory().getPath() + "/app_backup", Toast.LENGTH_LONG).show();
                                 File f = new File(rowItem.getDesc());
                                 ArrayList<BaseFile> ab = new ArrayList<>();
                                 File dst = new File(Environment.getExternalStorageDirectory().getPath() + "/app_backup");

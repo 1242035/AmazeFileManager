@@ -60,7 +60,7 @@ public class Preffrag extends PreferenceFragment{
                 final String[] sort = getResources().getStringArray(R.array.columns);
                 MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
                 if(theme==1)a.theme(Theme.DARK);
-                a.title(R.string.gridcolumnno);
+                a.title(R.string.grid_column_no);
                 int current = Integer.parseInt(sharedPref.getString(Constant.COLUMNS, "-1"));
                 current=current==-1?0:current;
                 if(current!=0)current=current-1;
@@ -119,7 +119,7 @@ public class Preffrag extends PreferenceFragment{
                     
                     } else {  rootmode.setChecked(false);
 				
-                        Toast.makeText(getActivity(), getResources().getString(R.string.rootfailure), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.root_failure), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     rootmode.setChecked(false);

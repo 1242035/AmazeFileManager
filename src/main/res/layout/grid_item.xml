@@ -51,7 +51,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/permis"
+                android:id="@+id/permission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|top|end"
@@ -90,7 +90,7 @@
 
 
                 <TextView
-                    android:id="@+id/firstline"
+                    android:id="@+id/first_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -106,7 +106,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/line2"
+                android:id="@+id/line_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/properties"
@@ -117,7 +117,7 @@
 
 
                 <TextView
-                    android:id="@+id/secondLine"
+                    android:id="@+id/second_line"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_alignParentRight="true"
@@ -134,7 +134,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/secondLine"
+                    android:layout_toLeftOf="@id/second_line"
                     android:layout_gravity="start"
                     android:textSize="12dp"
                     android:paddingLeft="5dp"

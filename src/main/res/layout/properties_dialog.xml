@@ -23,7 +23,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
-                android:id="@+id/t5"
+                android:id="@+id/text_five"
                 android:text="@string/calculating"
                 android:paddingLeft="3dp"
                 android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
                 android:text="@string/location"
                 android:fontFamily="sans-serif-medium" />
             <TextView
-                android:id="@+id/t6"
+                android:id="@+id/text_six"
                 android:text="@string/calculating"
                 android:paddingLeft="3dp"
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
-                android:id="@+id/t7"
+                android:id="@+id/text_seven"
                 android:paddingLeft="3dp"
                 android:text="@string/calculating"
                 android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
-                android:id="@+id/t8"
+                android:id="@+id/text_eight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="3dp"
@@ -91,7 +91,7 @@
                 android:fontFamily="sans-serif-medium" />
 
             <TextView
-                android:id="@+id/t9"
+                android:id="@+id/text_nine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="3dp"
@@ -109,10 +109,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:id="@+id/dirprops"
+        android:id="@+id/directory_properties"
         android:orientation="horizontal">
         <com.amaze.filemanager.ui.views.SizeDrawable
-            android:id="@+id/sizedrawable"
+            android:id="@+id/size_drawable"
             android:layout_width="40dp"
             android:layout_gravity="center_horizontal"
             android:layout_height="match_parent"/>
@@ -141,7 +141,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/t1"
+                    android:id="@+id/text_one"
                     android:text="@string/calculating"
                     android:padding="3dp"
                     android:layout_gravity="center_vertical"
@@ -170,7 +170,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/t2"
+                    android:id="@+id/text_two"
                     android:text="@string/calculating"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
@@ -200,7 +200,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/t3"
+                    android:id="@+id/text_three"
                     android:text="@string/calculating"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -230,7 +230,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/t4"
+                    android:id="@+id/text_four"
                     android:text="@string/calculating"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -248,14 +248,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/permission"
-        android:id="@+id/appX"
+        android:id="@+id/app_x"
         android:visibility="gone"
 />
 
 <include
-    android:id="@+id/permtable"
+    android:id="@+id/permission_table"
     android:visibility="gone"
-    layout="@layout/permissiontable"></include>
+    layout="@layout/permission_table"></include>
  <android.support.v7.widget.AppCompatButton
      android:id="@+id/set"
      android:layout_width="match_parent"

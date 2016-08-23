@@ -81,7 +81,7 @@
            
         </activity>
 		<activity
-            android:label="@string/textreader"
+            android:label="@string/text_reader"
             android:name=".activities.TextReader"
 			android:theme="@style/appCompatLight">
             <intent-filter
@@ -93,7 +93,7 @@
 
         </activity>
         <activity
-            android:label="@string/databasereader"
+            android:label="@string/database_reader"
             android:name=".activities.DbViewer"
             android:theme="@style/appCompatLight"
             android:screenOrientation="locked">
@@ -105,11 +105,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name=".activities.AboutActivity"
-            android:theme="@style/aboutLight"
-            />
-
         <service
 			android:name = ".services.ExtractService"
 			android:label = "Extracting"

@@ -30,8 +30,8 @@
         <com.amaze.filemanager.ui.views.CheckBx
             android:key="circular_images"
             android:defaultValue="true"
-            android:summary="@string/circularimages"
-            android:title="@string/circularicons"/>
+            android:summary="@string/circular_images"
+            android:title="@string/circular_icons"/>
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="true"
             android:key="show_dividers"
@@ -42,12 +42,12 @@
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="true"
             android:key="save_paths"
-            android:summary="@string/savepathsummary"
-            android:title="@string/savepaths" />
+            android:summary="@string/save_path_summary"
+            android:title="@string/save_paths" />
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="true"
             android:key="show_thumbs"
-            android:summary="@string/thumbSummary"
+            android:summary="@string/thumb_summary"
             android:title="@string/thumb" />
 		<com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="false"
@@ -71,7 +71,7 @@
             android:summary="@string/back_summary" />
         <Preference
             android:key="columns"
-            android:title="@string/gridcolumnno" />
+            android:title="@string/grid_column_no" />
 
     
     </PreferenceCategory>
@@ -112,8 +112,8 @@
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="false"
             android:key="root_mode"
-            android:summary="@string/rootmodesummary"
-            android:title="@string/rootmode" />
+            android:summary="@string/root_mode_summary"
+            android:title="@string/root_mode" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/about">

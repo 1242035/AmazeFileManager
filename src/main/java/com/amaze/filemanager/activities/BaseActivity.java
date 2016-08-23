@@ -25,22 +25,22 @@ import java.io.IOException;
  * Created by arpitkh996 on 03-03-2016.
  */
 public class BaseActivity extends AppCompatActivity {
-    public static int theme1;
+    public static int baseTheme;
     public SharedPreferences Sp;
 
     // Accent and Primary hex color string respectively
     public static String accentSkin;
     public static String skin, skinTwo;
-    Futils utils;
-    boolean  rootmode,checkStorage=true;
+    Futils fileUntils;
+    boolean  rootMode,checkStorage=true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Sp = PreferenceManager.getDefaultSharedPreferences(this);
         int th = Integer.parseInt(Sp.getString(Constant.THEME, "0"));
         // checking if theme should be set light/dark or automatic
-        theme1 = th == 2 ? PreferenceUtils.hourOfDay() : th;
-        utils=new Futils();
+        baseTheme = th == 2 ? PreferenceUtils.hourOfDay() : th;
+        fileUntils=new Futils();
         boolean random = Sp.getBoolean(Constant.RANDOM_CHECKBOX, false);
         if ( random )  {
             skin = PreferenceUtils.random(Sp);
@@ -51,10 +51,10 @@ public class BaseActivity extends AppCompatActivity {
         }
         accentSkin = PreferenceUtils.getAccentString(Sp);
         setTheme();
-        rootmode = Sp.getBoolean(Constant.ROOT_MODE, false);
-        if (rootmode) {
+        rootMode = Sp.getBoolean(Constant.ROOT_MODE, false);
+        if (rootMode) {
             if (!RootTools.isAccessGiven()) {
-                rootmode = false;
+                rootMode = false;
                 Sp.edit().putBoolean(Constant.ROOT_MODE, false).apply();
             }
         }
@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (rootmode) {
+        if (rootMode) {
             try {
                 RootTools.closeAllShells();
             } catch (IOException e) {
@@ -94,7 +94,7 @@ public class BaseActivity extends AppCompatActivity {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example, if the request has been denied previously.
-            final MaterialDialog materialDialog = utils.showBasicDialog(this,accentSkin,theme1, new String[]{getResources().getString(R.string.granttext), getResources().getString(R.string.grantper), getResources().getString(R.string.grant), getResources().getString(R.string.cancel), null});
+            final MaterialDialog materialDialog = fileUntils.showBasicDialog(this,accentSkin,baseTheme, new String[]{getResources().getString(R.string.grant_text), getResources().getString(R.string.grant_per), getResources().getString(R.string.grant), getResources().getString(R.string.cancel), null});
             materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,173 +120,90 @@ public class BaseActivity extends AppCompatActivity {
 
     void setTheme() {
         if (Build.VERSION.SDK_INT >= 21) {
+            int themeStyle = 0;
             switch (accentSkin) {
                 case "#F44336":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_red);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_red);
-                    }
+                    themeStyle = (baseTheme == 0) ? R.style.pref_accent_light_red : R.style.pref_accent_dark_red;
                     break;
 
                 case "#e91e63":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_pink);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_pink);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_pink : R.style.pref_accent_dark_pink;
+
                     break;
 
                 case "#9c27b0":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_purple);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_purple);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_purple : R.style.pref_accent_dark_purple;
+
                     break;
 
                 case "#673ab7":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_deep_purple);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_deep_purple);
-                    }
+                    themeStyle = ( baseTheme == 0) ? R.style.pref_accent_light_deep_purple : R.style.pref_accent_dark_deep_purple;
                     break;
 
                 case "#3f51b5":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_indigo);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_indigo);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_indigo : R.style.pref_accent_dark_indigo;
                     break;
 
                 case "#2196F3":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_blue);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_blue);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_blue : R.style.pref_accent_dark_blue;
+
                     break;
 
                 case "#03A9F4":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_light_blue);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_light_blue);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_light_blue :  R.style.pref_accent_dark_light_blue;
                     break;
 
                 case "#00BCD4":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_cyan);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_cyan);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_cyan : R.style.pref_accent_dark_cyan;
                     break;
 
                 case "#009688":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_teal);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_teal);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_teal : R.style.pref_accent_dark_teal;
                     break;
 
                 case "#4CAF50":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_green);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_green);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_green : R.style.pref_accent_dark_green;
                     break;
 
                 case "#8bc34a":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_light_green);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_light_green);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_light_green : R.style.pref_accent_dark_light_green;
                     break;
 
                 case "#FFC107":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_amber);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_amber);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_amber : R.style.pref_accent_dark_amber;
                     break;
 
                 case "#FF9800":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_orange);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_orange);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_orange : R.style.pref_accent_dark_orange;
                     break;
 
                 case "#FF5722":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_deep_orange);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_deep_orange);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_deep_orange : R.style.pref_accent_dark_deep_orange;
                     break;
 
                 case "#795548":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_brown);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_brown);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_brown : R.style.pref_accent_dark_brown;
                     break;
 
                 case "#212121":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_black);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_black);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_black : R.style.pref_accent_dark_black;
                     break;
 
                 case "#607d8b":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_blue_grey);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_blue_grey);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_blue_grey : R.style.pref_accent_dark_blue_grey;
                     break;
 
                 case "#004d40":
-                    if (theme1 == 0) {
-                        setTheme(R.style.pref_accent_light_super_su);
-                    }
-                    else {
-                        setTheme(R.style.pref_accent_dark_super_su);
-                    }
+                    themeStyle = ( baseTheme == 0 ) ? R.style.pref_accent_light_super_su : R.style.pref_accent_dark_super_su;
                     break;
+            }
+            if( themeStyle != 0 ){
+                setTitle(themeStyle);
             }
         }
         else
         {
-            if (theme1 == 1) {
+            if (baseTheme == 1) {
                 setTheme(R.style.appCompatDark);
             } else {
                 setTheme(R.style.appCompatLight);

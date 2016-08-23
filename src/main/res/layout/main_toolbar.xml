@@ -31,9 +31,6 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         >
-
-
-
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
@@ -64,9 +61,8 @@
 
             <FrameLayout
                 android:layout_below="@id/action_bar"
-                android:id="@+id/buttonbarframe"
+                android:id="@+id/button_bar_frame"
                 android:layout_height="wrap_content"
-
                 android:layout_width="match_parent"
                 android:minHeight="72dp">
 
@@ -87,7 +83,7 @@
                     </LinearLayout>
                 </HorizontalScrollView>
                 <LinearLayout
-                    android:id="@+id/pathbar"
+                    android:id="@+id/path_bar"
                     android:paddingRight="16dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -116,14 +112,14 @@
                                 style="@android:style/TextAppearance.Medium"
                                 android:textColor="@android:color/white"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/fullpath" />
+                                android:id="@+id/full_path" />
                             <TextView
                                 android:clickable="false"
                                 android:layout_width="wrap_content"
                                 style="@android:style/TextAppearance.Medium"
                                 android:textColor="@android:color/white"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/fullpath_anim"
+                                android:id="@+id/full_path_anim"
                                 android:visibility="gone"/>
                         </LinearLayout>
                     </HorizontalScrollView>
@@ -137,7 +133,7 @@
                         android:textColor="@android:color/white"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:id="@+id/pathname" />
+                        android:id="@+id/path_name" />
 
                 </LinearLayout>
             </FrameLayout>
@@ -196,14 +192,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/tab_indicator1"
+                android:id="@+id/tab_indicator_one"
                 android:layout_width="wrap_content"
                 android:minWidth="50dp"
                 android:layout_marginRight="2dp"
                 android:layout_height="match_parent" />
 
             <ImageView
-                android:id="@+id/tab_indicator2"
+                android:id="@+id/tab_indicator_two"
                 android:layout_width="wrap_content"
                 android:minWidth="50dp"
                 android:layout_marginLeft="2dp"
@@ -270,27 +266,12 @@
                 fab:fab_label="@string/folder" />
 
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_item1"
+                android:id="@+id/menu_item_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_insert_drive_file_white_48dp"
                 fab:fab_size="mini"
                 fab:fab_label="@string/file" />
-
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_item2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_settings_remote_white_48dp"
-                fab:fab_size="mini"
-                fab:fab_label="@string/smb_con" />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_item3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/drive"
-                fab:fab_size="mini"
-                fab:fab_label="Drive Connection" />
         </com.github.clans.fab.FloatingActionMenu>
 
     </android.support.design.widget.CoordinatorLayout>
@@ -315,7 +296,7 @@
             style="@android:style/Theme.Holo.Light"
             android:layout_width="@dimen/drawer_width"
             android:layout_alignParentTop="true"
-            android:layout_above="@+id/divider1"
+            android:layout_above="@+id/divider_one"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#ffffff"
@@ -323,19 +304,19 @@
             android:dividerHeight="0dip"
             android:scrollbars="none"/>
         <RelativeLayout
-            android:id="@+id/appbutton"
+            android:id="@+id/app_button"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:paddingEnd="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingStart="16dp"
-            android:layout_above="@+id/settingsbutton"
+            android:layout_above="@+id/settings_button"
             android:background="@drawable/safr_ripple_white"
             android:clickable="true">
 
             <ImageView
-                android:id="@+id/appicon"
+                android:id="@+id/app_icon"
                 android:layout_width="24dp"
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
@@ -349,12 +330,12 @@
                 android:contentDescription="@string/icon" />
 
             <TextView
-                android:id="@+id/apptext"
+                android:id="@+id/app_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_toEndOf="@+id/appicon"
-                android:layout_toRightOf="@+id/appicon"
+                android:layout_toEndOf="@+id/app_icon"
+                android:layout_toRightOf="@+id/app_icon"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium"
                 android:singleLine="true"
@@ -365,7 +346,7 @@
                 android:gravity="center_vertical" />
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/settingsbutton"
+            android:id="@+id/settings_button"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:paddingEnd="16dp"
@@ -377,7 +358,7 @@
             android:clickable="true">
 
             <ImageView
-                android:id="@+id/settingicon"
+                android:id="@+id/setting_icon"
                 android:layout_width="24dp"
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
@@ -391,12 +372,12 @@
                 android:contentDescription="@string/icon" />
 
             <TextView
-                android:id="@+id/settingtext"
+                android:id="@+id/setting_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:layout_toEndOf="@+id/settingicon"
-                android:layout_toRightOf="@+id/settingicon"
+                android:layout_toEndOf="@+id/setting_icon"
+                android:layout_toRightOf="@+id/setting_icon"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium"
                 android:singleLine="true"

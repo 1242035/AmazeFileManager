@@ -63,7 +63,7 @@ public class RenameBookmark extends DialogFragment {
             final MaterialDialog materialDialog;
             String pa = path;
             MaterialDialog.Builder builder = new MaterialDialog.Builder(c);
-            builder.title(R.string.renamebookmark);
+            builder.title(R.string.rename_bookmark);
             builder.positiveColor(Color.parseColor(fabskin));
             builder.negativeColor(Color.parseColor(fabskin));
             builder.neutralColor(Color.parseColor(fabskin));
@@ -75,12 +75,12 @@ public class RenameBookmark extends DialogFragment {
             builder.autoDismiss(false);
             View v2 = getActivity().getLayoutInflater().inflate(R.layout.rename, null);
             builder.customView(v2, true);
-            final TextInputLayout t1 = (TextInputLayout) v2.findViewById(R.id.t1);
-            final TextInputLayout t2 = (TextInputLayout) v2.findViewById(R.id.t2);
-            final AppCompatEditText con_name = (AppCompatEditText) v2.findViewById(R.id.editText4);
+            final TextInputLayout t1 = (TextInputLayout) v2.findViewById(R.id.text_one);
+            final TextInputLayout t2 = (TextInputLayout) v2.findViewById(R.id.text_two);
+            final AppCompatEditText con_name = (AppCompatEditText) v2.findViewById(R.id.edit_text_four);
             con_name.setText(title);
-            final String s1 = String.format(getString(R.string.cantbeempty), utils.getString(c, R.string.name));
-            final String s2 = String.format(getString(R.string.cantbeempty), utils.getString(c, R.string.path));
+            final String s1 = String.format(getString(R.string.cant_be_empty), utils.getString(c, R.string.name));
+            final String s2 = String.format(getString(R.string.cant_be_empty), utils.getString(c, R.string.path));
             con_name.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,43 +99,31 @@ public class RenameBookmark extends DialogFragment {
                     else t1.setError("");
                 }
             });
-            final AppCompatEditText ip = (AppCompatEditText) v2.findViewById(R.id.editText);
+            final AppCompatEditText ip = (AppCompatEditText) v2.findViewById(R.id.edit_text);
             if(studiomode!=0){
-                if (path.startsWith("smb:/")) {
-                try {
-                    jcifs.Config.registerSmbURLHandler();
-                    URL a = new URL(path);
-                    String userinfo = a.getUserInfo();
-                    if (userinfo != null) {
-                        String inf = URLDecoder.decode(userinfo, "UTF-8");
-                        user = inf.substring(0, inf.indexOf(":"));
-                        pass = inf.substring(inf.indexOf(":") + 1, inf.length());
-                        ipp = a.getHost();
-                        pa = "smb://" + ipp + a.getPath();
+
+                ip.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (ip.getText().toString().length() == 0)
+                            t2.setError(s1);
+                        else t2.setError("");
+                    }
+                });
             }
-            ip.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (ip.getText().toString().length() == 0)
-                        t2.setError(s1);
-                    else t2.setError("");
-                }
-            });
-            }else t2.setVisibility(View.GONE);
+            else {
+                t2.setVisibility(View.GONE);
+            }
             ip.setText(pa);
             builder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override

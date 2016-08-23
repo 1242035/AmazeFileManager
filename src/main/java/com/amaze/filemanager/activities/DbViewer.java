@@ -100,7 +100,7 @@ public class DbViewer extends BaseActivity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintColor(Color.parseColor(MainActivity.currentTab==1?skinTwo:skin));
-            FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.parentdb).getLayoutParams();
+            FrameLayout.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) findViewById(R.id.parent_db).getLayoutParams();
             SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
             p.setMargins(0, config.getStatusBarHeight(), 0, 0);
         }
@@ -117,7 +117,7 @@ public class DbViewer extends BaseActivity {
 
         path = getIntent().getStringExtra("path");
         pathFile = new File(path);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.list_view);
 
         load(pathFile);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

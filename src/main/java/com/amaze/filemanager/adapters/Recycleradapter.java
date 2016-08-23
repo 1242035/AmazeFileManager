@@ -30,6 +30,7 @@ import com.amaze.filemanager.ui.icons.MimeTypes;
 import com.amaze.filemanager.ui.views.CircleGradientDrawable;
 import com.amaze.filemanager.ui.views.RoundedImageView;
 import com.amaze.filemanager.utils.DataUtils;
+import com.amaze.filemanager.utils.Resource;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.io.File;
@@ -212,14 +213,14 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
         public ViewHolder(View view) {
             super(view);
 
-            txtTitle = (TextView) view.findViewById(R.id.firstline);
+            txtTitle = (TextView) view.findViewById(R.id.first_line);
             pictureIcon = (RoundedImageView) view.findViewById(R.id.picture_icon);
             rl = view.findViewById(R.id.second);
-            perm = (TextView) view.findViewById(R.id.permis);
+            perm = (TextView) view.findViewById(R.id.permission);
             date = (TextView) view.findViewById(R.id.date);
-            txtDesc = (TextView) view.findViewById(R.id.secondLine);
+            txtDesc = (TextView) view.findViewById(R.id.second_line);
             apkIcon = (ImageView) view.findViewById(R.id.apk_icon);
-            genericText = (TextView) view.findViewById(R.id.generictext);
+            genericText = (TextView) view.findViewById(R.id.generic_text);
             imageView1 = (ImageView) view.findViewById(R.id.icon_thumb);
             about=(ImageButton) view.findViewById(R.id.properties);
             checkImageView = (ImageView) view.findViewById(R.id.check_icon);
@@ -235,11 +236,12 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             return new ViewHolder(v);
 
         }
-        View v;if(main.IS_LIST) v= mInflater.inflate(R.layout.rowlayout, parent, false);
-        else  v= mInflater.inflate(R.layout.griditem, parent, false);
+        View v;if(main.IS_LIST) v= mInflater.inflate(R.layout.row_layout, parent, false);
+        else  v= mInflater.inflate(R.layout.grid_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
-        if(main.theme1==1)
-            vh.txtTitle.setTextColor(main.MAIN_ACTIVITY.getResources().getColor(android.R.color.white));
+        if(main.theme1==1) {
+            vh.txtTitle.setTextColor(Resource.getColor(main.MAIN_ACTIVITY,android.R.color.white));
+        }
         return vh;
     }
     int offset=0;
@@ -283,7 +285,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             if ( p == getItemCount() - 1) {
                 holder.rl.setMinimumHeight(rowHeight);
                 if (items.size() == (main.GO_BACK_ITEM ? 1 : 0))
-                    holder.txtTitle.setText(R.string.nofiles);
+                    holder.txtTitle.setText(R.string.no_file);
                 else holder.txtTitle.setText("");
                 return;
             }
@@ -620,11 +622,11 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
         public HeaderViewHolder(View view) {
             super(view);
 
-            ext = (TextView) view.findViewById(R.id.headertext);
+            ext = (TextView) view.findViewById(R.id.header_text);
         }}
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup) {
-        View  view = mInflater.inflate(R.layout.listheader, viewGroup, false);
+        View  view = mInflater.inflate(R.layout.list_header, viewGroup, false);
         /*if(main.theme1==1)
             view.setBackgroundResource(R.color.holo_dark_background);*/
         HeaderViewHolder holder = new HeaderViewHolder(view);
@@ -683,7 +685,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                             case R.id.book:
                                     DataUtils.addBook(new String[]{rowItem.getTitle(),rowItem.getDesc()},true);
                                 main.MAIN_ACTIVITY.updateDrawer();
-                                Toast.makeText(main.getActivity(), main.utils.getString(main.getActivity(), R.string.bookmarksadded), Toast.LENGTH_LONG).show();
+                                Toast.makeText(main.getActivity(), main.utils.getString(main.getActivity(), R.string.bookmarks_added), Toast.LENGTH_LONG).show();
                                 return true;
 
                         }

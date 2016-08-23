@@ -33,11 +33,7 @@ import android.widget.*;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.utils.Futils;
-
-import java.io.*;
 import java.util.*;
-
-import jcifs.smb.SmbFileInputStream;
 
 /**
  * A class that holds icons for a more efficient access.
@@ -269,8 +265,7 @@ public class IconHolder {
 				options.inJustDecodeBounds = false;
 
 				Bitmap bit;
-                if(path.startsWith("smb:/"))bit= BitmapFactory.decodeStream(new SmbFileInputStream(path));
-                else bit= BitmapFactory.decodeFile(path, options);
+                bit= BitmapFactory.decodeFile(path, options);
 
 				bitsat = bit;// decodeFile(path);//.createScaledBitmap(bits,imageViewReference.get().getHeight(),imageViewReference.get().getWidth(),true);
 			} catch (Exception e) {

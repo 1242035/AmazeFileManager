@@ -119,7 +119,7 @@ public class ZipViewer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.main_frag, container, false);
         mainActivity = (MainActivity) getActivity();
-        listView = (RecyclerView) rootView.findViewById(R.id.listView);
+        listView = (RecyclerView) rootView.findViewById(R.id.list_view);
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -320,9 +320,9 @@ public class ZipViewer extends Fragment {
             hideOption(R.id.cpy, menu);
             hideOption(R.id.cut, menu);
             hideOption(R.id.delete, menu);
-            hideOption(R.id.addshortcut, menu);
+            hideOption(R.id.add_shortcut, menu);
             hideOption(R.id.share, menu);
-            hideOption(R.id.openwith, menu);
+            hideOption(R.id.open_with, menu);
             showOption(R.id.all, menu);
             hideOption(R.id.compress, menu);
             hideOption(R.id.hide, menu);
@@ -609,7 +609,7 @@ public class ZipViewer extends Fragment {
             listView.addItemDecoration(headersDecor);
             addheader = false;
         }
-        final FastScroller fastScroller=(FastScroller)rootView.findViewById(R.id.fastscroll);
+        final FastScroller fastScroller=(FastScroller)rootView.findViewById(R.id.fast_scroll);
         fastScroller.setRecyclerView(listView,1);
         fastScroller.setPressedHandleColor(Color.parseColor(PreferenceUtils.getAccentString(Sp)));
         ((AppBarLayout)mToolbarContainer).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

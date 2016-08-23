@@ -52,7 +52,6 @@ public class MoveFiles extends AsyncTask<String,Void,Boolean> {
         int i=0;
         if(files.size()==0)return true;
         if(mode!=0)return false;
-        if(files.get(0).isSmb()){return false;}
         for(BaseFile f:files){
             File file=new File(path+"/"+f.getName());
             File file1=new File(f.getPath());

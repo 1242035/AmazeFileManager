@@ -57,13 +57,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import jcifs.smb.SmbException;
 
 public class CopyService extends Service {
     HashMap<Integer, Boolean> hash = new HashMap<Integer, Boolean>();
@@ -253,7 +249,7 @@ public class CopyService extends Service {
                     try {
 
                         if (hash.get(id)){
-                            if(!f1.isSmb() && !new File(files.get(i).getPath()).canRead() && rootmode){
+                            if(!new File(files.get(i).getPath()).canRead() && rootmode){
                                 copyRoot(files.get(i).getPath(),files.get(i).getName(),FILE2,move);
                                 continue;
                             }

@@ -2,7 +2,6 @@ package com.amaze.filemanager.ui.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -71,7 +70,7 @@ public class FastScroller extends FrameLayout {
 
     private void initialise(@NonNull Context context) {
         setClipChildren(false);
-        inflate(context, R.layout.fastscroller, this);
+        inflate(context, R.layout.fast_scroller, this);
         this.handle =(ImageView) findViewById(R.id.scroll_handle);
         this.bar = findViewById(R.id.scroll_bar);
         this.handle.setEnabled(true);
@@ -90,7 +89,7 @@ public class FastScroller extends FrameLayout {
     private void setUpBarBackground() {
         InsetDrawable insetDrawable;
         int resolveColor = resolveColor(getContext(), R.attr.colorControlNormal);
-        insetDrawable = new InsetDrawable(new ColorDrawable(resolveColor), getResources().getDimensionPixelSize(R.dimen.fastscroller_track_padding), 0, 0, 0);
+        insetDrawable = new InsetDrawable(new ColorDrawable(resolveColor), getResources().getDimensionPixelSize(R.dimen.fast_scroller_track_padding), 0, 0, 0);
         this.bar.setBackgroundDrawable(insetDrawable);
     }
 
@@ -160,8 +159,8 @@ public class FastScroller extends FrameLayout {
         StateListDrawable stateListDrawable = new StateListDrawable();
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fastscroller_handle_normal);
         Drawable drawable1=ContextCompat.getDrawable(getContext(),R.drawable.fastscroller_handle_pressed);
-        stateListDrawable.addState(View.PRESSED_ENABLED_STATE_SET, new InsetDrawable(drawable1, getResources().getDimensionPixelSize(R.dimen.fastscroller_track_padding), 0, 0, 0));
-        stateListDrawable.addState(View.EMPTY_STATE_SET, new InsetDrawable(drawable, getResources().getDimensionPixelSize(R.dimen.fastscroller_track_padding), 0, 0, 0));
+        stateListDrawable.addState(View.PRESSED_ENABLED_STATE_SET, new InsetDrawable(drawable1, getResources().getDimensionPixelSize(R.dimen.fast_scroller_track_padding), 0, 0, 0));
+        stateListDrawable.addState(View.EMPTY_STATE_SET, new InsetDrawable(drawable, getResources().getDimensionPixelSize(R.dimen.fast_scroller_track_padding), 0, 0, 0));
         this.handle.setImageDrawable(stateListDrawable);
     }
     public void setRecyclerView(@NonNull RecyclerView recyclerView,int columns) {

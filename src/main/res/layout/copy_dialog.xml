@@ -33,13 +33,13 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:id="@+id/textView" />
+        android:id="@+id/text_view" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/doforall"
+        android:text="@string/do_for_all"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
-        android:id="@+id/checkBox" />
+        android:id="@+id/check_box" />
 </LinearLayout>

@@ -32,7 +32,6 @@ import com.amaze.filemanager.fragments.TabFragment;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.services.ExtractService;
 import com.amaze.filemanager.services.ZipTask;
-import com.amaze.filemanager.ui.dialogs.SmbSearchDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -100,7 +99,7 @@ public class MainActivityHelper {
         }
     };
     void mkdir(final int openMode,final String path,final Main ma){
-        final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.entername), "",utils.getString(mainActivity,R.string.newfolder),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
+        final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.enter_name), "",utils.getString(mainActivity,R.string.new_folder),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
         materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +114,7 @@ public class MainActivityHelper {
         materialDialog.show();
     }
     void mkfile(final int openMode,final String path,final Main ma){
-        final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.entername), "",utils.getString(mainActivity,R.string.newfile),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
+        final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.enter_name), "",utils.getString(mainActivity,R.string.new_file),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
         materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,13 +140,6 @@ public class MainActivityHelper {
                 final String path1 = ma.CURRENT_PATH;
                 mkfile(ma.openMode,path1,ma);
                 break;
-            case 2:
-                SmbSearchDialog smbDialog=new SmbSearchDialog();
-                smbDialog.show(mainActivity.getFragmentManager(),"tab");
-                break;
-            /*case 3:
-                mainActivity.bindDrive();
-                break;*/
         }
     }
 
@@ -167,7 +159,7 @@ public class MainActivityHelper {
                 newPath=mainActivity.getResources().getString(R.string.documents);
                 break;
             case 4:
-                newPath=mainActivity.getResources().getString(R.string.apks);
+                newPath=mainActivity.getResources().getString(R.string.apk);
                 break;
             case 5:
                 newPath=mainActivity.getResources().getString(R.string.quick);
@@ -181,13 +173,13 @@ public class MainActivityHelper {
     public void guideDialogForLEXA(String path) {
         final MaterialDialog.Builder x = new MaterialDialog.Builder(mainActivity);
         if (mainActivity.theme1 == 1) x.theme(Theme.DARK);
-        x.title(R.string.needsaccess);
+        x.title(R.string.need_access);
         LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.lexadrawer, null);
+        View view = layoutInflater.inflate(R.layout.lexa_drawer, null);
         x.customView(view, true);
         // textView
         TextView textView = (TextView) view.findViewById(R.id.description);
-        textView.setText(utils.getString(mainActivity, R.string.needsaccesssummary) + path + utils.getString(mainActivity, R.string.needsaccesssummary1));
+        textView.setText(utils.getString(mainActivity, R.string.need_access_summary) + path + utils.getString(mainActivity, R.string.need_access_summary_one));
         ((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.sd_operate_step);
         x.positiveText(R.string.open);
         x.negativeText(R.string.cancel);
@@ -222,7 +214,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, (R.string.fileexist), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -256,7 +248,7 @@ public class MainActivityHelper {
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
                         } else
-                            Toast.makeText(context, R.string.operationunsuccesful, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.operation_un_successfully, Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -303,7 +295,7 @@ public class MainActivityHelper {
 
 
     public void mkFile(final HFile path,final Main ma) {
-        final Toast toast=Toast.makeText(ma.getActivity(), R.string.creatingfile, Toast.LENGTH_LONG);
+        final Toast toast=Toast.makeText(ma.getActivity(), R.string.creating_file, Toast.LENGTH_LONG);
         toast.show();
         Operations.mkfile(path, ma.getActivity(), ma.ROOT_MODE, new Operations.ErrorCallBack() {
             @Override
@@ -312,7 +304,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if(toast!=null)toast.cancel();
-                        Toast.makeText(mainActivity, (R.string.fileexist), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
                         if(ma!=null && ma.getActivity()!=null)
                             mkfile(file.getMode(),file.getPath(),ma);
 
@@ -356,7 +348,7 @@ public class MainActivityHelper {
         });
     }
     public void mkDir(final HFile path,final Main ma) {
-        final Toast toast=Toast.makeText(ma.getActivity(), R.string.creatingfolder, Toast.LENGTH_LONG);
+        final Toast toast=Toast.makeText(ma.getActivity(), R.string.creating_folder, Toast.LENGTH_LONG);
         toast.show();
         Operations.mkdir(path, ma.getActivity(), ma.ROOT_MODE, new Operations.ErrorCallBack() {
             @Override
@@ -365,7 +357,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, (R.string.fileexist), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
                         if (ma != null && ma.getActivity() != null)
                             mkdir(file.getMode(), file.getPath(), ma);
                     }
@@ -401,7 +393,7 @@ public class MainActivityHelper {
                         if (b) {
                             ma.updateList();
                         } else
-                            Toast.makeText(ma.getActivity(), R.string.operationunsuccesful, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ma.getActivity(), R.string.operation_un_successfully, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -410,10 +402,6 @@ public class MainActivityHelper {
 
     public void deleteFiles(ArrayList<BaseFile> files) {
         if (files == null) return;
-        if (files.get(0).isSmb()) {
-            new DeleteTask(null, mainActivity).execute((files));
-            return;
-        }
         int mode = checkFolder(new File(files.get(0).getPath()).getParentFile(), mainActivity);
         if (mode == 2) {
             mainActivity.oparrayList = (files);

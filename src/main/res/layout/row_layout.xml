@@ -32,7 +32,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true">
         <FrameLayout
-            android:id="@+id/iconframe"
+            android:id="@+id/icon_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/icon_margin_top"
@@ -66,7 +66,7 @@
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:id="@+id/generictext"
+                android:id="@+id/generic_text"
                 android:textColor="@android:color/white"
                 />
         </FrameLayout>
@@ -104,7 +104,7 @@
         android:layout_centerVertical="true">
 
         <TextView
-            android:id="@+id/firstline"
+            android:id="@+id/first_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -117,7 +117,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/firstline"
+            android:layout_below="@id/first_line"
             android:layout_marginTop="5dp">
 
 
@@ -130,7 +130,7 @@
                 android:textColor="?android:attr/textColorTertiary"
                 />
             <TextView
-                android:id="@+id/secondLine"
+                android:id="@+id/second_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/date"
@@ -140,7 +140,7 @@
                 />
 
             <TextView
-                android:id="@+id/permis"
+                android:id="@+id/permission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

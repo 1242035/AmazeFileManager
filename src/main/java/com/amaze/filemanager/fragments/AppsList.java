@@ -105,7 +105,7 @@ public class AppsList extends ListFragment {
         else{
             c=savedInstanceState.getParcelableArrayList("c");
             a=savedInstanceState.getParcelableArrayList("list");
-            adapter = new AppsAdapter(getActivity(), R.layout.rowlayout, a, app, c);
+            adapter = new AppsAdapter(getActivity(), R.layout.row_layout, a, app, c);
             setListAdapter(adapter);
             vl.setSelectionFromTop(savedInstanceState.getInt("index"), savedInstanceState.getInt("top"));
             vl.setSelectionFromTop(savedInstanceState.getInt("index"), savedInstanceState.getInt("top"));
@@ -234,7 +234,7 @@ public class AppsList extends ListFragment {
                 if (bitmap != null) {
 
 
-                    adapter = new AppsAdapter(getActivity(), R.layout.rowlayout, bitmap, app, c);
+                    adapter = new AppsAdapter(getActivity(), R.layout.row_layout, bitmap, app, c);
                     setListAdapter(adapter);
                     if(save && getListView()!=null)
                         getListView().setSelectionFromTop(index,top);

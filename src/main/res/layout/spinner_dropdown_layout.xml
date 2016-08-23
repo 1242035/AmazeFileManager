@@ -22,17 +22,17 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/spinnerLayout"
+    android:id="@+id/spinner_layout"
     android:layout_width="match_parent"
     android:background="@drawable/spinner_row_light"
     android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/textParent"
+        android:id="@+id/text_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/spinnerText"
+            android:id="@+id/spinner_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"

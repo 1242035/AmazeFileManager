@@ -86,9 +86,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-
 public class Futils {
 
 public  final int READ = 4;
@@ -98,7 +95,7 @@ public  final int READ = 4;
 
     public Futils() {
     }
-    //methods for fastscroller
+    //methods for
     public static float getViewRawY(View view) {
         int[] location = new int[2];
         location[0] = 0;
@@ -188,21 +185,6 @@ public  final int READ = 4;
         return length;
     }
 
-    public static long folderSize(SmbFile directory) {
-        long length = 0;
-        try {
-            for (SmbFile file:directory.listFiles()) {
-
-                if (file.isFile())
-                    length += file.length();
-                else
-                    length += folderSize(file);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return length;
-    }
     private  ColorStateList createEditTextColorStateList(int color) {
         int[][] states = new int[3][];
         int[] colors = new int[3];
@@ -430,13 +412,13 @@ public  final int READ = 4;
             if(uri==null)uri=Uri.fromFile(f);
             intent.setDataAndType(uri, type);
         Intent startintent;
-        if (forcechooser) startintent=Intent.createChooser(intent, c.getResources().getString(R.string.openwith));
+        if (forcechooser) startintent=Intent.createChooser(intent, c.getResources().getString(R.string.open_with));
         else startintent=intent;
         try {
             c.startActivity(startintent);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-        Toast.makeText(c,R.string.noappfound,Toast.LENGTH_SHORT).show();
+        Toast.makeText(c,R.string.no_app_found,Toast.LENGTH_SHORT).show();
         openWith(f,c);
         }}else{openWith(f, c);}
 
@@ -530,7 +512,7 @@ public  final int READ = 4;
     }
 public void openWith(final File f,final Context c) {
         MaterialDialog.Builder a=new MaterialDialog.Builder(c);
-        a.title(getString(c, R.string.openas));
+        a.title(getString(c, R.string.open_as));
         String[] items=new String[]{getString(c,R.string.text),getString(c,R.string.image),getString(c,R.string.video),getString(c,R.string.audio),getString(c,R.string.database),getString(c,R.string.other)};
 
         a.items(items).itemsCallback(new MaterialDialog.ListCallback() {
@@ -564,7 +546,7 @@ public void openWith(final File f,final Context c) {
                 try {
                     c.startActivity(intent);
                 } catch (Exception e) {
-                    Toast.makeText(c, R.string.noappfound, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(c, R.string.no_app_found, Toast.LENGTH_SHORT).show();
                     openWith(f, c);
                 }
             }
@@ -585,7 +567,7 @@ public void openWith(final File f,final Context c) {
             todelete.add(a.get(pos.get(i)).generateBaseFile());
             names = names + "\n" + (i + 1) + ". " + a.get(pos.get(i)).getTitle();
         }
-        c.content(getString(b.getActivity(), R.string.questiondelete) + names);
+        c.content(getString(b.getActivity(), R.string.question_delete) + names);
 
         if(b.theme1==1)
             c.theme(Theme.DARK);
@@ -675,9 +657,9 @@ public void openWith(final File f,final Context c) {
         if(c.theme1==1)
             a.theme(Theme.DARK);
         View v=c.getActivity().getLayoutInflater().inflate(R.layout.properties_dialog,null);
-        AppCompatButton appCompatButton=(AppCompatButton)v.findViewById(R.id.appX);
+        AppCompatButton appCompatButton=(AppCompatButton)v.findViewById(R.id.app_x);
         appCompatButton.setAllCaps(true);
-        final View permtabl=v.findViewById(R.id.permtable);
+        final View permtabl=v.findViewById(R.id.permission_table);
         final View but=v.findViewById(R.id.set);
         if(root && perm.length()>6) {
             appCompatButton.setVisibility(View.VISIBLE);
@@ -707,7 +689,7 @@ public void openWith(final File f,final Context c) {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 c.MAIN_ACTIVITY.copyToClipboard(c.getActivity(), hFile.getPath());
-                Toast.makeText(c.getActivity(), c.getResources().getString(R.string.pathcopied), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c.getActivity(), c.getResources().getString(R.string.path_copied), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -720,7 +702,7 @@ public void openWith(final File f,final Context c) {
                 (),v).execute(hFile.getPath());
     }
     public long[] getSpaces(HFile hFile){
-        if(!hFile.isSmb() && hFile.isDirectory()){
+        if(  hFile.isDirectory() ){
             try {
                 File file=new File(hFile.getPath());
                 long[] ints=new long[]{file.getTotalSpace(), file.getFreeSpace(),folderSize
@@ -738,8 +720,6 @@ public void openWith(final File f,final Context c) {
             date = getdate(f.lastModified());
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (SmbException e) {
-            e.printStackTrace();
         }
         String items =  getString(c,R.string.calculating), size = getString(c,R.string.calculating), name, parent;
         name =  f.getName();
@@ -752,7 +732,7 @@ public void openWith(final File f,final Context c) {
             a.theme(Theme.DARK);
 
         View v=c.getLayoutInflater().inflate(R.layout.properties_dialog,null);
-        v.findViewById(R.id.appX).setVisibility(View.GONE);
+        v.findViewById(R.id.app_x).setVisibility(View.GONE);
         a.customView(v, true);
         a.positiveText(R.string.copy_path);
         a.negativeText(getString(c, R.string.md5_2));
@@ -764,7 +744,7 @@ public void openWith(final File f,final Context c) {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 copyToClipboard(c, f.getPath());
-                Toast.makeText(c, c.getResources().getString(R.string.pathcopied), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, c.getResources().getString(R.string.path_copied), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -889,7 +869,7 @@ public void openWith(final File f,final Context c) {
             try {
                 openunknown(f, m, false);
             } catch (Exception e) {
-                Toast.makeText(m, getString(m, R.string.noappfound),Toast.LENGTH_LONG).show();
+                Toast.makeText(m, getString(m, R.string.no_app_found),Toast.LENGTH_LONG).show();
                 openWith(f, m);
             }
         }
@@ -918,13 +898,13 @@ public void showSMBHelpDialog(Context m,String acc){
             "</ol>\n" +
             "</body>\n" +
             "</html>"));
-    b.positiveText(R.string.doit);
+    b.positiveText(R.string.do_it);
     b.positiveColor(Color.parseColor(acc));
     b.build().show();
 }
 public void showPackageDialog(final File f,final MainActivity m){
     MaterialDialog.Builder mat=new MaterialDialog.Builder(m);
-    mat.title(R.string.packageinstaller).content(R.string.pitext)
+    mat.title(R.string.package_installer).content(R.string.pi_text)
             .positiveText(R.string.install)
             .negativeText(R.string.view)
             .neutralText(R.string.cancel)
@@ -950,7 +930,7 @@ public void showPackageDialog(final File f,final MainActivity m){
     public void showArchiveDialog(final File f, final MainActivity m) {
         MaterialDialog.Builder mat = new MaterialDialog.Builder(m);
         mat.title(R.string.archive)
-                .content(R.string.archtext)
+                .content(R.string.arch_text)
                 .positiveText(R.string.extract)
                 .negativeText(R.string.view)
                 .neutralText(R.string.cancel)
@@ -1005,7 +985,7 @@ public void showPackageDialog(final File f,final MainActivity m){
 
     public void showCompressDialog(final MainActivity m, final ArrayList<BaseFile> b, final String current) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(m);
-        a.input(getString(m, R.string.enterzipname), ".zip", false, new
+        a.input(getString(m, R.string.enter_zip_name), ".zip", false, new
                 MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
@@ -1015,7 +995,7 @@ public void showPackageDialog(final File f,final MainActivity m){
         a.widgetColor(Color.parseColor(BaseActivity.accentSkin));
         if(m.theme1==1)
             a.theme(Theme.DARK);
-        a.title(getString(m, R.string.enterzipname));
+        a.title(getString(m, R.string.enter_zip_name));
         a.positiveText(R.string.create);
         a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
         a.onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1035,7 +1015,7 @@ public void showPackageDialog(final File f,final MainActivity m){
     }
 
     public void showSortDialog(final Main m) {
-        String[] sort = m.getResources().getStringArray(R.array.sortby);
+        String[] sort = m.getResources().getStringArray(R.array.sort_by);
         int current = Integer.parseInt(m.Sp.getString("sortby", "0"));
         MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         if(m.theme1==1)a.theme(Theme.DARK);
@@ -1070,12 +1050,12 @@ public void showPackageDialog(final File f,final MainActivity m){
                 dialog.dismiss();
             }
         });
-        a.title(R.string.sortby);
+        a.title(R.string.sort_by);
         a.build().show();
     }
 
     public void showSortDialog(final AppsList m) {
-        String[] sort = m.getResources().getStringArray(R.array.sortbyApps);
+        String[] sort = m.getResources().getStringArray(R.array.sort_by_apps);
         int current = Integer.parseInt(m.Sp.getString("sortbyApps", "0"));
         MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         if(m.theme1==1)a.theme(Theme.DARK);
@@ -1109,7 +1089,7 @@ public void showPackageDialog(final File f,final MainActivity m){
                 dialog.dismiss();
             }
         });
-        a.title(R.string.sortby);
+        a.title(R.string.sort_by);
         a.build().show();
     }
 
@@ -1130,7 +1110,7 @@ public void showPackageDialog(final File f,final MainActivity m){
             a.theme(Theme.DARK);
 
         a.autoDismiss(true);
-        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, R.layout.bookmarkrow, toHFileArray(DataUtils.history),null,true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, R.layout.bookmark_row, toHFileArray(DataUtils.history),null,true);
         a.adapter(adapter, new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
@@ -1148,11 +1128,11 @@ public void showPackageDialog(final File f,final MainActivity m){
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
         a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
-        a.title(R.string.hiddenfiles);
+        a.title(R.string.hidden_files);
         if(m.theme1==1)
             a.theme(Theme.DARK);
         a.autoDismiss(true);
-        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, R.layout.bookmarkrow, toHFileArray(DataUtils.getHiddenfiles()),null,false);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, R.layout.bookmark_row, toHFileArray(DataUtils.getHiddenfiles()),null,false);
         a.adapter(adapter, new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {

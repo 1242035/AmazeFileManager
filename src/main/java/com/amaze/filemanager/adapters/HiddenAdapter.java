@@ -12,16 +12,13 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.fragments.Main;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.utils.DataUtils;
-import com.amaze.filemanager.utils.HistoryManager;
 
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -63,7 +60,7 @@ public class HiddenAdapter extends ArrayAdapter<HFile> {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) c
                     .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            view = mInflater.inflate(R.layout.bookmarkrow, null);
+            view = mInflater.inflate(R.layout.bookmark_row, null);
             final ViewHolder vholder = new ViewHolder();
             vholder.txtTitle = (TextView) view.findViewById(R.id.text1);
             vholder.image = (ImageButton) view.findViewById(R.id.delete_button);
@@ -84,7 +81,7 @@ public class HiddenAdapter extends ArrayAdapter<HFile> {
             holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(!f.isSmb() && f.isDirectory())
+            if( f.isDirectory())
             {
                 ArrayList<BaseFile> a=new ArrayList<BaseFile>();
                 BaseFile baseFile=new BaseFile(items.get(p).getPath()+"/.nomedia");
@@ -111,15 +108,6 @@ public class HiddenAdapter extends ArrayAdapter<HFile> {
                                     context.loadlist(f.getPath(), false, -1);
                                 }
                             });
-                        } else {
-                            if(!f.isSmb()){
-                                context.getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        context.utils.openFile(new File(f.getPath()), (MainActivity) context.getActivity());
-                                    }
-                                });
-                            }
                         }
                     }
                 }).start();

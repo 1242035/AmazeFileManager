@@ -149,14 +149,14 @@ public class Preferences extends BaseActivity  implements ActivityCompat.OnReque
             case 0:
                 p=new Preffrag();
                 FragmentTransaction transaction =getFragmentManager().beginTransaction();
-                transaction.replace(R.id.prefsfragment,p );
+                transaction.replace(R.id.prefs_fragment,p );
                 transaction.commit();
                 select=0;
                 getSupportActionBar().setTitle(R.string.setting);
                 break;
             case 1:
                 FragmentTransaction transaction1 =getFragmentManager().beginTransaction();
-                transaction1.replace(R.id.prefsfragment, new ColorPref());
+                transaction1.replace(R.id.prefs_fragment, new ColorPref());
                 transaction1.commit();
                 select=1;
                 getSupportActionBar().setTitle(R.string.color_title);

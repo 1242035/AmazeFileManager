@@ -73,7 +73,7 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
     LayoutInflater inflater;
     int fabskin;
     public DrawerAdapter(Context context, ArrayList<Item> values, MainActivity m, SharedPreferences Sp) {
-        super(context, R.layout.drawerrow, values);
+        super(context, R.layout.drawer_row, values);
 
         this.context = context;
         this.values = values;
@@ -109,8 +109,8 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
             view.setPadding(0, m.dpToPx(8), 0, m.dpToPx(8));
             return view;
         } else {
-            View  view = inflater.inflate(R.layout.drawerrow, parent, false);
-            final TextView txtTitle=(TextView) view.findViewById(R.id.firstline);
+            View  view = inflater.inflate(R.layout.drawer_row, parent, false);
+            final TextView txtTitle=(TextView) view.findViewById(R.id.first_line);
             final ImageView imageView=(ImageView) view.findViewById(R.id.icon);
             if (m.theme1 == 0) {
                 view.setBackgroundResource(R.drawable.safr_ripple_white);
@@ -136,10 +136,9 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
                         if(DataUtils.containsBooks(new String[]{item.getTitle(),path})!=-1){
                             m.renameBookmark((item).getTitle(),path);
                         }
-                        else if (path.startsWith("smb:/")) {
-                            m.showSMBDialog(item.getTitle(),path, true);
-                        }
-                    } else if(position<m.storage_count ){
+
+                    }
+                    else if(position<m.storage_count ){
                         String path = ((EntryItem) getItem(position)).getPath();
                         if(!path.equals("/"))
                             new Futils().showProps(RootHelper.generateBaseFile(new File(path),true),m,m.theme1);

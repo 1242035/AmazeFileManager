@@ -44,20 +44,20 @@ public class GenerateMD5Task extends AsyncTask<String, String, String> {
         this.items = items;
         this.date = date;
         this.textView = textView;
-        this.sizeDrawable = (SizeDrawable) textView.findViewById(R.id.sizedrawable);
-        final TextView t1 = (TextView) textView.findViewById(R.id.t1);
-        final TextView t2 = (TextView) textView.findViewById(R.id.t2);
-        final TextView t3 = (TextView) textView.findViewById(R.id.t3);
-        final TextView t4 = (TextView) textView.findViewById(R.id.t4);
-        t5 = (TextView) textView.findViewById(R.id.t5);
-        t6 = (TextView) textView.findViewById(R.id.t6);
-        t7 = (TextView) textView.findViewById(R.id.t7);
-        t8 = (TextView) textView.findViewById(R.id.t8);
-        t9 = (TextView) textView.findViewById(R.id.t9);
+        this.sizeDrawable = (SizeDrawable) textView.findViewById(R.id.size_drawable);
+        final TextView t1 = (TextView) textView.findViewById(R.id.text_one);
+        final TextView t2 = (TextView) textView.findViewById(R.id.text_two);
+        final TextView t3 = (TextView) textView.findViewById(R.id.text_three);
+        final TextView t4 = (TextView) textView.findViewById(R.id.text_four);
+        t5 = (TextView) textView.findViewById(R.id.text_five);
+        t6 = (TextView) textView.findViewById(R.id.text_six);
+        t7 = (TextView) textView.findViewById(R.id.text_seven);
+        t8 = (TextView) textView.findViewById(R.id.text_eight);
+        t9 = (TextView) textView.findViewById(R.id.text_nine);
         md5TextView = (TextView) textView.findViewById(R.id.md5);
         if (!f.isDirectory()) {
             textView.findViewById(R.id.divider).setVisibility(View.GONE);
-            textView.findViewById(R.id.dirprops).setVisibility(View.GONE);
+            textView.findViewById(R.id.directory_properties).setVisibility(View.GONE);
         } else {
             md5TextView.setVisibility(View.GONE);
 
@@ -86,7 +86,7 @@ public class GenerateMD5Task extends AsyncTask<String, String, String> {
                         g.sizeDrawable.startAnimation(animation);
                     } else {
                         textView.findViewById(R.id.divider).setVisibility(View.GONE);
-                        textView.findViewById(R.id.dirprops).setVisibility(View.GONE);
+                        textView.findViewById(R.id.directory_properties).setVisibility(View.GONE);
                     }
 
                 }

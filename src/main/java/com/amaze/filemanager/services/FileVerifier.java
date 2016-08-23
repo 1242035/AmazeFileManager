@@ -14,8 +14,6 @@ import java.net.MalformedURLException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
-import jcifs.smb.SmbException;
-
 /**
  * Created by arpitkh996 on 25-01-2016.
  */
@@ -81,8 +79,6 @@ public class FileVerifier extends Thread {
             }
             return;
         }
-        if (!targetFile.isSmb())
-            utils.scanFile(targetFile.getPath(), c);
         if (!checkNonRootFiles(sourceFile, targetFile)) {
             fileVerifierInterface.addFailedFile(sourceFile);
             fileVerifierInterface.setCopySuccessful(false);
@@ -90,8 +86,6 @@ public class FileVerifier extends Thread {
         try {
             targetFile.setLastModified(sourceFile.lastModified());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (SmbException e) {
             e.printStackTrace();
         }
         if (move) {

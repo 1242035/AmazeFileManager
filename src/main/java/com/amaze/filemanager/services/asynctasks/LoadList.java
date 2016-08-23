@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.fragments.Main;
 import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.filesystem.BaseFile;
@@ -42,18 +43,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-import jcifs.smb.SmbAuthException;
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-
-
 public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements>> {
 
     private String path;
     boolean back;
     Main ma;
     Context c;
-    int openmode = 0;//0 for normal 1 for smb 2 for custom 3 for drive
+    int openmode = Constant.OPEN_NORMAL;//0 for normal 1 for smb 2 for custom 3 for drive
     public LoadList(boolean back, Context c,Main ma, int openmode) {
         this.back = back;
         this.ma = ma;
@@ -63,8 +59,9 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
     @Override
     protected void onPreExecute() {
-        if (ma!=null && ma.mSwipeRefreshLayout!=null)
+        if (ma!=null && ma.mSwipeRefreshLayout!=null) {
             ma.mSwipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     @Override
@@ -87,34 +84,15 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
            if (openmode == -1) {
                HFile hFile = new HFile(HFile.UNKNOWN, path);
                hFile.generateMode(ma.getActivity());
-               if (hFile.isDirectory() && !hFile.isSmb()) {
+               if (hFile.isDirectory()) {
                    openmode = (0);
-               } else if (hFile.isSmb()) {
-                   openmode = (1);
-                   ma.smbPath = path;
-               } else if (hFile.isCustomPath())
+               }else if (hFile.isCustomPath())
                    openmode = (2);
                else if (android.util.Patterns.EMAIL_ADDRESS.matcher(path).matches()) {
                    openmode = (3);
                }
            }
-           if (openmode == 1) {
-               HFile hFile = new HFile(HFile.SMB_MODE, path);
-               try {
-                   SmbFile[] smbFile = hFile.getSmbFile(5000).listFiles();
-                   list = ma.addToSmb(smbFile, path);
-               } catch (SmbAuthException e) {
-                   if(!e.getMessage().toLowerCase().contains("denied"))
-                   ma.reauthenticateSmb();
-                   publishProgress(e.getLocalizedMessage());
-               } catch (SmbException e) {
-                   publishProgress(e.getLocalizedMessage());
-                   e.printStackTrace();
-               } catch (NullPointerException e) {
-                   publishProgress(e.getLocalizedMessage());
-                   e.printStackTrace();
-               }
-           } else if (openmode == 2) {
+           else if (openmode == 2) {
 
                ArrayList<BaseFile> arrayList = null;
                switch (Integer.parseInt(path)) {
@@ -364,7 +342,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
             if (!f.equals("/")) {
                 BaseFile a = RootHelper.generateBaseFile(new File(f), ma.SHOW_HIDDEN);
                 a.generateMode(ma.getActivity());
-                if (a != null && !a.isSmb() && !(a).isDirectory() && a.exists())
+                if (a != null && !(a).isDirectory() && a.exists())
                     songs.add(a);
             }
         }

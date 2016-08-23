@@ -79,7 +79,7 @@ public class TabFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.tabfragment,
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.tab_fragment,
                 container, false);
         fragmentManager=getActivity().getSupportFragmentManager();
         mToolBarContainer=getActivity().findViewById(R.id.lin);
@@ -250,7 +250,7 @@ public class TabFragment extends android.support.v4.app.Fragment
     String parsePathForName(String path,int openmode){
         Resources resources=getActivity().getResources();
         if("/".equals(path))
-            return resources.getString(R.string.rootdirectory);
+            return resources.getString(R.string.root_directory);
         else if(openmode==1 && path.startsWith("smb:/"))
             return (new File(parseSmbPath(path)).getName());
         else if("/storage/emulated/0".equals(path))

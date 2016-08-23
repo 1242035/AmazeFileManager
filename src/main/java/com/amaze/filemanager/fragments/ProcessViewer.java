@@ -53,8 +53,6 @@ import com.amaze.filemanager.ui.icons.IconUtils;
 import com.amaze.filemanager.utils.DataPackage;
 import com.amaze.filemanager.utils.Futils;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class ProcessViewer extends Fragment {
@@ -75,7 +73,7 @@ public class ProcessViewer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = (ViewGroup) inflater.inflate(R.layout.processparent,
+        View root = (ViewGroup) inflater.inflate(R.layout.process_parent,
                 container, false);
         setRetainInstance(false);
 
@@ -83,7 +81,7 @@ public class ProcessViewer extends Fragment {
         mainActivity = (MainActivity) getActivity();
         if (mainActivity.theme1 == 1)
             root.setBackgroundResource((R.color.cardView_background));
-        rootView = (LinearLayout) root.findViewById(R.id.secondbut);
+        rootView = (LinearLayout) root.findViewById(R.id.second_but);
         //((MainActivity)getActivity()).getSupportActionBar().setTitle(utils.getString(getActivity(),R.string.processes));
         mainActivity.setActionBarTitle(utils.getString(getActivity(), R.string.processes));
         mainActivity.floatingActionButton.hideMenuButton(true);
@@ -275,18 +273,18 @@ public class ProcessViewer extends Fragment {
                         if (move) {
                             text = utils.getString(getActivity(), R.string.moving) + "\n" + name + "\n" + utils.readableFileSize(done) + "/" + utils.readableFileSize(total) + "\n" + p1 + "%";
                         }
-                        ((TextView) process.findViewById(R.id.progressText)).setText(text);
-                        ProgressBar p = (ProgressBar) process.findViewById(R.id.progressBar1);
+                        ((TextView) process.findViewById(R.id.progress_text)).setText(text);
+                        ProgressBar p = (ProgressBar) process.findViewById(R.id.progress_bar_one);
                         p.setProgress(p1);
                         p.setSecondaryProgress(p2);
                     }
                 } else {
                     CardView root = (android.support.v7.widget.CardView) getActivity()
-                            .getLayoutInflater().inflate(R.layout.processrow, null);
+                            .getLayoutInflater().inflate(R.layout.process_row, null);
                     root.setTag("copy" + id);
 
                     ImageButton cancel = (ImageButton) root.findViewById(R.id.delete_button);
-                    TextView progressText = (TextView) root.findViewById(R.id.progressText);
+                    TextView progressText = (TextView) root.findViewById(R.id.progress_text);
 
                     Drawable icon = icons.getCopyDrawable();
                     boolean move = b.isMove();
@@ -305,7 +303,7 @@ public class ProcessViewer extends Fragment {
                         progressText.setTextColor(Color.BLACK);
                     }
 
-                    ((ImageView) root.findViewById(R.id.progressImage)).setImageDrawable(icon);
+                    ((ImageView) root.findViewById(R.id.progress_image)).setImageDrawable(icon);
                     cancel.setOnClickListener(new View.OnClickListener() {
 
                         public void onClick(View p1) {
@@ -330,7 +328,7 @@ public class ProcessViewer extends Fragment {
                         text = utils.getString(getActivity(), R.string.moving) + "\n" + name;
                     }
                     progressText.setText(text);
-                    ProgressBar p = (ProgressBar) root.findViewById(R.id.progressBar1);
+                    ProgressBar p = (ProgressBar) root.findViewById(R.id.progress_bar_one);
                     p.setProgress(p1);
                     p.setSecondaryProgress(p2);
                     CopyIds.add(id1);
@@ -358,20 +356,20 @@ public class ProcessViewer extends Fragment {
                     int p1 = dataPackage.getP1();
                     long p3 = dataPackage.getTotal();
                     long p2 = dataPackage.getDone();
-                    ProgressBar p = (ProgressBar) process.findViewById(R.id.progressBar1);
+                    ProgressBar p = (ProgressBar) process.findViewById(R.id.progress_bar_one);
                     if (p1 <= 100) {
-                        ((TextView) process.findViewById(R.id.progressText)).setText(utils.getString(getActivity(), R.string.extracting) + "\n" + name + "\n" + p1 + "%" + "\n" + utils.readableFileSize(p2) + "/" + utils.readableFileSize(p3));
+                        ((TextView) process.findViewById(R.id.progress_text)).setText(utils.getString(getActivity(), R.string.extracting) + "\n" + name + "\n" + p1 + "%" + "\n" + utils.readableFileSize(p2) + "/" + utils.readableFileSize(p3));
 
                         p.setProgress(p1);
                     }
                 }
             } else {
-                CardView root = (CardView) getActivity().getLayoutInflater().inflate(R.layout.processrow, null);
+                CardView root = (CardView) getActivity().getLayoutInflater().inflate(R.layout.process_row, null);
                 root.setTag("extract" + id);
 
-                ImageView progressImage = ((ImageView) root.findViewById(R.id.progressImage));
+                ImageView progressImage = ((ImageView) root.findViewById(R.id.progress_image));
                 ImageButton cancel = (ImageButton) root.findViewById(R.id.delete_button);
-                TextView progressText = (TextView) root.findViewById(R.id.progressText);
+                TextView progressText = (TextView) root.findViewById(R.id.progress_text);
 
                 if (mainActivity.theme1 == 1) {
 
@@ -406,8 +404,8 @@ public class ProcessViewer extends Fragment {
                 int p1 = dataPackage.getP1();
 
 
-                ((TextView) root.findViewById(R.id.progressText)).setText(utils.getString(getActivity(), R.string.extracting) + "\n" + name);
-                ProgressBar p = (ProgressBar) root.findViewById(R.id.progressBar1);
+                ((TextView) root.findViewById(R.id.progress_text)).setText(utils.getString(getActivity(), R.string.extracting) + "\n" + name);
+                ProgressBar p = (ProgressBar) root.findViewById(R.id.progress_bar_one);
                 p.setProgress(p1);
                 ExtractIds.add(id);
                 rootView.addView(root);
@@ -429,20 +427,20 @@ public class ProcessViewer extends Fragment {
                     String name = dataPackage.getName();
                     int p1 = dataPackage.getP1();
 
-                    ProgressBar p = (ProgressBar) process.findViewById(R.id.progressBar1);
+                    ProgressBar p = (ProgressBar) process.findViewById(R.id.progress_bar_one);
                     if (p1 <= 100) {
-                        ((TextView) process.findViewById(R.id.progressText)).setText(utils.getString(getActivity(), R.string.zipping) + "\n" + name + "\n" + p1 + "%");
+                        ((TextView) process.findViewById(R.id.progress_text)).setText(utils.getString(getActivity(), R.string.zipping) + "\n" + name + "\n" + p1 + "%");
 
                         p.setProgress(p1);
                     }
                 }
             } else {
-                CardView root = (CardView) getActivity().getLayoutInflater().inflate(R.layout.processrow, null);
+                CardView root = (CardView) getActivity().getLayoutInflater().inflate(R.layout.process_row, null);
                 root.setTag("zip" + id);
 
-                ImageView progressImage = ((ImageView) root.findViewById(R.id.progressImage));
+                ImageView progressImage = ((ImageView) root.findViewById(R.id.progress_image));
                 ImageButton cancel = (ImageButton) root.findViewById(R.id.delete_button);
-                TextView progressText = (TextView) root.findViewById(R.id.progressText);
+                TextView progressText = (TextView) root.findViewById(R.id.progress_text);
 
                 if (mainActivity.theme1 == 1) {
 
@@ -477,8 +475,8 @@ public class ProcessViewer extends Fragment {
                 int p1 = dataPackage.getP1();
 
 
-                ((TextView) root.findViewById(R.id.progressText)).setText(utils.getString(getActivity(), R.string.zipping) + "\n" + name);
-                ProgressBar p = (ProgressBar) root.findViewById(R.id.progressBar1);
+                ((TextView) root.findViewById(R.id.progress_text)).setText(utils.getString(getActivity(), R.string.zipping) + "\n" + name);
+                ProgressBar p = (ProgressBar) root.findViewById(R.id.progress_bar_one);
                 p.setProgress(p1);
 
                 ZipIds.add(id);

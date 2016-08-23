@@ -95,8 +95,6 @@ public class SearchAsyncHelper extends Fragment {
             String path = params[0];
             HFile file=new HFile(mOpenMode, path);
             file.generateMode(getActivity());
-            if(file.isSmb())return null;
-
             // level 1
             // if regex or not
             if (!isRegexEnabled) search(file, mInput);
