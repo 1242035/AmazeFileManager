@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.frmMain;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.utils.Futils;
@@ -34,11 +34,11 @@ import java.util.ArrayList;
 
 public class MoveFiles extends AsyncTask<String,Void,Boolean> {
     ArrayList<BaseFile> files;
-    Main ma;
+    frmMain ma;
     String path;
     Context context;
     int mode;
-    public MoveFiles(ArrayList<BaseFile> files, Main ma, Context context,int mode){
+    public MoveFiles(ArrayList<BaseFile> files, frmMain ma, Context context,int mode){
         this.ma=ma;
         this.context=context;
         this.files=files;
@@ -50,12 +50,18 @@ public class MoveFiles extends AsyncTask<String,Void,Boolean> {
         path=strings[0];
         boolean b=true;
         int i=0;
-        if(files.size()==0)return true;
-        if(mode!=0)return false;
+        if(files.size()==0) {
+            return true;
+        }
+        if(mode!=0) {
+            return false;
+        }
         for(BaseFile f:files){
             File file=new File(path+"/"+f.getName());
             File file1=new File(f.getPath());
-            if(!file1.renameTo(file)){b=false;}
+            if(!file1.renameTo(file)){
+                b=false;
+            }
             i++;
         }
         return b;
@@ -63,20 +69,24 @@ public class MoveFiles extends AsyncTask<String,Void,Boolean> {
     @Override
     public void onPostExecute(Boolean b){
         Futils futils=new Futils();
-        if(b ){
-            if(ma!=null)if(ma.CURRENT_PATH.equals(path))ma.updateList();
-                for(BaseFile f:files) {
-                    futils.scanFile(f.getPath(), context);
-                    futils.scanFile(path + "/" + f.getName(), context);
-
+        if( b ) {
+            if(ma!=null) {
+                if(ma.currentPath.equals(path)) {
+                    ma.updateList();
                 }
+            }
+            for(BaseFile f:files) {
+                futils.scanFile(f.getPath(), context);
+                futils.scanFile(path + "/" + f.getName(), context);
+            }
         }
-        else if(!b){
+        else if( ! b ) {
             Intent intent = new Intent(context, CopyService.class);
             intent.putExtra("FILE_PATHS", (files));
             intent.putExtra("COPY_DIRECTORY", path);
             intent.putExtra("move",true);
             intent.putExtra("MODE",mode);
-            context.startService(intent);}
+            context.startService(intent);
+        }
     }
 }

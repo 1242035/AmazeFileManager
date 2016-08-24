@@ -42,9 +42,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.filesystem.RootHelper;
-import com.amaze.filemanager.fragments.AppsList;
+import com.amaze.filemanager.fragments.frmAppList;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.ui.Layoutelements;
@@ -62,11 +63,11 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
     Context context;
     List<Layoutelements> items;
     public HashMap<Integer, Boolean> myChecked = new HashMap<Integer, Boolean>();
-    AppsList app;
+    frmAppList app;
     ArrayList<PackageInfo> c = new ArrayList<PackageInfo>();
 
     public AppsAdapter(Context context, int resourceId,
-                       List<Layoutelements> items, AppsList app, ArrayList<PackageInfo> c) {
+                       List<Layoutelements> items, frmAppList app, ArrayList<PackageInfo> c) {
         super(context, resourceId, items);
         this.context = context;
         this.items = items;
@@ -140,8 +141,9 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
             view = mInflater.inflate(R.layout.row_layout, null);
             final ViewHolder vholder = new ViewHolder();
             vholder.txtTitle = (TextView) view.findViewById(R.id.first_line);
-            if (app.theme1!=0)
+            if (app.baseTheme!=0) {
                 vholder.txtTitle.setTextColor(Color.WHITE);
+            }
             vholder.apkIcon = (ImageView) view.findViewById(R.id.apk_icon);
             vholder.rl = (RelativeLayout) view.findViewById(R.id.second);
             vholder.txtDesc= (TextView) view.findViewById(R.id.date);
@@ -160,7 +162,9 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
         app.ic.cancelLoad(holder.apkIcon);
         app.ic.loadDrawable(holder.apkIcon,(rowItem.getDesc()),null);
         if (holder.about != null) {
-            if(app.theme1==0)holder.about.setColorFilter(Color.parseColor("#ff666666"));
+            if(app.baseTheme==0) {
+                holder.about.setColorFilter(Color.parseColor("#ff666666"));
+            }
             showPopup(holder.about,rowItem);
         }
         holder.txtTitle.setText(rowItem.getTitle());
@@ -186,14 +190,11 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
             if (checked) {
                 holder.rl.setBackgroundColor(Color.parseColor("#5f33b5e5"));
             } else {
-                    if (app.theme1 == 0) {
-
-                        holder.rl.setBackgroundResource(R.drawable.safr_ripple_white);
-                    } else {
-
-                        holder.rl.setBackgroundResource(R.drawable.safr_ripple_black);
-                    }
-
+                if (app.baseTheme == 0) {
+                    holder.rl.setBackgroundResource(R.drawable.safr_ripple_white);
+                } else {
+                    holder.rl.setBackgroundResource(R.drawable.safr_ripple_black);
+                }
             }
         }
         return view;
@@ -219,7 +220,7 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                                 ArrayList<File> arrayList2=new ArrayList<File>();
                                 arrayList2.add(new File(rowItem.getDesc()));
                                 int color1= Color.parseColor(PreferenceUtils.getAccentString(app.Sp));
-                                utils.shareFiles(arrayList2,app.getActivity(),app.theme1,color1);
+                                utils.shareFiles(arrayList2,app.getActivity(),app.baseTheme,color1);
                                 return true;
                             case R.id.unins:
                                 final BaseFile f1 = new BaseFile(rowItem.getDesc());
@@ -235,10 +236,11 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                                 //utils.deleteFiles(arrayList, null, arrayList1);
                                 if ((info1.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                                     // system package
-                                    if(app.Sp.getBoolean("rootmode",false)) {
+                                    if(app.Sp.getBoolean(Constant.ROOT_MODE,false)) {
                                         MaterialDialog.Builder builder1 = new MaterialDialog.Builder(app.getActivity());
-                                        if(app.theme1==1)
+                                        if(app.baseTheme==1) {
                                             builder1.theme(Theme.DARK);
+                                        }
                                         builder1.content(utils.getString(app.getActivity(), R.string.unin_system_apk))
                                                 .title(utils.getString(app.getActivity(), R.string.warning))
                                                 .negativeColor(color)

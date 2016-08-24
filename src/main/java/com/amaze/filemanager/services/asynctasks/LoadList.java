@@ -26,7 +26,7 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.amaze.filemanager.Constant;
-import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.frmMain;
 import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.ui.icons.Icons;
@@ -47,10 +47,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
     private String path;
     boolean back;
-    Main ma;
+    frmMain ma;
     Context c;
     int openmode = Constant.OPEN_NORMAL;//0 for normal 1 for smb 2 for custom 3 for drive
-    public LoadList(boolean back, Context c,Main ma, int openmode) {
+    public LoadList(boolean back, Context c,frmMain ma, int openmode) {
         this.back = back;
         this.ma = ma;
         this.openmode = openmode;
@@ -59,15 +59,16 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
     @Override
     protected void onPreExecute() {
-        if (ma!=null && ma.mSwipeRefreshLayout!=null) {
-            ma.mSwipeRefreshLayout.setRefreshing(true);
+        if (ma!=null && ma.swipeRefreshLayout!=null) {
+            ma.swipeRefreshLayout.setRefreshing(true);
         }
     }
 
     @Override
     public void onProgressUpdate(String... message) {
-        if(c!=null)
-        Toast.makeText(c, message[0], Toast.LENGTH_SHORT).show();
+        if( c != null ) {
+            Toast.makeText(c, message[0], Toast.LENGTH_SHORT).show();
+        }
     }
 
     boolean grid;
@@ -79,21 +80,22 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
           ArrayList<Layoutelements> list = null;
            path = params[0];
            grid = ma.checkforpath(path);
-           ma.folder_count = 0;
-           ma.file_count = 0;
+           ma.folderCount = 0;
+           ma.fileCount = 0;
            if (openmode == -1) {
                HFile hFile = new HFile(HFile.UNKNOWN, path);
                hFile.generateMode(ma.getActivity());
-               if (hFile.isDirectory()) {
+               if ( hFile.isDirectory() ) {
                    openmode = (0);
-               }else if (hFile.isCustomPath())
+               }
+               else if (hFile.isCustomPath()) {
                    openmode = (2);
+               }
                else if (android.util.Patterns.EMAIL_ADDRESS.matcher(path).matches()) {
                    openmode = (3);
                }
            }
-           else if (openmode == 2) {
-
+           else if ( openmode == 2 ) {
                ArrayList<BaseFile> arrayList = null;
                switch (Integer.parseInt(path)) {
                    case 0:
@@ -126,32 +128,40 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
                }
                try {
-                   if (arrayList != null)
+                   if (arrayList != null) {
                        list = addTo(arrayList);
-                   else return new ArrayList<>();
+                   }
+                   else {
+                       return new ArrayList<>();
+                   }
                } catch (Exception e) {
+                   e.printStackTrace();
                }
-           } else {
+           }
+           else {
                try {
                    ArrayList<BaseFile> arrayList;
-                   if (ma.ROOT_MODE) {
-                       arrayList = RootHelper.getFilesList(path, ma.ROOT_MODE, ma.SHOW_HIDDEN, new RootHelper.GetModeCallBack() {
+                   if ( ma.rootMode ) {
+                       arrayList = RootHelper.getFilesList(path, ma.rootMode, ma.showHidden, new RootHelper.GetModeCallBack() {
                            @Override
                            public void getMode(int mode) {
                                openmode = mode;
                            }
                        });
-                   } else
-                       arrayList = (RootHelper.getFilesList(path, ma.SHOW_HIDDEN));
+                   }
+                   else {
+                       arrayList = (RootHelper.getFilesList(path, ma.showHidden));
+                   }
                    openmode = 0;
                    list = addTo(arrayList);
-
-               } catch (Exception e) {
+               }
+               catch (Exception e) {
                    return null;
                }
            }
-           if (list != null && !(openmode == 2 && ((path).equals("5") || (path).equals("6"))))
-               Collections.sort(list, new FileListSorter(ma.dsort, ma.sortby, ma.asc, ma.ROOT_MODE));
+           if (list != null && !(openmode == 2 && ((path).equals("5") || (path).equals("6")))) {
+               Collections.sort(list, new FileListSorter(ma.directorySort, ma.sortBy, ma.asc, ma.rootMode));
+           }
            return list;
 
     }
@@ -168,26 +178,30 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                     Layoutelements layoutelements = ma.utils.newElement(ma.folder, f.getPath(), ele.getPermisson(), ele.getLink(), size, 0, true, false, ele.getDate() + "");
                     layoutelements.setMode(ele.getMode());
                     a.add(layoutelements);
-                    ma.folder_count++;
-                } else {
+                    ma.folderCount++;
+                }
+                else {
                     long longSize = 0;
                     try {
                         if (ele.getSize() != -1) {
                             longSize = Long.valueOf(ele.getSize());
                             size = ma.utils.readableFileSize(longSize);
-                        } else {
+                        }
+                        else {
                             size = "";
                             longSize = 0;
                         }
-                    } catch (NumberFormatException e) {
-                        //e.printStackTrace();
+                    }
+                    catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
                     try {
-                        Layoutelements layoutelements = ma.utils.newElement(Icons.loadMimeIcon(ma.getActivity(), f.getPath(), !ma.IS_LIST, ma.res), f.getPath(), ele.getPermisson(), ele.getLink(), size, longSize, false, false, ele.getDate() + "");
+                        Layoutelements layoutelements = ma.utils.newElement(Icons.loadMimeIcon(ma.getActivity(), f.getPath(), !ma.isList, ma.getResources() ), f.getPath(), ele.getPermisson(), ele.getLink(), size, longSize, false, false, ele.getDate() + "");
                         layoutelements.setMode(ele.getMode());
                         a.add(layoutelements);
-                        ma.file_count++;
-                    } catch (Exception e) {
+                        ma.fileCount++;
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -203,8 +217,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
             bitmap = null;
         }
         ma.createViews(bitmap, back, path, openmode, false, grid);
-        ma.mSwipeRefreshLayout.setRefreshing(false);
-
+        ma.swipeRefreshLayout.setRefreshing(false);
     }
 
     ArrayList<BaseFile> listaudio() {
@@ -225,8 +238,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
             do {
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
-                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                if (strings != null) songs.add(strings);
+                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                if (strings != null) {
+                    songs.add(strings);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -245,8 +260,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
             do {
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
-                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                if (strings != null) songs.add(strings);
+                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                if (strings != null) {
+                    songs.add(strings);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -266,8 +283,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
             do {
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
-                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                if (strings != null) songs.add(strings);
+                BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                if (strings != null) {
+                    songs.add(strings);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -284,15 +303,19 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                         .getContentUri("external"), projection,
                 null,
                 null, null);
-        if (cursor == null) return songs;
+        if (cursor == null) {
+            return songs;
+        }
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             do {
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
                 File f = new File(path);
                 if (d.compareTo(new Date(f.lastModified())) != 1 && !f.isDirectory()) {
-                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                    if (strings != null) songs.add(strings);
+                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                    if (strings != null) {
+                        songs.add(strings);
+                    }
                 }
             } while (cursor.moveToNext());
         }
@@ -304,10 +327,11 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
             }
         });
-        if (songs.size() > 20)
+        if (songs.size() > 20) {
             for (int i = songs.size() - 1; i > 20; i--) {
                 songs.remove(i);
             }
+        }
         return songs;
     }
 
@@ -324,8 +348,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
                 if (path != null && path.endsWith(".apk")) {
-                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                    if (strings != null) songs.add(strings);
+                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                    if (strings != null) {
+                        songs.add(strings);
+                    }
                 }
             } while (cursor.moveToNext());
         }
@@ -340,10 +366,11 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
         ArrayList<BaseFile> songs = new ArrayList<>();
         for (String f : paths) {
             if (!f.equals("/")) {
-                BaseFile a = RootHelper.generateBaseFile(new File(f), ma.SHOW_HIDDEN);
+                BaseFile a = RootHelper.generateBaseFile(new File(f), ma.showHidden);
                 a.generateMode(ma.getActivity());
-                if (a != null && !(a).isDirectory() && a.exists())
+                if (a != null && !(a).isDirectory() && a.exists()) {
                     songs.add(a);
+                }
             }
         }
         return songs;
@@ -364,8 +391,10 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                 String path = cursor.getString(cursor.getColumnIndex
                         (MediaStore.Files.FileColumns.DATA));
                 if (path != null && contains(types, path)) {
-                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.SHOW_HIDDEN);
-                    if (strings != null) songs.add(strings);
+                    BaseFile strings = RootHelper.generateBaseFile(new File(path), ma.showHidden);
+                    if (strings != null) {
+                        songs.add(strings);
+                    }
                 }
             } while (cursor.moveToNext());
         }
@@ -375,7 +404,9 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
 
     boolean contains(String[] types, String path) {
         for (String string : types) {
-            if (path.endsWith(string)) return true;
+            if (path.endsWith(string)) {
+                return true;
+            }
         }
         return false;
     }

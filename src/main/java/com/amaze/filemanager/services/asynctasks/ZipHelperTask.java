@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.fragments.frmZipViewer;
 import com.amaze.filemanager.ui.ZipObj;
 
 import java.io.File;
@@ -22,7 +22,7 @@ import java.util.zip.ZipInputStream;
  */
 public class ZipHelperTask extends AsyncTask<String, Void, ArrayList<ZipObj>> {
 
-    ZipViewer zipViewer;
+    frmZipViewer zipViewer;
     String dir;
 
     /**
@@ -30,7 +30,7 @@ public class ZipHelperTask extends AsyncTask<String, Void, ArrayList<ZipObj>> {
      * @param zipViewer the zipViewer fragment instance
      * @param dir
      */
-    public ZipHelperTask(ZipViewer zipViewer, String dir) {
+    public ZipHelperTask(frmZipViewer zipViewer, String dir) {
         this.zipViewer = zipViewer;
         this.dir = dir;
         zipViewer.swipeRefreshLayout.setRefreshing(true);

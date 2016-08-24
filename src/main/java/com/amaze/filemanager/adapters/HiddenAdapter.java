@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.frmMain;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.HFile;
@@ -27,13 +27,13 @@ import java.util.ArrayList;
  */
 public class HiddenAdapter extends ArrayAdapter<HFile> {
     /*Shortcuts s;*/
-    Main context;Context c;
+    frmMain context;Context c;
     public ArrayList<HFile> items;
     MaterialDialog materialDialog;
     boolean hide;
     ///	public HashMap<Integer, Boolean> myChecked = new HashMap<Integer, Boolean>();
 
-    public HiddenAdapter(Context c,Main context, int resourceId, ArrayList<HFile> items,MaterialDialog materialDialog,boolean hide) {
+    public HiddenAdapter(Context c,frmMain context, int resourceId, ArrayList<HFile> items,MaterialDialog materialDialog,boolean hide) {
         super(c, resourceId, items);
         this.c=c;
         this.context = context;

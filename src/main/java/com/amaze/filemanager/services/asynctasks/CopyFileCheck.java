@@ -16,7 +16,7 @@ import com.afollestad.materialdialogs.Theme;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.frmMain;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.utils.DataUtils;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 
 public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayList<BaseFile>> {
-    Main ma;
+    frmMain ma;
     String path;
     Boolean move;
     ArrayList<BaseFile> ab, a, b, lol;
@@ -41,7 +41,7 @@ public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayL
     Context con;
     boolean rootmode=false;
     int openMode=0;
-    public CopyFileCheck(Main main, String path, Boolean move, MainActivity context,boolean rootMode) {
+    public CopyFileCheck(frmMain main, String path, Boolean move, MainActivity context,boolean rootMode) {
         this.ma = main;
         this.path = path;
         this.move = move;
@@ -99,23 +99,21 @@ public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayL
         if (counter == a.size() || a.size() == 0) {
 
             if (ab != null && ab.size() != 0) {
-
                 int mode = mainActivity.mainActivityHelper.checkFolder(new File(path), mainActivity);
                 if (mode == 2) {
-                    mainActivity.oparrayList = (ab);
+                    mainActivity.openArrayList = (ab);
                     mainActivity.operation = move ? DataUtils.MOVE : DataUtils.COPY;
-                    mainActivity.oppathe = path;
-                } else if (mode == 1 || mode == 0) {
-
+                    mainActivity.openPath = path;
+                }
+                else if (mode == 1 || mode == 0) {
                     if (!move) {
-
                         Intent intent = new Intent(con, CopyService.class);
                         intent.putParcelableArrayListExtra("FILE_PATHS",ab);
                         intent.putExtra("COPY_DIRECTORY", path);
                         intent.putExtra("MODE",openMode);
                         mainActivity.startService(intent);
-                    } else {
-
+                    }
+                    else {
                         new MoveFiles(ab, ma, ma.getActivity(),openMode).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path);
                     }
                 }
@@ -135,7 +133,9 @@ public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayL
             // checkBox
             final CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_box);
             utils.setTint(checkBox, Color.parseColor(BaseActivity.accentSkin));
-            if (mainActivity.theme1 == 1) x.theme(Theme.DARK);
+            if (mainActivity.baseTheme == 1) {
+                x.theme(Theme.DARK);
+            }
             x.title(utils.getString(con, R.string.paste));
             x.positiveText(R.string.skip);
             x.negativeText(R.string.overwrite);

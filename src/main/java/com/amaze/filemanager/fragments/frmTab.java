@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +32,6 @@ import com.amaze.filemanager.ui.views.CustomViewPager;
 import com.amaze.filemanager.ui.views.Indicator;
 import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.Futils;
-import com.amaze.filemanager.utils.Logger;
 import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.PreferenceUtils;
 
@@ -44,9 +42,9 @@ import java.util.List;
 /**
  * Created by Arpit on 15-12-2014.
  */
-public class TabFragment extends android.support.v4.app.Fragment
-        implements ViewPager.OnPageChangeListener {
-
+public class frmTab extends android.support.v4.app.Fragment
+        implements ViewPager.OnPageChangeListener ,Ifragment {
+    protected long code = 2L;
     public  List<Fragment> fragments = new ArrayList<Fragment>();
     public ScreenSlidePagerAdapter mSectionsPagerAdapter;
     Futils utils = new Futils();
@@ -85,11 +83,10 @@ public class TabFragment extends android.support.v4.app.Fragment
         mToolBarContainer=getActivity().findViewById(R.id.lin);
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-
-            indicator = (Indicator) getActivity().findViewById(R.id.indicator);
+            //indicator = (Indicator) getActivity().findViewById(R.id.indicator);
         } else {
-            circleDrawable1 = (ImageView) getActivity().findViewById(R.id.tab_indicator1);
-            circleDrawable2 = (ImageView) getActivity().findViewById(R.id.tab_indicator2);
+            circleDrawable1 = (ImageView) getActivity().findViewById(R.id.tab_indicator_one);
+            circleDrawable2 = (ImageView) getActivity().findViewById(R.id.tab_indicator_one);
         }
 
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -117,47 +114,54 @@ public class TabFragment extends android.support.v4.app.Fragment
             List<Tab> tabs1=tabHandler.getAllTabs();
             int i=tabs1.size();
             if(i==0) {
-                if (mainActivity.storage_count>1)
-                    addTab(new Tab(1,"",((EntryItem)DataUtils.list.get(1)).getPath(),"/"),1,"");
-                else
-                    addTab(new Tab(1,"","/","/"),1,"");
+                if (mainActivity.storageCount>1) {
+                    addTab(new Tab(1, "", ((EntryItem) DataUtils.list.get(1)).getPath(), "/"), 1, "");
+                }
+                else {
+                    addTab(new Tab(1, "", "/", "/"), 1, "");
+                }
                 if(!DataUtils.list.get(0).isSection()){
                     String pa=((EntryItem) DataUtils.list.get(0)).getPath();
-                    addTab(new Tab(2,"",pa,pa),2,"");}
-                else     addTab(new Tab(2,"",((EntryItem)DataUtils.list.get(1)).getPath(),"/"),2,"");
+                    addTab(new Tab(2,"",pa,pa),2,"");
+                }
+                else {
+                    addTab(new Tab(2,"",((EntryItem)DataUtils.list.get(1)).getPath(),"/"),2,"");
+                }
             }
-            else{
-                if(path!=null && path.length()!=0){
-                    if(l==1)
-                        addTab(tabHandler.findTab(1),1,"");
+            else {
+                if(path!=null && path.length()!=0) {
+                    if(l==1) {
+                        addTab(tabHandler.findTab(1), 1, "");
+                    }
                     addTab(tabHandler.findTab(l+1),l+1,path);
-                    if(l==0)
-                        addTab(tabHandler.findTab(2),2,"");
+                    if(l==0) {
+                        addTab(tabHandler.findTab(2), 2, "");
+                    }
                 }
                 else
-                {addTab(tabHandler.findTab(1),1,"");
+                {
+                    addTab(tabHandler.findTab(1),1,"");
                     addTab(tabHandler.findTab(2),2,"");
                 }
             }
-
-
-
             mViewPager.setAdapter(mSectionsPagerAdapter);
-
             try {
                 mViewPager.setCurrentItem(l,true);
                 if (circleDrawable1!=null && circleDrawable2 !=null) {
                     updateIndicator(mViewPager.getCurrentItem());
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
 
-        } else {
+        }
+        else {
             fragments.clear();
             try {
-                if (fragmentManager == null)
+                if (fragmentManager == null) {
                     fragmentManager = getActivity().getSupportFragmentManager();
+                }
                 fragments.add(0, fragmentManager.getFragment(savedInstanceState, "tab" + 0));
                 fragments.add(1, fragmentManager.getFragment(savedInstanceState, "tab" + 1));
             } catch (Exception e) {
@@ -174,20 +178,15 @@ public class TabFragment extends android.support.v4.app.Fragment
         }
 
 
-        if (indicator!=null) indicator.setViewPager(mViewPager);
+        if (indicator!=null) {
+            indicator.setViewPager(mViewPager);
+        }
 
         // color of viewpager when current tab is 0
         startColor = BaseActivity.skin;
         // color of viewpager when current tab is 1
         endColor = BaseActivity.skinTwo;
-
-        // update the views as there is any change in {@link MainActivity#currentTab}
-        // probably due to config change
-        /*colorDrawable.setColor(Color.parseColor(MainActivity.currentTab==1 ?
-                BaseActivity.skinTwo : BaseActivity.skin));
-        mainActivity.updateViews(colorDrawable);*/
-
-        mainActivity.mainFragment = (Main) getTab();
+        mainActivity.mainFragment = (frmMain) getTab();
 
         return rootView;
     }
@@ -225,40 +224,40 @@ public class TabFragment extends android.support.v4.app.Fragment
 
         tabHandler.clear();
         for(Fragment fragment:fragments) {
-            if(fragment.getClass().getName().contains("Main")){
-                Main m=(Main)fragment;
-                items.add(parsePathForName(m.CURRENT_PATH,m.openMode));
+            if(fragment.getClass().getName().contains("frmMain")) {
+                frmMain m=(frmMain)fragment;
+                items.add(parsePathForName(m.currentPath,m.openMode));
                 if(i-1==MainActivity.currentTab && i==pos){
-                    mainActivity.updatePath(m.CURRENT_PATH,m.results,m.openMode,m
-                            .folder_count,m.file_count);
-                    mainActivity.updateDrawer(m.CURRENT_PATH);
+                    mainActivity.updatePath(m.currentPath,m.results,m.openMode,m
+                            .folderCount,m.fileCount);
+                    mainActivity.updateDrawer(m.currentPath);
                 }
                 if(m.openMode==0) {
-                    tabHandler.addTab(new Tab(i, m.CURRENT_PATH, m.CURRENT_PATH, m.home));
-                }else
+                    tabHandler.addTab(new Tab(i, m.currentPath, m.currentPath, m.home));
+                }
+                else {
                     tabHandler.addTab(new Tab(i, m.home, m.home, m.home));
+                }
 
                 i++;
             }
         }
     }
-    String parseSmbPath(String a) {
-        if (a.contains("@"))
-            return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
-        else return a;
-    }
+
     String parsePathForName(String path,int openmode){
         Resources resources=getActivity().getResources();
-        if("/".equals(path))
+        if("/".equals(path)) {
             return resources.getString(R.string.root_directory);
-        else if(openmode==1 && path.startsWith("smb:/"))
-            return (new File(parseSmbPath(path)).getName());
-        else if("/storage/emulated/0".equals(path))
+        }
+        else if("/storage/emulated/0".equals(path)) {
             return resources.getString(R.string.storage);
-        else if(openmode==2)
+        }
+        else if(openmode==2) {
             return new MainActivityHelper(mainActivity).getIntegralNames(path);
-        else
+        }
+        else {
             return new File(path).getName();
+        }
     }
 
     @Override
@@ -266,10 +265,13 @@ public class TabFragment extends android.support.v4.app.Fragment
         super.onSaveInstanceState(outState);
         try {
             int i = 0;
-            if(Sp!=null)
-            Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).commit();
+            if(Sp!=null) {
+                Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).apply();
+            }
             if (fragments != null && fragments.size() !=0) {
-                if(fragmentManager==null)return;
+                if(fragmentManager==null) {
+                    return;
+                }
                 for (Fragment fragment : fragments) {
                     fragmentManager.putFragment(outState, "tab" + i, fragment);
                     i++;
@@ -277,7 +279,6 @@ public class TabFragment extends android.support.v4.app.Fragment
                 outState.putInt("pos", mViewPager.getCurrentItem());
             }
         } catch (Exception e) {
-            Logger.log(e,"puttingtosavedinstance",getActivity());
             e.printStackTrace();
         }
     }
@@ -301,19 +302,20 @@ public class TabFragment extends android.support.v4.app.Fragment
         mToolBarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         MainActivity.currentTab=p1;
-        if (Sp!=null) Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).commit();
-        Log.d(getClass().getSimpleName(), "Page Selected: " + MainActivity.currentTab);
+        if (Sp!=null) {
+            Sp.edit().putInt(Constant.CURRENT_TAB, MainActivity.currentTab).apply();
+        }
 
         Fragment fragment=fragments.get(p1);
         if(fragment!=null) {
             String name = fragments.get(p1).getClass().getName();
             if (name!=null && name.contains("Main")) {
-                Main ma = ((Main) fragments.get(p1));
-                if (ma.CURRENT_PATH != null) {
+                frmMain ma = ((frmMain) fragments.get(p1));
+                if (ma.currentPath != null) {
                     try {
-                        mainActivity.updateDrawer(ma.CURRENT_PATH);
-                        mainActivity.updatePath(ma.CURRENT_PATH,  ma.results,ma.openMode,
-                                ma.folder_count, ma.file_count);
+                        mainActivity.updateDrawer(ma.currentPath);
+                        mainActivity.updatePath(ma.currentPath,  ma.results,ma.openMode,
+                                ma.folderCount, ma.fileCount);
                         if (buttons.getVisibility() == View.VISIBLE) {
                             mainActivity.bbar(ma);
                         }
@@ -324,7 +326,9 @@ public class TabFragment extends android.support.v4.app.Fragment
             }
         }
 
-        if (circleDrawable1!=null && circleDrawable2!=null) updateIndicator(p1);
+        if (circleDrawable1!=null && circleDrawable2!=null) {
+            updateIndicator(p1);
+        }
     }
 
     @Override
@@ -332,15 +336,23 @@ public class TabFragment extends android.support.v4.app.Fragment
         // nothing to do
     }
 
+    @Override
+    public long getCode() {
+        return code;
+    }
+
     public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
         public int getItemPosition (Object object)
-        {int index = fragments.indexOf ((Fragment)object);
-            if (index == -1)
+        {
+            int index = fragments.indexOf ((Fragment)object);
+            if (index == -1) {
                 return POSITION_NONE;
-            else
+            }
+            else {
                 return index;
+            }
         }
 
         public int getCount() {
@@ -362,12 +374,14 @@ public class TabFragment extends android.support.v4.app.Fragment
 
     public void addTab(Tab text,int pos,String path) {
         if(text==null)return;
-        android.support.v4.app.Fragment main = new Main();
+        android.support.v4.app.Fragment main = new frmMain();
         Bundle b = new Bundle();
-        if(path!=null && path.length()!=0)
-            b.putString("lastpath",path);
-        else
-            b.putString("lastpath",text.getOriginalPath(savepaths));
+        if(path!=null && path.length()!=0) {
+            b.putString("lastpath", path);
+        }
+        else {
+            b.putString("lastpath", text.getOriginalPath(savepaths));
+        }
         b.putString("home", text.getHome());
         b.putInt("no", pos);
         main.setArguments(b);
@@ -376,15 +390,21 @@ public class TabFragment extends android.support.v4.app.Fragment
         mViewPager.setOffscreenPageLimit(4);
     }
     public Fragment getTab() {
-        if(fragments.size()==2)
-        return fragments.get(mViewPager.getCurrentItem());
-        else return null;
+        if(fragments.size()==2) {
+            return fragments.get(mViewPager.getCurrentItem());
+        }
+        else {
+            return null;
+        }
     }
 
     public Fragment getTab(int pos) {
-        if(fragments.size()==2 && pos<2)
+        if(fragments.size()==2 && pos<2) {
             return fragments.get(pos);
-        else return null;
+        }
+        else {
+            return null;
+        }
     }
 
     // updating indicator color as per the current viewpager tab
@@ -399,6 +419,5 @@ public class TabFragment extends android.support.v4.app.Fragment
             circleDrawable2.setImageDrawable(new ColorCircleDrawable(Color.GRAY));
             return;
         }
-
     }
 }

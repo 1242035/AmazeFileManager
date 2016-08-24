@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,8 @@ import com.amaze.filemanager.services.asynctasks.DbViewerTask;
 /**
  * Created by Vishal on 06-02-2015.
  */
-public class DbViewerFragment extends Fragment {
+public class frmDbViewer extends Fragment implements Ifragment {
+    protected long code = 3L;
     public DbViewer dbViewer;
     private String tableName;
     private View rootView;
@@ -51,7 +53,7 @@ public class DbViewerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (dbViewer.theme1 == 1) {
+        if (dbViewer.baseTheme == 1) {
 
             relativeLayout.setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
             webView.setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
@@ -67,5 +69,10 @@ public class DbViewerFragment extends Fragment {
         super.onDetach();
         schemaCursor.close();
         contentCursor.close();
+    }
+
+    @Override
+    public long getCode() {
+        return code;
     }
 }

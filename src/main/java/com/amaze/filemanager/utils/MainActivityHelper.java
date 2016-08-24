@@ -26,9 +26,9 @@ import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.filesystem.Operations;
-import com.amaze.filemanager.fragments.SearchAsyncHelper;
-import com.amaze.filemanager.fragments.Main;
-import com.amaze.filemanager.fragments.TabFragment;
+import com.amaze.filemanager.fragments.frmSearchAsyncHelper;
+import com.amaze.filemanager.fragments.frmMain;
+import com.amaze.filemanager.fragments.frmTab;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.services.ExtractService;
 import com.amaze.filemanager.services.ZipTask;
@@ -66,7 +66,9 @@ public class MainActivityHelper {
     public void showFailedOperationDialog(ArrayList<BaseFile> failedOps, boolean move, Context contextc){
         MaterialDialog.Builder mat=new MaterialDialog.Builder(contextc);
         mat.title("Operation Unsuccessful");
-        if(mainActivity.theme1==1)mat.theme(Theme.DARK);
+        if(mainActivity.baseTheme==1) {
+            mat.theme(Theme.DARK);
+        }
         mat.positiveColor(Color.parseColor(BaseActivity.accentSkin));
         mat.positiveText(R.string.cancel);
         String content="Following files were not "+(move?"moved":"copied")+" successfully";
@@ -81,24 +83,25 @@ public class MainActivityHelper {
     public final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                    Toast.makeText( mainActivity, "Media Mounted", Toast.LENGTH_SHORT).show();
-                    String a = intent.getData().getPath();
-                    if (a != null && a.trim().length() != 0 && new File(a).exists() && new File(a).canExecute()) {
-                        DataUtils.storages.add(a);
-                        mainActivity.refreshDrawer();
-                    } else {
-                        mainActivity.refreshDrawer();
-                    }
-                } else if (intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-
+        if (intent != null) {
+            if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
+                Toast.makeText( mainActivity, "Media Mounted", Toast.LENGTH_SHORT).show();
+                String a = intent.getData().getPath();
+                if (a != null && a.trim().length() != 0 && new File(a).exists() && new File(a).canExecute()) {
+                    DataUtils.storages.add(a);
+                    mainActivity.refreshDrawer();
+                }
+                else {
                     mainActivity.refreshDrawer();
                 }
             }
+            else if (intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+                mainActivity.refreshDrawer();
+            }
+        }
         }
     };
-    void mkdir(final int openMode,final String path,final Main ma){
+    void mkdir(final int openMode,final String path,final frmMain ma){
         final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.enter_name), "",utils.getString(mainActivity,R.string.new_folder),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
         materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +116,7 @@ public class MainActivityHelper {
         });
         materialDialog.show();
     }
-    void mkfile(final int openMode,final String path,final Main ma){
+    void mkfile(final int openMode,final String path,final frmMain ma){
         final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{utils.getString(mainActivity, R.string.enter_name), "",utils.getString(mainActivity,R.string.new_file),utils.getString(mainActivity, R.string.create),utils.getString(mainActivity,R.string.cancel),null});
         materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,15 +132,15 @@ public class MainActivityHelper {
         materialDialog.show();
     }
     public void add(int pos) {
-        final Main ma = (Main) ((TabFragment) mainActivity.getSupportFragmentManager().findFragmentById(R.id.content_frame)).getTab();
+        final frmMain ma = (frmMain) ((frmTab) mainActivity.getSupportFragmentManager().findFragmentById(R.id.content_frame)).getTab();
         switch (pos) {
 
             case 0:
-                final String path = ma.CURRENT_PATH;
+                final String path = ma.currentPath;
                 mkdir(ma.openMode,path,ma);
                 break;
             case 1:
-                final String path1 = ma.CURRENT_PATH;
+                final String path1 = ma.currentPath;
                 mkfile(ma.openMode,path1,ma);
                 break;
         }
@@ -172,7 +175,9 @@ public class MainActivityHelper {
     }
     public void guideDialogForLEXA(String path) {
         final MaterialDialog.Builder x = new MaterialDialog.Builder(mainActivity);
-        if (mainActivity.theme1 == 1) x.theme(Theme.DARK);
+        if (mainActivity.baseTheme == 1) {
+            x.theme(Theme.DARK);
+        }
         x.title(R.string.need_access);
         LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(mainActivity.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.lexa_drawer, null);
@@ -213,8 +218,8 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
+                    if (toast != null) toast.cancel();
+                    Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -229,11 +234,13 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
-                        mainActivity.oppathe = file.getPath();
-                        mainActivity.oppathe1 = file1.getPath();
-                        mainActivity.operation = DataUtils.RENAME;
-                        guideDialogForLEXA(mainActivity.oppathe1);
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+                    mainActivity.openPath = file.getPath();
+                    mainActivity.openPathOne = file1.getPath();
+                    mainActivity.operation = DataUtils.RENAME;
+                    guideDialogForLEXA(mainActivity.openPathOne);
                     }
                 });
             }
@@ -243,12 +250,15 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
-                        if (b) {
+                        if (toast != null) {
+                            toast.cancel();
+                        }
+                        if ( b ) {
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
-                        } else
+                        } else {
                             Toast.makeText(context, R.string.operation_un_successfully, Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });
@@ -262,19 +272,21 @@ public class MainActivityHelper {
             if (!folder.exists() || !folder.isDirectory()) {
                 return 0;
             }
-
             // On Android 5, trigger storage access framework.
             if (!FileUtil.isWritableNormalOrSaf(folder, context)) {
                 guideDialogForLEXA(folder.getPath());
                 return 2;
             }
             return 1;
-        } else if (Build.VERSION.SDK_INT == 19 && FileUtil.isOnExtSdCard(folder, context)) {
+        }
+        else if (Build.VERSION.SDK_INT == 19 && FileUtil.isOnExtSdCard(folder, context)) {
             // Assume that Kitkat workaround works
             return 1;
-        } else if (FileUtil.isWritable(new File(folder, "DummyFile"))) {
+        }
+        else if (FileUtil.isWritable(new File(folder, "DummyFile"))) {
             return 1;
-        } else {
+        }
+        else {
             return 0;
         }
     }
@@ -282,32 +294,38 @@ public class MainActivityHelper {
     public void compressFiles(File file, ArrayList<BaseFile> b) {
         int mode = checkFolder(file.getParentFile(), mainActivity);
         if (mode == 2) {
-            mainActivity.oppathe = (file.getPath());
+            mainActivity.openPath = (file.getPath());
             mainActivity.operation = DataUtils.COMPRESS;
-            mainActivity.oparrayList = b;
-        } else if (mode == 1) {
+            mainActivity.openArrayList = b;
+        }
+        else if (mode == 1) {
             Intent intent2 = new Intent(mainActivity, ZipTask.class);
             intent2.putExtra("name", file.getPath());
             intent2.putExtra("files", b);
             mainActivity.startService(intent2);
-        } else Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-    public void mkFile(final HFile path,final Main ma) {
+    public void mkFile(final HFile path,final frmMain ma) {
         final Toast toast=Toast.makeText(ma.getActivity(), R.string.creating_file, Toast.LENGTH_LONG);
         toast.show();
-        Operations.mkfile(path, ma.getActivity(), ma.ROOT_MODE, new Operations.ErrorCallBack() {
+        Operations.mkfile(path, ma.getActivity(), ma.rootMode, new Operations.ErrorCallBack() {
             @Override
             public void exists(final HFile file) {
                 ma.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(toast!=null)toast.cancel();
-                        Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
-                        if(ma!=null && ma.getActivity()!=null)
-                            mkfile(file.getMode(),file.getPath(),ma);
-
+                    if(toast!=null) {
+                        toast.cancel();
+                    }
+                    Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
+                    if(ma!=null && ma.getActivity()!=null) {
+                        mkfile(file.getMode(), file.getPath(), ma);
+                    }
                     }
                 });
             }
@@ -318,12 +336,14 @@ public class MainActivityHelper {
                 ma.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(toast!=null)toast.cancel();
-                        mainActivity.oppathe = path.getPath();
+                        if(toast!=null) {
+                            toast.cancel();
+                        }
+                        mainActivity.openPath = path.getPath();
                         mainActivity.operation = DataUtils.NEW_FOLDER;
-                        guideDialogForLEXA(mainActivity.oppathe);
-                    }});
-
+                        guideDialogForLEXA(mainActivity.openPath);
+                    }}
+                );
             }
 
             @Override
@@ -347,19 +367,22 @@ public class MainActivityHelper {
             }
         });
     }
-    public void mkDir(final HFile path,final Main ma) {
+    public void mkDir(final HFile path,final frmMain ma) {
         final Toast toast=Toast.makeText(ma.getActivity(), R.string.creating_folder, Toast.LENGTH_LONG);
         toast.show();
-        Operations.mkdir(path, ma.getActivity(), ma.ROOT_MODE, new Operations.ErrorCallBack() {
+        Operations.mkdir(path, ma.getActivity(), ma.rootMode, new Operations.ErrorCallBack() {
             @Override
             public void exists(final HFile file) {
                 ma.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
+                        if (toast != null) {
+                            toast.cancel();
+                        }
                         Toast.makeText(mainActivity, (R.string.file_exist), Toast.LENGTH_SHORT).show();
-                        if (ma != null && ma.getActivity() != null)
+                        if (ma != null && ma.getActivity() != null) {
                             mkdir(file.getMode(), file.getPath(), ma);
+                        }
                     }
                 });
             }
@@ -370,12 +393,11 @@ public class MainActivityHelper {
                 ma.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mainActivity.oppathe = path.getPath();
-                        mainActivity.operation = DataUtils.NEW_FOLDER;
-                        guideDialogForLEXA(mainActivity.oppathe);
+                    mainActivity.openPath = path.getPath();
+                    mainActivity.operation = DataUtils.NEW_FOLDER;
+                    guideDialogForLEXA(mainActivity.openPath);
                     }
                 });
-
             }
 
             @Override
@@ -389,11 +411,15 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
 
-                        if (toast != null) toast.cancel();
+                        if (toast != null) {
+                            toast.cancel();
+                        }
                         if (b) {
                             ma.updateList();
-                        } else
+                        }
+                        else {
                             Toast.makeText(ma.getActivity(), R.string.operation_un_successfully, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -401,64 +427,61 @@ public class MainActivityHelper {
     }
 
     public void deleteFiles(ArrayList<BaseFile> files) {
-        if (files == null) return;
+        if (files == null) {
+            return;
+        }
         int mode = checkFolder(new File(files.get(0).getPath()).getParentFile(), mainActivity);
         if (mode == 2) {
-            mainActivity.oparrayList = (files);
+            mainActivity.openArrayList = (files);
             mainActivity.operation = DataUtils.DELETE;
-        } else if (mode == 1 || mode == 0)
+        }
+        else if (mode == 1 || mode == 0) {
             new DeleteTask(null, mainActivity).execute((files));
+        }
     }
 
     public void extractFile(File file) {
         int mode = checkFolder(file.getParentFile(), mainActivity);
         if (mode == 2) {
-            mainActivity.oppathe = (file.getPath());
+            mainActivity.openPath = (file.getPath());
             mainActivity.operation = DataUtils.EXTRACT;
-        } else if (mode == 1) {
+        }
+        else if (mode == 1) {
             Intent intent = new Intent(mainActivity, ExtractService.class);
             intent.putExtra("zip", file.getPath());
             mainActivity.startService(intent);
-        } else Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
-    }
-
-    public String parseSmbPath(String a) {
-        if (a.contains("@"))
-            return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
-        else return a;
+        } else {
+            Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
-     * Creates a fragment which will handle the search AsyncTask {@link SearchAsyncHelper}
+     * Creates a fragment which will handle the search AsyncTask {@link frmSearchAsyncHelper}
      * @param query the text query entered the by user
      */
     public void search(String query) {
-        TabFragment tabFragment=mainActivity.getFragment();
-        if(tabFragment==null)return;
-        final Main ma = (Main) tabFragment.getTab();
-        final String fpath = ma.CURRENT_PATH;
-
-        /*SearchTask task = new SearchTask(ma.searchHelper, ma, query);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, fpath);*/
-        //ma.searchTask = task;
+        frmTab tabFragment=mainActivity.getFragment();
+        if(tabFragment==null) {
+            return;
+        }
+        final frmMain ma = (frmMain) tabFragment.getTab();
+        final String fpath = ma.currentPath;
         SEARCH_TEXT = query;
-        mainActivity.mainFragment = (Main) mainActivity.getFragment().getTab();
+        mainActivity.mainFragment = (frmMain) mainActivity.getFragment().getTab();
         FragmentManager fm = mainActivity.getSupportFragmentManager();
-        SearchAsyncHelper fragment =
-                (SearchAsyncHelper) fm.findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
+        frmSearchAsyncHelper fragment =
+                (frmSearchAsyncHelper) fm.findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
 
         if (fragment != null) {
-
             if (fragment.mSearchTask.getStatus() == AsyncTask.Status.RUNNING) {
-
                 fragment.mSearchTask.cancel(true);
             }
             fm.beginTransaction().remove(fragment).commit();
         }
 
-        addSearchFragment(fm, new SearchAsyncHelper(), fpath, query, ma.openMode, ma.ROOT_MODE,
-                mainActivity.Sp.getBoolean(SearchAsyncHelper.KEY_REGEX, false),
-                mainActivity.Sp.getBoolean(SearchAsyncHelper.KEY_REGEX_MATCHES, false));
+        addSearchFragment(fm, new frmSearchAsyncHelper(), fpath, query, ma.openMode, ma.rootMode,
+                mainActivity.Sp.getBoolean(frmSearchAsyncHelper.KEY_REGEX, false),
+                mainActivity.Sp.getBoolean(frmSearchAsyncHelper.KEY_REGEX_MATCHES, false));
     }
 
     /**
@@ -476,12 +499,12 @@ public class MainActivityHelper {
                                          String path, String input, int openMode, boolean rootMode,
                                          boolean regex, boolean matches) {
         Bundle args = new Bundle();
-        args.putString(SearchAsyncHelper.KEY_INPUT, input);
-        args.putString(SearchAsyncHelper.KEY_PATH, path);
-        args.putInt(SearchAsyncHelper.KEY_OPEN_MODE, openMode);
-        args.putBoolean(SearchAsyncHelper.KEY_ROOT_MODE, rootMode);
-        args.putBoolean(SearchAsyncHelper.KEY_REGEX, regex);
-        args.putBoolean(SearchAsyncHelper.KEY_REGEX_MATCHES, matches);
+        args.putString(frmSearchAsyncHelper.KEY_INPUT, input);
+        args.putString(frmSearchAsyncHelper.KEY_PATH, path);
+        args.putInt(frmSearchAsyncHelper.KEY_OPEN_MODE, openMode);
+        args.putBoolean(frmSearchAsyncHelper.KEY_ROOT_MODE, rootMode);
+        args.putBoolean(frmSearchAsyncHelper.KEY_REGEX, regex);
+        args.putBoolean(frmSearchAsyncHelper.KEY_REGEX_MATCHES, matches);
 
         fragment.setArguments(args);
         fragmentManager.beginTransaction().add(fragment,
@@ -505,14 +528,17 @@ public class MainActivityHelper {
                 newName.contains(GREATER_THAN) || newName.contains(LESS_THAN) ||
                 newName.contains(QUESTION_MARK) || newName.contains(QUOTE)) {
             return false;
-        } else if (isDir) {
+        }
+        else if (isDir) {
 
             // new directory name shall not be equal to parent directory name
             StringBuilder parentPath = new StringBuilder(builder.substring(0,
                     builder.length()-(newName.length()+1)));
             String parentName = parentPath.substring(parentPath.lastIndexOf("/")+1,
                     parentPath.length());
-            if (newName.equals(parentName)) return false;
+            if (newName.equals(parentName)) {
+                return false;
+            }
         }
         return true;
     }

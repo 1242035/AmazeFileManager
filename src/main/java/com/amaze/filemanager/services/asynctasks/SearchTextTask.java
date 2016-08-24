@@ -86,7 +86,7 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
         for (Map.Entry mapEntry : mapEntries) {
 
             Map.Entry keyMapEntry = (Map.Entry) mapEntry.getKey();
-            mInput.getText().setSpan(textReader.theme1 == 0 ? new BackgroundColorSpan(Color.YELLOW) :
+            mInput.getText().setSpan(textReader.baseTheme == 0 ? new BackgroundColorSpan(Color.YELLOW) :
                             new BackgroundColorSpan(Color.LTGRAY),
                     (Integer) keyMapEntry.getKey(), (Integer) keyMapEntry.getValue(),
                     Spanned.SPAN_INCLUSIVE_INCLUSIVE);

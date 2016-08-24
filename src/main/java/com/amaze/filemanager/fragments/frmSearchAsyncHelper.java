@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 /**
  * Created by vishal on 26/2/16.
  */
-public class SearchAsyncHelper extends Fragment {
-
+public class frmSearchAsyncHelper extends Fragment implements Ifragment{
+    protected long code = 6L;
     private HelperCallbacks mCallbacks;
     private String mPath, mInput;
     public SearchTask mSearchTask;
@@ -30,6 +30,11 @@ public class SearchAsyncHelper extends Fragment {
     public static final String KEY_ROOT_MODE = Constant.ROOT_MODE;
     public static final String KEY_REGEX = Constant.REGEX;
     public static final String KEY_REGEX_MATCHES = Constant.MATCHES;
+
+    @Override
+    public long getCode() {
+        return code;
+    }
 
     // interface for activity to communicate with asynctask
     public interface HelperCallbacks {

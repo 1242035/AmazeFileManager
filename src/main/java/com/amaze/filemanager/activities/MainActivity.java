@@ -95,15 +95,14 @@ import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.filesystem.RootHelper;
-import com.amaze.filemanager.fragments.AppsList;
-import com.amaze.filemanager.fragments.Main;
-import com.amaze.filemanager.fragments.ProcessViewer;
-import com.amaze.filemanager.fragments.SearchAsyncHelper;
-import com.amaze.filemanager.fragments.TabFragment;
-import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.fragments.frmAppList;
+import com.amaze.filemanager.fragments.frmMain;
+import com.amaze.filemanager.fragments.frmProcessViewer;
+import com.amaze.filemanager.fragments.frmSearchAsyncHelper;
+import com.amaze.filemanager.fragments.frmTab;
+import com.amaze.filemanager.fragments.frmZipViewer;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.services.DeleteTask;
-import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
 import com.amaze.filemanager.services.asynctasks.MoveFiles;
 import com.amaze.filemanager.ui.dialogs.RenameBookmark;
 import com.amaze.filemanager.ui.dialogs.RenameBookmark.BookmarkCallback;
@@ -136,7 +135,7 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends BaseActivity implements OnRequestPermissionsResultCallback,
         DataChangeListener, BookmarkCallback,
-        SearchAsyncHelper.HelperCallbacks {
+        frmSearchAsyncHelper.HelperCallbacks {
 
     final Pattern DIR_SEPARATOR = Pattern.compile("/");
     /* Request code used to invoke sign in user interactions. */
@@ -204,7 +203,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     private static final int PATH_ANIM_START_DELAY = 0;
     private static final int PATH_ANIM_END_DELAY = 0;
     public static final String TAG_ASYNC_HELPER = "async_helper";
-    public Main mainFragment;
+    public frmMain mainFragment;
 
     private RelativeLayout searchViewLayout;
     private AppCompatEditText searchViewEditText;
@@ -256,7 +255,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             @Override
             public void onFinish() {
-                utils.crossfadeInverse(buttons,pathBar);
+                fileUntils.crossfadeInverse(buttons,pathBar);
             }
         };
         path = getIntent().getStringExtra(Constant.ARGS_PATH);
@@ -306,7 +305,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         if (savedInstanceState == null) {
             if (openProcesses) {
                 android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_frame, new ProcessViewer());
+                transaction.replace(R.id.content_frame, new frmProcessViewer());
                 //   transaction.addToBackStack(null);
                 selected = 102;
                 openProcesses = false;
@@ -490,15 +489,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     floatingActionButton.close(true);
                     fileUntils.revealShow(findViewById(R.id.fab_bg), false);
                 } else {
-                    TabFragment tabFragment = ((TabFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame));
+                    frmTab tabFragment = ((frmTab) getSupportFragmentManager().findFragmentById(R.id.content_frame));
                     Fragment fragment1 = tabFragment.getTab();
-                    Main main = (Main) fragment1;
+                    frmMain main = (frmMain) fragment1;
                     main.goBack();
                 }
             }
             else if (name.contains("ZipViewer"))
             {
-                ZipViewer zipViewer = (ZipViewer) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                frmZipViewer zipViewer = (frmZipViewer) getSupportFragmentManager().findFragmentById(R.id.content_frame);
                 if (zipViewer.mActionMode == null) {
                     if (zipViewer.cangoBack()) {
                         zipViewer.goBack();
@@ -662,7 +661,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void goToMain(String path) {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //title.setText(R.string.app_name);
-        TabFragment tabFragment = new TabFragment();
+        frmTab tabFragment = new frmTab();
         if (path != null && path.length() > 0) {
             Bundle b = new Bundle();
             b.putString(Constant.ARGS_PATH, path);
@@ -692,7 +691,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         if (!list.get(i).isSection())
             if ((selected == null || selected >= list.size())) {
 
-                TabFragment tabFragment = new TabFragment();
+                frmTab tabFragment = new frmTab();
                 Bundle a = new Bundle();
                 a.putString(Constant.ARGS_PATH, ((EntryItem) list.get(i)).getPath());
                 tabFragment.setArguments(a);
@@ -753,20 +752,17 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         } catch (Exception e1) {
             return true;
         }
-        if (f.contains("TabFragment"))
-        {
-            setActionBarTitle("Amaze");
-            if (aBoolean) {
-                s.setTitle(getResources().getString(R.string.grid_view));
-            } else {
-                s.setTitle(getResources().getString(R.string.list_view));
-            }
+        if ( f.contains("TabFragment") ) {
             try {
-                TabFragment tabFragment = (TabFragment) fragment;
-                Main ma = ((Main) tabFragment.getTab());
-                if (ma.IS_LIST) s.setTitle(R.string.grid_view);
-                else s.setTitle(R.string.list_view);
-                updatePath(ma.CURRENT_PATH, ma.results, ma.openMode, ma.folder_count, ma.file_count);
+                frmTab tabFragment = (frmTab) fragment;
+                frmMain ma = ((frmMain) tabFragment.getTab());
+                if (ma.isList) {
+                    s.setTitle(R.string.grid_view);
+                }
+                else {
+                    s.setTitle(R.string.list_view);
+                }
+                updatePath(ma.currentPath, ma.results, ma.openMode, ma.folderCount, ma.fileCount);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -792,15 +788,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.view).setVisible(true);
             menu.findItem(R.id.extract).setVisible(false);
             invalidatePasteButton(menu.findItem(R.id.paste));
-            findViewById(R.id.buttonbarframe).setVisibility(View.VISIBLE);
+            findViewById(R.id.button_bar_frame).setVisibility(View.VISIBLE);
         }
-        else if (f.contains("AppsList") || f.contains("ProcessViewer") ) {
+        else if (f.contains("frgAppsList") || f.contains("frgProcessViewer") ) {
             appBarLayout.setExpanded(true);
             menu.findItem(R.id.set_home).setVisible(false);
             if (indicatorLayout != null) {
                 indicatorLayout.setVisibility(View.GONE);
             }
-            findViewById(R.id.buttonbarframe).setVisibility(View.GONE);
+            findViewById(R.id.button_bar_frame).setVisibility(View.GONE);
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
@@ -821,7 +817,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             if (indicatorLayout != null) {
                 indicatorLayout.setVisibility(View.GONE);
             }
-            TextView textView = (TextView) mainActivity.pathBar.findViewById(R.id.fullpath);
+            TextView textView = (TextView) mainActivity.pathBar.findViewById(R.id.full_path);
             pathBar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -869,6 +865,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void back() {
         super.onBackPressed();
     }
+/*
     @Override
     public boolean onOptionsItemselecteded(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -923,8 +920,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 break;
             case R.id.item10:
                 Fragment fragment = getDFragment();
-                if (fragment.getClass().getName().contains("AppsList")) {
-                    fileUntils.showSortDialog((AppsList) fragment);
+                if (fragment.getClass().getName().contains("frgAppsList")) {
+                    fileUntils.showSortDialog((frgAppsList) fragment);
                 }
                 break;
             case R.id.sort_by:
@@ -1005,7 +1002,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         }
         return super.onOptionsItemselecteded(item);
     }
-
+       */
     /**
      * show search view with a circular reveal animation
      */
@@ -1022,8 +1019,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             // TODO:ViewAnimationUtils.createCircularReveal
             animator = new ObjectAnimator().ofFloat(searchViewLayout,"alpha",0f,1f);
         }
-
-        utils.revealShow(fabBackground, true);
+        fileUntils.revealShow(fabBackground, true);
 
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(600);
@@ -1218,7 +1214,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     public void updatepaths(int pos) {
-        TabFragment tabFragment=getFragment();
+        frmTab tabFragment=getFragment();
         if(tabFragment!=null) {
             tabFragment.updatepaths(pos);
         }
@@ -1228,7 +1224,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         findViewById(R.id.lin).animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_in_bottom);
-        Fragment zipFragment = new ZipViewer();
+        Fragment zipFragment = new frmZipViewer();
         Bundle bundle = new Bundle();
         bundle.putString(Constant.ARGS_PATH, path);
         zipFragment.setArguments(bundle);
@@ -1240,13 +1236,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         openZip(path);
     }
 
-    public TabFragment getFragment() {
+    public frmTab getFragment() {
         Fragment fragment = getDFragment();
         if (fragment == null) {
             return null;
         }
-        if (fragment instanceof TabFragment) {
-            TabFragment tabFragment = (TabFragment) fragment;
+        if (fragment instanceof frmTab) {
+            frmTab tabFragment = (frmTab) fragment;
             return tabFragment;
         }
         return null;
@@ -1285,8 +1281,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     public void refreshDrawer() {
         List<String> val=DataUtils.getStorages();
-        if (val == null)
+        if (val == null) {
             val = getStorageDirectories();
+        }
         ArrayList<Item> list = new ArrayList<>();
         storageCount = 0;
         for (String file : val) {
@@ -1400,19 +1397,19 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     startService(intent1);
                     break;
                 case DataUtils.MOVE://moving
-                    new MoveFiles((openArrayList), ((Main) getFragment().getTab()), ((Main) getFragment().getTab()).getActivity(),0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path);
+                    new MoveFiles((openArrayList), ((frmMain) getFragment().getTab()), ((frmMain) getFragment().getTab()).getActivity(),0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path);
                     break;
                 case DataUtils.NEW_FOLDER://mkdir
-                    Main ma1 = ((Main) getFragment().getTab());
+                    frmMain ma1 = ((frmMain) getFragment().getTab());
                     mainActivityHelper.mkDir(RootHelper.generateBaseFile(new File(openPath),true), ma1);
                     break;
                 case DataUtils.RENAME:
                     mainActivityHelper.rename(HFile.LOCAL_MODE,(openPath), (openPathOne),mainActivity,rootMode);
-                    Main ma2 = ((Main) getFragment().getTab());
+                    frmMain ma2 = ((frmMain) getFragment().getTab());
                     ma2.updateList();
                     break;
                 case DataUtils.NEW_FILE:
-                    Main ma3 = ((Main) getFragment().getTab());
+                    frmMain ma3 = ((frmMain) getFragment().getTab());
                     mainActivityHelper.mkFile(new HFile(HFile.LOCAL_MODE,openPath), ma3);
 
                     break;
@@ -1427,8 +1424,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 
-    public void bbar(final Main main) {
-        final String text = main.CURRENT_PATH;
+    public void bbar(final frmMain main) {
+        final String text = main.currentPath;
         try {
             buttons.removeAllViews();
             buttons.setMinimumHeight(pathBar.getHeight());
@@ -1593,7 +1590,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         appBarLayout = (AppBarLayout) findViewById(R.id.lin);
 
         screenLayout = (CoordinatorLayout) findViewById(R.id.main_frame);
-        buttonBarFrame = (FrameLayout) findViewById(R.id.buttonbarframe);
+        buttonBarFrame = (FrameLayout) findViewById(R.id.button_bar_frame);
 
         //buttonBarFrame.setBackgroundColor(Color.parseColor(currentTab==1 ? skinTwo : skin));
         drawerHeaderLayout = getLayoutInflater().inflate(R.layout.drawer_header, null);
@@ -1636,11 +1633,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         drawerList = (ListView) findViewById(R.id.menu_drawer);
         drawerHeaderView.setBackgroundResource(R.drawable.amaze_header);
         //drawerHeaderParent.setBackgroundColor(Color.parseColor((currentTab==1 ? skinTwo : skin)));
-        if (findViewById(R.id.tab_frame) != null) {
+        /*if (findViewById(R.id.tab_frame) != null) {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, drawerLinear);
             drawerLayout.setScrimColor(Color.TRANSPARENT);
             isDrawerLocked = true;
         }
+        */
         drawerList.addHeaderView(drawerHeaderLayout);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         View v = findViewById(R.id.fab_bg);
@@ -1650,7 +1648,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             @Override
             public void onClick(View view) {
                 floatingActionButton.close(true);
-                utils.revealShow(view, false);
+                fileUntils.revealShow(view, false);
                 if (isSearchViewEnabled) hideSearchView();
             }
         });
@@ -1686,14 +1684,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         if (baseTheme == 1) {
             appbutton.setBackgroundResource(R.drawable.safr_ripple_black);
             ((ImageView) appbutton.findViewById(R.id.app_icon)).setImageResource(R.drawable.ic_doc_apk_white);
-            ((TextView) appbutton.findViewById(R.id.apptext)).setTextColor(Resource.getColor(this, android.R.color.white));
+            ((TextView) appbutton.findViewById(R.id.app_text)).setTextColor(Resource.getColor(this, android.R.color.white));
         }
         appbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 android.support.v4.app.FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                transaction2.replace(R.id.content_frame, new AppsList());
+                transaction2.replace(R.id.content_frame, new frmAppList() );
                 findViewById(R.id.lin).animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 pendingFragmentTransaction = transaction2;
                 if (!isDrawerLocked) drawerLayout.closeDrawer(drawerLinear);
@@ -1842,9 +1840,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         else {
             newPath = news;
         }
-        final TextView bapath = (TextView) pathBar.findViewById(R.id.fullpath);
-        final TextView animPath = (TextView) pathBar.findViewById(R.id.fullpath_anim);
-        TextView textView = (TextView) pathBar.findViewById(R.id.pathname);
+        final TextView bapath = (TextView) pathBar.findViewById(R.id.full_path);
+        final TextView animPath = (TextView) pathBar.findViewById(R.id.full_path_anim);
+        TextView textView = (TextView) pathBar.findViewById(R.id.path_name);
         if (!results) {
             textView.setText(folder_count + " " + getResources().getString(R.string.folders) + "" +
                     " " + file_count + " " + getResources().getString(R.string.files));
@@ -2070,12 +2068,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     public void initiatebbar() {
         final View pathBar = findViewById(R.id.path_bar);
-        TextView textView = (TextView) findViewById(R.id.fullpath);
+        TextView textView = (TextView) findViewById(R.id.full_path);
 
         pathBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main m = ((Main) getFragment().getTab());
+                frmMain m = ((frmMain) getFragment().getTab());
                 if (m.openMode == 0) {
                     bbar(m);
                     fileUntils.crossfade(buttons,pathBar);
@@ -2087,7 +2085,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main m = ((Main) getFragment().getTab());
+                frmMain m = ((frmMain) getFragment().getTab());
                 if (m.openMode == 0) {
                     bbar(m);
                     fileUntils.crossfade(buttons,pathBar);
@@ -2148,12 +2146,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     pendingPath = null;
                     return;
                 }
-                TabFragment m = getFragment();
+                frmTab m = getFragment();
                 if(m==null){
                     goToMain(pendingPath);
                     return;
                 }
-                Main main = ((Main) m.getTab());
+                frmMain main = ((frmMain) m.getTab());
                 if (main != null) {
                     main.loadlist(pendingPath, false, -1);
                 }
@@ -2176,7 +2174,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             if (new File(path).isDirectory()) {
                 Fragment f = getDFragment();
                 if ((f.getClass().getName().contains("TabFragment"))) {
-                    Main m = ((Main) getFragment().getTab());
+                    frmMain m = ((frmMain) getFragment().getTab());
                     m.loadlist(path, false, 0);
                 }
                 else {
@@ -2196,7 +2194,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         else if ((openProcesses = i.getBooleanExtra(Constant.ARGS_OPEN_PROCESS, false))) {
 
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, new ProcessViewer());
+            transaction.replace(R.id.content_frame, new frmProcessViewer());
             //   transaction.addToBackStack(null);
             selected = 102;
             openProcesses = false;
@@ -2256,7 +2254,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         if (requestCode == 77) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 updateDrawer();
-                TabFragment tabFragment = getFragment();
+                frmTab tabFragment = getFragment();
                 boolean b = Sp.getBoolean(Constant.NEED_TO_SET_HOME, true);
                 //reset home and current paths according to new storages
                 if (b) {
@@ -2277,11 +2275,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     if (tabFragment != null) {
                         Fragment main = tabFragment.getTab(0);
                         if (main != null) {
-                            ((Main) main).updateTabWithDb(tabHandler.findTab(1));
+                            ((frmMain) main).updateTabWithDb(tabHandler.findTab(1));
                         }
                         Fragment main1 = tabFragment.getTab(1);
                         if (main1 != null) {
-                            ((Main) main1).updateTabWithDb(tabHandler.findTab(2));
+                            ((frmMain) main1).updateTabWithDb(tabHandler.findTab(2));
                         }
                     }
                     Sp.edit().putBoolean(Constant.NEED_TO_SET_HOME, false).apply();
@@ -2291,11 +2289,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     if (tabFragment != null) {
                         Fragment main = tabFragment.getTab(0);
                         if (main != null) {
-                            ((Main) main).updateList();
+                            ((frmMain) main).updateList();
                         }
                         Fragment main1 = tabFragment.getTab(1);
                         if (main1 != null) {
-                            ((Main) main1).updateList();
+                            ((frmMain) main1).updateList();
                         }
                     }
                 }
@@ -2350,14 +2348,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     @Override
     public void onPreExecute() {
-        mainFragment.mSwipeRefreshLayout.setRefreshing(true);
+        mainFragment.swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void onPostExecute() {
 
         mainFragment.onSearchCompleted();
-        mainFragment.mSwipeRefreshLayout.setRefreshing(false);
+        mainFragment.swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -2369,8 +2367,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onCancelled() {
 
-        mainFragment.createViews(mainFragment.LIST_ELEMENTS, false, mainFragment.CURRENT_PATH,
-                mainFragment.openMode, false, !mainFragment.IS_LIST);
-        mainFragment.mSwipeRefreshLayout.setRefreshing(false);
+        mainFragment.createViews(mainFragment.listElement, false, mainFragment.currentPath,
+                mainFragment.openMode, false, !mainFragment.isList);
+        mainFragment.swipeRefreshLayout.setRefreshing(false);
     }
 }

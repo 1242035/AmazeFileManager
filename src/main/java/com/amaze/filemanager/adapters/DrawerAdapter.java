@@ -96,13 +96,13 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (values.get(position).isSection()) {
             ImageView view = new ImageView(context);
-            if (m.theme1==0)
+            if (m.baseTheme==0)
                 view.setImageResource(R.color.divider);
             else
                 view.setImageResource(R.color.divider_dark);
             view.setClickable(false);
             view.setFocusable(false);
-            if(m.theme1==0)
+            if(m.baseTheme==0)
             view.setBackgroundColor(Color.WHITE);
             else view.setBackgroundResource(R.color.background_material_dark);
             view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, m.dpToPx(17)));
@@ -112,7 +112,7 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
             View  view = inflater.inflate(R.layout.drawer_row, parent, false);
             final TextView txtTitle=(TextView) view.findViewById(R.id.first_line);
             final ImageView imageView=(ImageView) view.findViewById(R.id.icon);
-            if (m.theme1 == 0) {
+            if (m.baseTheme == 0) {
                 view.setBackgroundResource(R.drawable.safr_ripple_white);
             } else {
                 view.setBackgroundResource(R.drawable.safr_ripple_black);
@@ -120,7 +120,7 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
             view.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View p1) {
-                    m.selectItem(position);
+                   // m.selectItem(position);
                 }
                 // TODO: Implement this method
 
@@ -130,7 +130,7 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
                 public boolean onLongClick(View v) {
                     if(!getItem(position).isSection())
                     // not to remove the first bookmark (storage) and permanent bookmarks
-                    if (position > m.storage_count && position < values.size()-7) {
+                    if (position > m.storageCount && position < values.size()-7) {
                         EntryItem item=(EntryItem) getItem(position);
                         String path = (item).getPath();
                         if(DataUtils.containsBooks(new String[]{item.getTitle(),path})!=-1){
@@ -138,10 +138,10 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
                         }
 
                     }
-                    else if(position<m.storage_count ){
+                    else if(position<m.storageCount ){
                         String path = ((EntryItem) getItem(position)).getPath();
                         if(!path.equals("/"))
-                            new Futils().showProps(RootHelper.generateBaseFile(new File(path),true),m,m.theme1);
+                            new Futils().showProps(RootHelper.generateBaseFile(new File(path),true),m,m.baseTheme);
                     }
 
                     // return true to denote no further processing
@@ -153,13 +153,13 @@ public class DrawerAdapter extends ArrayAdapter<Item> {
             imageView.setImageDrawable(getDrawable(position));
             imageView.clearColorFilter();
             if (myChecked.get(position)) {
-                if (m.theme1 == 0)
+                if (m.baseTheme == 0)
                     view.setBackgroundColor(Color.parseColor("#ffeeeeee"));
                 else view.setBackgroundColor(Color.parseColor("#ff424242"));
                 imageView.setColorFilter(fabskin);
                 txtTitle.setTextColor(Color.parseColor(BaseActivity.accentSkin));
             } else {
-                if (m.theme1 == 0) {
+                if (m.baseTheme == 0) {
                     imageView.setColorFilter(Color.parseColor("#666666"));
                     txtTitle.setTextColor(m.getResources().getColor(android.R.color.black));
                 } else {

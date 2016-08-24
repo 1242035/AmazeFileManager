@@ -134,7 +134,7 @@ public class TextReader extends BaseActivity
         super.onCreate(savedInstanceState);
         Sp = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (theme1 == 1) {
+        if (baseTheme == 1) {
             getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
         }
         setContentView(R.layout.search);
@@ -232,7 +232,7 @@ public class TextReader extends BaseActivity
         getSupportActionBar().setTitle(fileName);
         mInput.addTextChangedListener(this);
         try {
-            if (theme1 == 1) {
+            if (baseTheme == 1) {
                 mInput.setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
             }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -469,7 +469,7 @@ public class TextReader extends BaseActivity
                 if(mFile.canRead()){
                     HFile hFile=new HFile(HFile.LOCAL_MODE,mFile.getPath());
                     hFile.generateMode(this);
-                    utils.showProps(hFile, this, theme1);
+                    utils.showProps(hFile, this, baseTheme);
                 }else Toast.makeText(this,R.string.not_allowed,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.open_with:
@@ -653,7 +653,7 @@ public class TextReader extends BaseActivity
 
                     // setting older span back before setting new one
                     Map.Entry keyValueOld = (Map.Entry) nodes.get(mCurrent).getKey();
-                    mInput.getText().setSpan(theme1 == 0 ? new BackgroundColorSpan(Color.YELLOW) :
+                    mInput.getText().setSpan(baseTheme == 0 ? new BackgroundColorSpan(Color.YELLOW) :
                                     new BackgroundColorSpan(Color.LTGRAY),
                             (Integer) keyValueOld.getKey(),
                             (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -679,7 +679,7 @@ public class TextReader extends BaseActivity
                     if (mCurrent!=-1) {
 
                         Map.Entry keyValueOld = (Map.Entry) nodes.get(mCurrent).getKey();
-                        mInput.getText().setSpan(theme1 == 0 ? new BackgroundColorSpan(Color.YELLOW) :
+                        mInput.getText().setSpan(baseTheme == 0 ? new BackgroundColorSpan(Color.YELLOW) :
                                         new BackgroundColorSpan(Color.LTGRAY),
                                 (Integer) keyValueOld.getKey(),
                                 (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);

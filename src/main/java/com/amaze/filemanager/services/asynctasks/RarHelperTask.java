@@ -6,7 +6,7 @@ package com.amaze.filemanager.services.asynctasks;
 
 import android.os.AsyncTask;
 
-import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.fragments.frmZipViewer;
 import com.amaze.filemanager.utils.Futils;
 import com.github.junrar.Archive;
 import com.github.junrar.rarfile.FileHeader;
@@ -21,7 +21,7 @@ import java.util.Comparator;
  */
 public class RarHelperTask extends AsyncTask<File, Void, ArrayList<FileHeader>> {
 
-    ZipViewer zipViewer;
+    frmZipViewer zipViewer;
     String dir;
 
     /**
@@ -29,7 +29,7 @@ public class RarHelperTask extends AsyncTask<File, Void, ArrayList<FileHeader>> 
      * @param zipViewer the zipViewer fragment instance
      * @param dir
      */
-    public RarHelperTask(ZipViewer zipViewer, String dir) {
+    public RarHelperTask(frmZipViewer zipViewer, String dir) {
 
         this.zipViewer = zipViewer;
         this.dir = dir;

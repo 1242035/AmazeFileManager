@@ -31,15 +31,9 @@ import android.widget.Toast;
 
 import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.fragments.frmZipViewer;
 import com.amaze.filemanager.filesystem.BaseFile;
-import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.utils.Futils;
-
-import com.amaze.filemanager.filesystem.RootHelper;
-import com.stericson.RootTools.RootTools;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class DeleteTask extends AsyncTask<ArrayList<BaseFile>, String, Boolean> {
@@ -50,14 +44,14 @@ public class DeleteTask extends AsyncTask<ArrayList<BaseFile>, String, Boolean> 
     Context cd;
     Futils utils = new Futils();
     boolean rootMode;
-    ZipViewer zipViewer;
+    frmZipViewer zipViewer;
 
     public DeleteTask(ContentResolver c, Context cd) {
         this.cd = cd;
         rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(Constant.ROOT_MODE, false);
     }
 
-    public DeleteTask(ContentResolver c, Context cd, ZipViewer zipViewer) {
+    public DeleteTask(ContentResolver c, Context cd, frmZipViewer zipViewer) {
         this.cd = cd;
         rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(Constant.ROOT_MODE, false);
         this.zipViewer = zipViewer;

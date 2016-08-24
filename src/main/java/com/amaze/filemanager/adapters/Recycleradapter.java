@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.BaseFile;
-import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.frmMain;
 import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.ui.icons.Icons;
 import com.amaze.filemanager.ui.icons.MimeTypes;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
  */
 public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.ViewHolder>
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
-    Main main;
+    frmMain main;
     ArrayList<Layoutelements> items;
     Context context;
     private SparseBooleanArray myChecked = new SparseBooleanArray();
@@ -54,7 +54,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
     int grey_color;
     int c1,c2,c3,c4,c5,c6,c7,c8,c9,anim;
 
-    public Recycleradapter(Main m, ArrayList<Layoutelements> items, Context context){
+    public Recycleradapter(frmMain m, ArrayList<Layoutelements> items, Context context){
         this.main=m;
         this.items=items;
         this.context=context;
@@ -121,35 +121,36 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
 
         notifyDataSetChanged();
         //notifyItemChanged(position);
-        if (main.selection == false || main.mActionMode == null) {
+        if (main.selection == false || main.actionMode == null) {
             main.selection = true;
-            /*main.mActionMode = main.getActivity().startActionMode(
-                    main.mActionModeCallback);*/
-            main.mActionMode = main.MAIN_ACTIVITY.startSupportActionMode(main.mActionModeCallback);
+            main.actionMode = main.mainActivity.startSupportActionMode(main.actionModeCallback);
 
         }
-        if(main.mActionMode!=null && main.selection)
-            main.mActionMode.invalidate();
+        if(main.actionMode!=null && main.selection) {
+            main.actionMode.invalidate();
+        }
         if (getCheckedItemPositions().size() == 0) {
             main.selection = false;
-            main.mActionMode.finish();
-            main.mActionMode = null;
+            main.actionMode.finish();
+            main.actionMode = null;
         }
     }
 
     public void toggleChecked(boolean b,String path) {
-        int a; if(path.equals("/") || !main.GO_BACK_ITEM)a=0;else a=1;
+        int a; if(path.equals("/") || !main.goBackItem)a=0;else a=1;
         for (int i = a; i < items.size(); i++) {
             myChecked.put(i, b);
             notifyItemChanged(i);
         }
-        if(main.mActionMode!=null)
-            main.mActionMode.invalidate();
+        if(main.actionMode!=null) {
+            main.actionMode.invalidate();
+        }
         if (getCheckedItemPositions().size() == 0) {
             main.selection = false;
-            if(main.mActionMode!=null)
-                main.mActionMode.finish();
-            main.mActionMode = null;
+            if(main.actionMode!=null) {
+                main.actionMode.finish();
+            }
+            main.actionMode = null;
         }
     }
 
@@ -164,12 +165,13 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             notifyItemChanged(i);
         }
 
-        if(main.mActionMode!=null)main.mActionMode.invalidate();
+        if(main.actionMode!=null)main.actionMode.invalidate();
         if (getCheckedItemPositions().size() == 0) {
             main.selection = false;
-            if(main.mActionMode!=null)
-                main.mActionMode.finish();
-            main.mActionMode = null;
+            if(main.actionMode!=null) {
+                main.actionMode.finish();
+            }
+            main.actionMode = null;
         }
     }
     public ArrayList<Integer> getCheckedItemPositions() {
@@ -186,7 +188,13 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
 
     public boolean areAllChecked(String path) {
         boolean b = true;
-        int a; if(path.equals("/") || !main.GO_BACK_ITEM)a=0;else a=1;
+        int a;
+        if(path.equals("/") || !main.goBackItem) {
+            a=0;
+        }
+        else {
+            a=1;
+        }
         for (int i = a; i < myChecked.size(); i++) {
             if (!myChecked.get(i)) {
                 b = false;
@@ -236,11 +244,16 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             return new ViewHolder(v);
 
         }
-        View v;if(main.IS_LIST) v= mInflater.inflate(R.layout.row_layout, parent, false);
-        else  v= mInflater.inflate(R.layout.grid_item, parent, false);
+        View v;
+        if(main.isList) {
+            v= mInflater.inflate(R.layout.row_layout, parent, false);
+        }
+        else  {
+            v= mInflater.inflate(R.layout.grid_item, parent, false);
+        }
         ViewHolder vh = new ViewHolder(v);
-        if(main.theme1==1) {
-            vh.txtTitle.setTextColor(Resource.getColor(main.MAIN_ACTIVITY,android.R.color.white));
+        if(main.baseTheme==1) {
+            vh.txtTitle.setTextColor(Resource.getColor(main.mainActivity,android.R.color.white));
         }
         return vh;
     }
@@ -281,12 +294,15 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder vholder,final int p) {
         final ViewHolder holder = ((ViewHolder)vholder);
-        if (main.IS_LIST) {
+        if (main.isList) {
             if ( p == getItemCount() - 1) {
                 holder.rl.setMinimumHeight(rowHeight);
-                if (items.size() == (main.GO_BACK_ITEM ? 1 : 0))
+                if (items.size() == (main.goBackItem ? 1 : 0)) {
                     holder.txtTitle.setText(R.string.no_file);
-                else holder.txtTitle.setText("");
+                }
+                else {
+                    holder.txtTitle.setText("");
+                }
                 return;
             }
         }
@@ -296,7 +312,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             myanim.put(p, true);
         }
         final Layoutelements rowItem = items.get(p);
-        if (main.IS_LIST) {
+        if (main.isList) {
             holder.rl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -306,16 +322,18 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 holder.checkImageView.setBackground(new CircleGradientDrawable(main.fabSkin,
-                        main.theme1, main.getResources().getDisplayMetrics()));
-            } else holder.checkImageView.setBackgroundDrawable(new CircleGradientDrawable(main.fabSkin,
-                    main.theme1, main.getResources().getDisplayMetrics()));
+                        main.baseTheme, main.getResources().getDisplayMetrics()));
+            } else {
+                holder.checkImageView.setBackgroundDrawable(new CircleGradientDrawable(main.fabSkin,
+                        main.baseTheme, main.getResources().getDisplayMetrics()));
+            }
 
             holder.rl.setOnLongClickListener(new View.OnLongClickListener() {
 
                 public boolean onLongClick(View p1) {
 
                     // check if the item on which action is performed is not the first {goback} item
-                    if (!rowItem.getSize().equals(main.goback)) {
+                    if (!rowItem.getSize().equals(main.goBack)) {
 
                         toggleChecked(p, holder.checkImageView);
                     }
@@ -325,39 +343,46 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             });
 
             filetype = -1;
-            if (Icons.isPicture((rowItem.getDesc().toLowerCase()))) filetype = 0;
-            else if (Icons.isApk((rowItem.getDesc()))) filetype = 1;
-            else if (Icons.isVideo(rowItem.getDesc())) filetype = 2;
+            if (Icons.isPicture((rowItem.getDesc().toLowerCase()))) {
+                filetype = 0;
+            }
+            else if (Icons.isApk((rowItem.getDesc()))) {
+                filetype = 1;
+            }
+            else if (Icons.isVideo(rowItem.getDesc())) {
+                filetype = 2;
+            }
             holder.txtTitle.setText(rowItem.getTitle());
             holder.genericIcon.setImageDrawable(rowItem.getImageId());
             holder.genericText.setText("");
 
             if (holder.about != null) {
-                if(main.theme1==0)holder.about.setColorFilter(grey_color);
+                if(main.baseTheme==0) {
+                    holder.about.setColorFilter(grey_color);
+                }
                 showPopup(holder.about,rowItem);
             }
             holder.genericIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    int id = v.getId();
-                    if (id == R.id.generic_icon || id == R.id.picture_icon
-                            || id == R.id.apk_icon) {
-
-                        // TODO: transform icon on press to the properties dialog with animation
-                        if (!rowItem.getSize().equals(main.goback)) {
-
-                            toggleChecked(p, holder.checkImageView);
-                        } else main.goBack();
+                int id = v.getId();
+                if (id == R.id.generic_icon || id == R.id.picture_icon
+                        || id == R.id.apk_icon) {
+                    // TODO: transform icon on press to the properties dialog with animation
+                    if (!rowItem.getSize().equals(main.goBack)) {
+                        toggleChecked(p, holder.checkImageView);
                     }
-
+                    else {
+                        main.goBack();
+                    }
+                }
                 }
             });
 
             holder.pictureIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!rowItem.getSize().equals(main.goback)) {
+                    if (!rowItem.getSize().equals(main.goBack)) {
 
                         toggleChecked(p, holder.checkImageView);
                     }
@@ -367,7 +392,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             holder.apkIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!rowItem.getSize().equals(main.goback)) {
+                    if (!rowItem.getSize().equals(main.goBack)) {
 
                         toggleChecked(p, holder.checkImageView);
                     }
@@ -377,25 +402,26 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             holder.genericIcon.setVisibility(View.VISIBLE);
             holder.pictureIcon.setVisibility(View.INVISIBLE);
             if (filetype == 0) {
-                if (main.SHOW_THUMBS) {
+                if (main.showThumb) {
                     holder.genericIcon.setVisibility(View.GONE);
-
-                    if (main.CIRCULAR_IMAGES) {
+                    if (main.circularImage) {
                         holder.apkIcon.setVisibility(View.GONE);
                         holder.pictureIcon.setVisibility(View.VISIBLE);
-                        holder.pictureIcon.setImageDrawable(main.DARK_IMAGE);
+                        holder.pictureIcon.setImageDrawable(main.darkImage);
                         main.ic.cancelLoad(holder.pictureIcon);
                         main.ic.loadDrawable(holder.pictureIcon, (rowItem.getDesc()), null);
-                    } else {
+                    }
+                    else {
                         holder.checkImageView.setVisibility(View.INVISIBLE);
                         holder.apkIcon.setVisibility(View.VISIBLE);
-                        holder.apkIcon.setImageDrawable(main.DARK_IMAGE);
+                        holder.apkIcon.setImageDrawable(main.darkVideo);
                         main.ic.cancelLoad(holder.apkIcon);
                         main.ic.loadDrawable(holder.apkIcon, (rowItem.getDesc()), null);
                     }
                 }
-            } else if (filetype == 1) {
-                if (main.SHOW_THUMBS) {
+            }
+            else if (filetype == 1) {
+                if (main.showThumb) {
                     holder.genericIcon.setVisibility(View.GONE);
                     holder.pictureIcon.setVisibility(View.GONE);
                     holder.checkImageView.setVisibility(View.INVISIBLE);
@@ -405,19 +431,21 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                     main.ic.loadDrawable(holder.apkIcon, (rowItem.getDesc()), null);
                 }
 
-            } else if (filetype == 2) {
-                if (main.SHOW_THUMBS) {
+            }
+            else if (filetype == 2) {
+                if (main.showThumb) {
                     holder.genericIcon.setVisibility(View.GONE);
-                    if (main.CIRCULAR_IMAGES) {
+                    if (main.circularImage) {
                         holder.checkImageView.setVisibility(View.INVISIBLE);
                         holder.pictureIcon.setVisibility(View.VISIBLE);
-                        holder.pictureIcon.setImageDrawable(main.DARK_VIDEO);
+                        holder.pictureIcon.setImageDrawable(main.darkVideo);
                         main.ic.cancelLoad(holder.pictureIcon);
                         main.ic.loadDrawable(holder.pictureIcon,(rowItem.getDesc()), null);
-                    } else {
+                    }
+                    else {
                         holder.checkImageView.setVisibility(View.INVISIBLE);
                         holder.apkIcon.setVisibility(View.VISIBLE);
-                        holder.apkIcon.setImageDrawable(main.DARK_VIDEO);
+                        holder.apkIcon.setImageDrawable(main.darkVideo);
                         main.ic.cancelLoad(holder.apkIcon);
                         main.ic.loadDrawable(holder.apkIcon, (rowItem.getDesc()), null);
                     }
@@ -430,11 +458,9 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             Boolean checked = myChecked.get(p);
             if (checked != null) {
 
-                if (main.theme1 == 0) {
-
+                if (main.baseTheme == 0) {
                     holder.rl.setBackgroundResource(R.drawable.safr_ripple_white);
                 } else {
-
                     holder.rl.setBackgroundResource(R.drawable.safr_ripple_black);
                 }
                 holder.rl.setSelected(false);
@@ -455,24 +481,32 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                 } else {
                     holder.checkImageView.setVisibility(View.INVISIBLE);
                     GradientDrawable gradientDrawable = (GradientDrawable) holder.genericIcon.getBackground();
-                    if (main.COLORISE_ICONS) {
-                        if (rowItem.isDirectory())
-                            gradientDrawable.setColor(main.icon_skin_color);
+                    if (main.coloriseIcon) {
+                        if (rowItem.isDirectory()) {
+                            gradientDrawable.setColor(main.iconSkinColor);
+                        }
                         else if (Icons.isVideo(rowItem.getDesc()) || Icons.isPicture(rowItem
-                                .getDesc()))
+                                .getDesc())) {
                             gradientDrawable.setColor(c2);
-                        else if (Icons.isAudio(rowItem.getDesc()))
+                        }
+                        else if (Icons.isAudio(rowItem.getDesc())) {
                             gradientDrawable.setColor(c3);
-                        else if (Icons.isPdf(rowItem.getDesc()))
+                        }
+                        else if (Icons.isPdf(rowItem.getDesc())) {
                             gradientDrawable.setColor(c4);
-                        else if (Icons.isCode(rowItem.getDesc()))
+                        }
+                        else if (Icons.isCode(rowItem.getDesc())) {
                             gradientDrawable.setColor(c5);
-                        else if (Icons.isText(rowItem.getDesc()))
+                        }
+                        else if (Icons.isText(rowItem.getDesc())) {
                             gradientDrawable.setColor(c6);
-                        else if (Icons.isArchive(rowItem.getDesc()))
+                        }
+                        else if (Icons.isArchive(rowItem.getDesc())) {
                             gradientDrawable.setColor(c7);
-                        else if(Icons.isApk(rowItem.getDesc()))
+                        }
+                        else if(Icons.isApk(rowItem.getDesc())) {
                             gradientDrawable.setColor(c8);
+                        }
                         else if (Icons.isgeneric(rowItem.getDesc())) {
                             gradientDrawable.setColor(c9);
                             String ext = MimeTypes.getExtension(new File(rowItem.getDesc()).getName());
@@ -481,30 +515,33 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                                 holder.genericIcon.setImageDrawable(null);
                             }
                         } else {
-                            gradientDrawable.setColor(main.icon_skin_color);
+                            gradientDrawable.setColor(main.iconSkinColor);
                         }
-                    } else gradientDrawable.setColor((main.icon_skin_color));
-                    if (rowItem.getSize().equals(main.goback))
+                    }
+                    else {
+                        gradientDrawable.setColor((main.iconSkinColor));
+                    }
+                    if (rowItem.getSize().equals(main.goBack)) {
                         gradientDrawable.setColor(c1);
-
-
+                    }
                 }
             }
-            if (main.SHOW_PERMISSIONS)
+            if (main.showPermission) {
                 holder.perm.setText(rowItem.getPermissions());
-            if (main.SHOW_LAST_MODIFIED)
+            }
+            if (main.showLastModified) {
                 holder.date.setText(rowItem.getDate());
+            }
             String size = rowItem.getSize();
-
-            if (size.equals(main.goback)) {
-
+            if (size.equals(main.goBack)) {
                 holder.date.setText(size);
-
                 holder.txtDesc.setText("");
-            } else if (main.SHOW_SIZE)
-
+            }
+            else if (main.showSize) {
                 holder.txtDesc.setText(rowItem.getSize());
-        } else {
+            }
+        }
+        else {
             // view is a grid view
             Boolean checked = myChecked.get(p);
 
@@ -519,12 +556,11 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             holder.rl.setOnLongClickListener(new View.OnLongClickListener() {
 
                 public boolean onLongClick(View p1) {
+                if (!rowItem.getSize().equals(main.goBack)) {
 
-                    if (!rowItem.getSize().equals(main.goback)) {
-
-                        toggleChecked(p, holder.checkImageViewGrid);
-                    }
-                    return true;
+                    toggleChecked(p, holder.checkImageViewGrid);
+                }
+                return true;
                 }
             });
             holder.txtTitle.setText(rowItem.getTitle());
@@ -537,52 +573,62 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                 holder.genericIcon.setColorFilter(null);
                 holder.imageView1.setVisibility(View.VISIBLE);
                 holder.imageView1.setImageDrawable(null);
-                if (main.theme == 1)
+                if (main.theme == 1) {
                     holder.imageView1.setBackgroundColor(Color.BLACK);
+                }
                 main.ic.cancelLoad(holder.imageView1);
                 main.ic.loadDrawable(holder.imageView1, (rowItem.getDesc()), null);
-            } else if (Icons.isApk((rowItem.getDesc()))) {
+            }
+            else if (Icons.isApk((rowItem.getDesc()))) {
                 holder.genericIcon.setColorFilter(null);
                 main.ic.cancelLoad(holder.genericIcon);
                 main.ic.loadDrawable(holder.genericIcon, (rowItem.getDesc()), null);
             }
-            if (rowItem.isDirectory())
-                holder.genericIcon.setColorFilter(main.icon_skin_color);
-                    else if (Icons.isVideo(rowItem.getDesc()))
+            if (rowItem.isDirectory()) {
+                holder.genericIcon.setColorFilter(main.iconSkinColor);
+            }
+            else if (Icons.isVideo(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c2);
-                    else if (Icons.isAudio(rowItem.getDesc()))
+            }
+            else if (Icons.isAudio(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c3);
-                    else if (Icons.isPdf(rowItem.getDesc()))
+            }
+            else if (Icons.isPdf(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c4);
-                    else if (Icons.isCode(rowItem.getDesc()))
+            }
+            else if (Icons.isCode(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c5);
-                    else if (Icons.isText(rowItem.getDesc()))
+            }
+            else if (Icons.isText(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c6);
-                    else if (Icons.isArchive(rowItem.getDesc()))
+            }
+            else if (Icons.isArchive(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c7);
-                    else if (Icons.isgeneric(rowItem.getDesc()))
+            }
+            else if (Icons.isgeneric(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(c9);
-                    else if (Icons.isApk(rowItem.getDesc()) || Icons.isPicture(rowItem.getDesc()))
+            }
+            else if (Icons.isApk(rowItem.getDesc()) || Icons.isPicture(rowItem.getDesc())) {
                 holder.genericIcon.setColorFilter(null);
-            else holder.genericIcon.setColorFilter(main.icon_skin_color);
-            if (rowItem.getSize().equals(main.goback))
+            }
+            else {
+                holder.genericIcon.setColorFilter(main.iconSkinColor);
+            }
+            if (rowItem.getSize().equals(main.goBack)) {
                 holder.genericIcon.setColorFilter(c1);
-
-
-
+            }
             if (checked != null) {
-
                 if (checked) {
-                    holder.genericIcon.setColorFilter(main.icon_skin_color);
-                    //holder.genericIcon.setImageDrawable(main.getResources().getDrawable(R.drawable.abc_ic_cab_done_holo_dark));
-
+                    holder.genericIcon.setColorFilter(main.iconSkinColor);
                     holder.checkImageViewGrid.setVisibility(View.VISIBLE);
                     holder.rl.setBackgroundColor(Color.parseColor("#9f757575"));
-                } else {
+                }
+                else {
                     holder.checkImageViewGrid.setVisibility(View.INVISIBLE);
-                    if (main.theme1 == 0)
+                    if (main.baseTheme == 0) {
                         holder.rl.setBackgroundResource(R.drawable.item_doc_grid);
-                    else{
+                    }
+                    else {
                         holder.rl.setBackgroundResource(R.drawable.ic_grid_card_background_dark);
                         holder.rl.findViewById(R.id.icon_frame).setBackgroundColor(Color.parseColor("#303030"));
                     }
@@ -590,32 +636,45 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
             }
 
             if (holder.about != null) {
-                if(main.theme1==0)holder.about.setColorFilter(grey_color);
+                if(main.baseTheme==0) {
+                    holder.about.setColorFilter(grey_color);
+                }
                 showPopup(holder.about,rowItem);
             }
-            if (main.SHOW_LAST_MODIFIED)
+            if (main.showLastModified) {
                 holder.date.setText(rowItem.getDate());
-            if (rowItem.getSize().equals(main.goback)) {
+            }
+            if (rowItem.getSize().equals(main.goBack) ) {
                 holder.date.setText(rowItem.getSize());
                 holder.txtDesc.setText("");
-            }/*else if(main.SHOW_SIZE)
-                holder.txtDesc.setText(rowItem.getSize());
-           */ if (main.SHOW_PERMISSIONS)
+            }
+            if (main.showPermission) {
                 holder.perm.setText(rowItem.getPermissions());
+            }
         }
     }
 
     @Override
     public long getHeaderId(int i) {
-        if(items.size()==0)return -1;
-        if(i>=0 && i<items.size())
-            if(main.IS_LIST){
-                if(i!=items.size()){
-                    if(items.get(i).getSize().equals(main.goback))return -1;
-                    if(items.get(i).isDirectory())return 'D';
-                    else return 'F';}
+        if (items.size() == 0) {
+            return -1;
+        }
+        if (i >= 0 && i < items.size()) {
+            if (main.isList) {
+                if (i != items.size()) {
+                    if (items.get(i).getSize().equals(main.goBack)) {
+                        return -1;
+                    }
+                    if (items.get(i).isDirectory()) {
+                        return 'D';
+                    } else {
+                        return 'F';
+                    }
+                }
             }
-        return -1;}
+        }
+        return -1;
+    }
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         public TextView ext;
 
@@ -630,8 +689,12 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
         /*if(main.theme1==1)
             view.setBackgroundResource(R.color.holo_dark_background);*/
         HeaderViewHolder holder = new HeaderViewHolder(view);
-        if (main.theme1==0)holder.ext.setTextColor(Color.parseColor("#8A000000"));
-        else holder.ext.setTextColor(Color.parseColor("#B3ffffff"));
+        if (main.baseTheme==0) {
+            holder.ext.setTextColor(Color.parseColor("#8A000000"));
+        }
+        else {
+            holder.ext.setTextColor(Color.parseColor("#B3ffffff"));
+        }
         return holder;
     }
     private static final int TYPE_HEADER = 0;
@@ -653,38 +716,38 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.about:
-                                main.utils.showProps((rowItem).generateBaseFile(), rowItem.getPermissions(), main, main.ROOT_MODE);
+                                main.utils.showProps((rowItem).generateBaseFile(), rowItem.getPermissions(), main, main.rootMode);
                                 return true;
                             case R.id.share:
                                 ArrayList<File> arrayList = new ArrayList<File>();
                                 arrayList.add(new File(rowItem.getDesc()));
-                                main.utils.shareFiles(arrayList, main.MAIN_ACTIVITY, main.theme1, Color.parseColor(main.fabSkin));
+                                main.utils.shareFiles(arrayList, main.mainActivity, main.baseTheme, Color.parseColor(main.fabSkin));
                                 return true;
                             case R.id.rename:
                                 main.rename(rowItem.generateBaseFile());
                                 return true;
                             case R.id.cpy:
-                                MainActivity MAIN_ACTIVITY=main.MAIN_ACTIVITY;
-                                main.MAIN_ACTIVITY.MOVE_PATH = null;
+                                MainActivity MAIN_ACTIVITY = main.mainActivity;
+                                main.mainActivity.movePath = null;
                                 ArrayList<BaseFile> copies = new ArrayList<>();
                                 copies.add(rowItem.generateBaseFile());
-                                MAIN_ACTIVITY.COPY_PATH = copies;
+                                MAIN_ACTIVITY.copyPath = copies;
                                 MAIN_ACTIVITY.supportInvalidateOptionsMenu();
                                 return true;
                             case R.id.cut:
-                                MainActivity MAIN_ACTIVITY1=main.MAIN_ACTIVITY;
-                                MAIN_ACTIVITY1.COPY_PATH = null;
+                                MainActivity MAIN_ACTIVITY1 = main.mainActivity;
+                                MAIN_ACTIVITY1.copyPath = null;
                                 ArrayList<BaseFile> copie = new ArrayList<>();
                                 copie.add(rowItem.generateBaseFile());
-                                MAIN_ACTIVITY1.MOVE_PATH = copie;
+                                MAIN_ACTIVITY1.movePath = copie;
                                 MAIN_ACTIVITY1.supportInvalidateOptionsMenu();
                                 return true;
                             case R.id.ex:
-                                main.MAIN_ACTIVITY.mainActivityHelper.extractFile(new File(rowItem.getDesc()));
+                                main.mainActivity.mainActivityHelper.extractFile(new File(rowItem.getDesc()));
                                 return true;
                             case R.id.book:
-                                    DataUtils.addBook(new String[]{rowItem.getTitle(),rowItem.getDesc()},true);
-                                main.MAIN_ACTIVITY.updateDrawer();
+                                DataUtils.addBook(new String[]{rowItem.getTitle(), rowItem.getDesc()}, true);
+                                main.mainActivity.updateDrawer();
                                 Toast.makeText(main.getActivity(), main.utils.getString(main.getActivity(), R.string.bookmarks_added), Toast.LENGTH_LONG).show();
                                 return true;
 
@@ -694,29 +757,43 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                 });
                 popupMenu.inflate(R.menu.item_extras);
                 String x = rowItem.getDesc().toLowerCase();
-                if(rowItem.isDirectory())popupMenu.getMenu().findItem(R.id.share).setVisible(false);
-                if (x.endsWith(".zip") || x.endsWith(".jar") || x.endsWith(".apk") || x.endsWith(".rar") || x.endsWith(".tar") || x.endsWith(".tar.gz"))
+                if (rowItem.isDirectory()) {
+                    popupMenu.getMenu().findItem(R.id.share).setVisible(false);
+                }
+                if (x.endsWith(".zip") ||
+                    x.endsWith(".jar") ||
+                    x.endsWith(".apk") ||
+                    x.endsWith(".rar") ||
+                    x.endsWith(".tar") ||
+                    x.endsWith(".tar.gz")) {
                     popupMenu.getMenu().findItem(R.id.ex).setVisible(true);
+                }
                 popupMenu.show();
             }
         });
 
     }
     private boolean isPositionHeader(int position) {
-        if(main.IS_LIST)
-            return  (position== items.size());
-        return false;}
+        if(main.isList) {
+            return (position == items.size());
+        }
+        return false;
+    }
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         if(i!=getItemCount()-1) {
             HeaderViewHolder holder=(HeaderViewHolder)viewHolder;
-            if(items.get(i).isDirectory())holder.ext.setText(R.string.directories);
-            else holder.ext.setText(R.string.files);
+            if(items.get(i).isDirectory()) {
+                holder.ext.setText(R.string.directories);
+            }
+            else {
+                holder.ext.setText(R.string.files);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return main.IS_LIST?items.size()+1:items.size();
+        return main.isList?items.size()+1:items.size();
     }
 }

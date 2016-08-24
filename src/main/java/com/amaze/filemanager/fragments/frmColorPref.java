@@ -1,4 +1,4 @@
-package com.amaze.filemanager.fragments.preference_fragments;
+package com.amaze.filemanager.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,7 +32,8 @@ import static com.amaze.filemanager.Constant.*;
 /**
  * Created by Arpit on 21-06-2015.
  */
-public class ColorPref extends PreferenceFragment implements Preference.OnPreferenceClickListener  {
+public class frmColorPref extends PreferenceFragment
+        implements Preference.OnPreferenceClickListener  {
 
     SharedPreferences sharedPref;
     int theme;

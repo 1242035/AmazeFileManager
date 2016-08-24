@@ -45,7 +45,7 @@ import android.widget.ListView;
 import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.filesystem.RootHelper;
-import com.amaze.filemanager.fragments.DbViewerFragment;
+import com.amaze.filemanager.fragments.frmDbViewer;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.stericson.RootTools.RootTools;
@@ -76,7 +76,7 @@ public class DbViewer extends BaseActivity {
         super.onCreate(savedInstanceState);
 
 
-        if (theme1 == 1) {
+        if (baseTheme == 1) {
             setTheme(R.style.appCompatDark);
             getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
         }
@@ -125,7 +125,7 @@ public class DbViewer extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                DbViewerFragment fragment = new DbViewerFragment();
+                frmDbViewer fragment = new frmDbViewer();
                 Bundle bundle = new Bundle();
                 bundle.putString("table", arrayList.get(position));
                 fragment.setArguments(bundle);
@@ -154,7 +154,7 @@ public class DbViewer extends BaseActivity {
                 File file1=getExternalCacheDir();
                 if(file1==null)file1=getCacheDir();
 
-                if (!file.canRead() && rootmode) {
+                if (!file.canRead() && rootMode) {
                     RootTools.copyFile(pathFile.getPath(),new File(file1.getPath(),file.getName()).getPath(), true,false);
                     pathFile=new File(file1.getPath(),file.getName());
                     RootHelper.runAndWait("chmod 777 " + pathFile.getPath(), true);

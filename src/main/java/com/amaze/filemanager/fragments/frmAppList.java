@@ -55,9 +55,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AppsList extends ListFragment {
+public class frmAppList extends ListFragment implements Ifragment{
+    protected long code = 8L;
     Futils utils = new Futils();
-    AppsList app = this;
+    frmAppList app = this;
     AppsAdapter adapter;
 
     public SharedPreferences Sp;
@@ -65,7 +66,7 @@ public class AppsList extends ListFragment {
     ListView vl;
     public IconHolder ic;
     ArrayList<Layoutelements> a = new ArrayList<Layoutelements>();
-    public int theme1;
+    public int baseTheme;
     private MainActivity mainActivity;
     int asc,sortby;
     @Override
@@ -94,9 +95,9 @@ public class AppsList extends ListFragment {
         getSortModes();
         ListView vl = getListView();
         int theme=Integer.parseInt(Sp.getString(Constant.THEME,"0"));
-        theme1 = theme==2 ? PreferenceUtils.hourOfDay() : theme;
+        baseTheme = theme==2 ? PreferenceUtils.hourOfDay() : theme;
         vl.setDivider(null);
-        if(theme1==1) {
+        if(baseTheme==1) {
             getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.holo_dark_background));
         }
         if(savedInstanceState==null) {
@@ -105,7 +106,7 @@ public class AppsList extends ListFragment {
         else{
             c=savedInstanceState.getParcelableArrayList("c");
             a=savedInstanceState.getParcelableArrayList("list");
-            adapter = new AppsAdapter(getActivity(), R.layout.row_layout, a, app, c);
+            adapter = new AppsAdapter( getActivity(), R.layout.row_layout, a, app, c);
             setListAdapter(adapter);
             vl.setSelectionFromTop(savedInstanceState.getInt("index"), savedInstanceState.getInt("top"));
             vl.setSelectionFromTop(savedInstanceState.getInt("index"), savedInstanceState.getInt("top"));
@@ -185,6 +186,11 @@ public class AppsList extends ListFragment {
             b.putInt("index", index);
             b.putInt("top", top);
         }
+    }
+
+    @Override
+    public long getCode() {
+        return code;
     }
 
     class LoadListTask extends AsyncTask<Void, Void, ArrayList<Layoutelements>> {

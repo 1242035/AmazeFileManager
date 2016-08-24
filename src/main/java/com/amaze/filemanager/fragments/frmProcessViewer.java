@@ -52,11 +52,12 @@ import com.amaze.filemanager.services.ZipTask;
 import com.amaze.filemanager.ui.icons.IconUtils;
 import com.amaze.filemanager.utils.DataPackage;
 import com.amaze.filemanager.utils.Futils;
+import com.amaze.filemanager.utils.Resource;
 
 import java.util.ArrayList;
 
-public class ProcessViewer extends Fragment {
-
+public class frmProcessViewer extends Fragment implements Ifragment {
+    protected long code = 5L;
     LinearLayout rootView;
     boolean mBound = false;
     Futils utils = new Futils();
@@ -79,7 +80,7 @@ public class ProcessViewer extends Fragment {
 
 
         mainActivity = (MainActivity) getActivity();
-        if (mainActivity.theme1 == 1)
+        if (mainActivity.baseTheme == 1)
             root.setBackgroundResource((R.color.cardView_background));
         rootView = (LinearLayout) root.findViewById(R.id.second_but);
         //((MainActivity)getActivity()).getSupportActionBar().setTitle(utils.getString(getActivity(),R.string.processes));
@@ -291,10 +292,10 @@ public class ProcessViewer extends Fragment {
                     if (move) {
                         icon = icons.getCutDrawable();
                     }
-                    if (mainActivity.theme1 == 1) {
+                    if (mainActivity.baseTheme == 1) {
 
                         cancel.setImageResource(R.drawable.ic_action_cancel);
-                        root.setCardBackgroundColor(R.color.cardView_foreground);
+                        root.setCardBackgroundColor( Resource.getColor( getContext(), R.color.cardView_foreground) );
                         root.setCardElevation(0f);
                         progressText.setTextColor(Color.WHITE);
                     } else {
@@ -371,9 +372,9 @@ public class ProcessViewer extends Fragment {
                 ImageButton cancel = (ImageButton) root.findViewById(R.id.delete_button);
                 TextView progressText = (TextView) root.findViewById(R.id.progress_text);
 
-                if (mainActivity.theme1 == 1) {
+                if (mainActivity.baseTheme == 1) {
 
-                    root.setCardBackgroundColor(R.color.cardView_foreground);
+                    root.setCardBackgroundColor( Resource.getColor(getContext(), R.color.cardView_foreground) );
                     root.setCardElevation(0f);
                     cancel.setImageResource(R.drawable.ic_action_cancel);
                     progressText.setTextColor(Color.WHITE);
@@ -442,9 +443,9 @@ public class ProcessViewer extends Fragment {
                 ImageButton cancel = (ImageButton) root.findViewById(R.id.delete_button);
                 TextView progressText = (TextView) root.findViewById(R.id.progress_text);
 
-                if (mainActivity.theme1 == 1) {
+                if (mainActivity.baseTheme == 1) {
 
-                    root.setCardBackgroundColor(R.color.cardView_foreground);
+                    root.setCardBackgroundColor( Resource.getColor(getContext(), R.color.cardView_foreground) );
                     root.setCardElevation(0f);
                     cancel.setImageResource(R.drawable.ic_action_cancel);
                     progressText.setTextColor(Color.WHITE);
@@ -485,4 +486,8 @@ public class ProcessViewer extends Fragment {
         }
     }
 
+    @Override
+    public long getCode() {
+        return code;
+    }
 }

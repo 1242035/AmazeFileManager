@@ -106,12 +106,12 @@ import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.filesystem.RootHelper;
-import com.amaze.filemanager.fragments.AppsList;
-import com.amaze.filemanager.fragments.Main;
-import com.amaze.filemanager.fragments.ProcessViewer;
-import com.amaze.filemanager.fragments.SearchAsyncHelper;
-import com.amaze.filemanager.fragments.TabFragment;
-import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.fragments.frgAppsList;
+import com.amaze.filemanager.fragments.frmMain;
+import com.amaze.filemanager.fragments.frmProcessViewer;
+import com.amaze.filemanager.fragments.frmSearchAsyncHelper;
+import com.amaze.filemanager.fragments.frmTab;
+import com.amaze.filemanager.fragments.frmZipViewer;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
@@ -276,23 +276,12 @@ public class MainActivity extends BaseActivity implements
 
         if (!Sp.getBoolean("booksadded", false)) {
             grid.make(DataUtils.BOOKS);
-            Sp.edit().putBoolean("booksadded", true).commit();
+            Sp.edit().putBoolean("booksadded", true).apply();
         }
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
         // initialize g+ api client as per preferences
-        if (Sp.getBoolean("plus_pic", false)) {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Plus.API)
-
-                    .addScope(Plus.SCOPE_PLUS_LOGIN)
-                    .build();
-        }
-
 
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
@@ -859,7 +848,7 @@ public class MainActivity extends BaseActivity implements
             menu.findItem(R.id.extract).setVisible(false);
             invalidatePasteButton(menu.findItem(R.id.paste));
             findViewById(R.id.buttonbarframe).setVisibility(View.VISIBLE);
-        } else if (f.contains("AppsList") || f.contains("ProcessViewer") ||
+        } else if (f.contains("frgAppsList") || f.contains("frgProcessViewer") ||
                 f.contains(FTPServerFragment.class.getName())) {
             appBarLayout.setExpanded(true);
             menu.findItem(R.id.sethome).setVisible(false);
@@ -869,7 +858,7 @@ public class MainActivity extends BaseActivity implements
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
             menu.findItem(R.id.extract).setVisible(false);
-            if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
+            if (f.contains("frgProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
             else {
                 menu.findItem(R.id.dsort).setVisible(false);
                 menu.findItem(R.id.sortby).setVisible(false);
@@ -983,7 +972,7 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.item10:
                 Fragment fragment = getDFragment();
-                if (fragment.getClass().getName().contains("AppsList"))
+                if (fragment.getClass().getName().contains("frgAppsList"))
                     utils.showSortDialog((AppsList) fragment);
 
                 break;

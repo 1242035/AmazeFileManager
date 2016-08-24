@@ -41,8 +41,8 @@ import android.widget.FrameLayout;
 
 import com.amaze.filemanager.Constant;
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.fragments.preference_fragments.ColorPref;
-import com.amaze.filemanager.fragments.preference_fragments.Preffrag;
+import com.amaze.filemanager.fragments.frmColorPref;
+import com.amaze.filemanager.fragments.frmPreference;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -143,11 +143,11 @@ public class Preferences extends BaseActivity  implements ActivityCompat.OnReque
         activity.overridePendingTransition(enter_anim, exit_anim);
         activity.startActivity(activity.getIntent());
     }
-    Preffrag p;
+    frmPreference p;
     public void selectItem(int i){
         switch (i){
             case 0:
-                p=new Preffrag();
+                p=new frmPreference();
                 FragmentTransaction transaction =getFragmentManager().beginTransaction();
                 transaction.replace(R.id.prefs_fragment,p );
                 transaction.commit();
@@ -156,7 +156,7 @@ public class Preferences extends BaseActivity  implements ActivityCompat.OnReque
                 break;
             case 1:
                 FragmentTransaction transaction1 =getFragmentManager().beginTransaction();
-                transaction1.replace(R.id.prefs_fragment, new ColorPref());
+                transaction1.replace(R.id.prefs_fragment, new frmColorPref());
                 transaction1.commit();
                 select=1;
                 getSupportActionBar().setTitle(R.string.color_title);

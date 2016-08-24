@@ -65,9 +65,8 @@ public abstract class FileUtil {
         FileChannel outChannel = null;
         try {
             inStream = new FileInputStream(source);
-
             // First try the normal way
-            if (isWritable(target)) {
+            if ( isWritable(target) ) {
                 // standard way
                 outStream = new FileOutputStream(target);
                 inChannel = inStream.getChannel();
@@ -89,7 +88,6 @@ public abstract class FileUtil {
                 else {
                     return false;
                 }
-
                 if (outStream != null) {
                     // Both for SAF and for Kitkat, write to output stream.
                     byte[] buffer = new byte[16384]; // MAGIC_NUMBER
@@ -102,8 +100,7 @@ public abstract class FileUtil {
             }
         }
         catch (Exception e) {
-            Log.e("AmazeFileUtils",
-                    "Error when copying file from " + source.getAbsolutePath() + " to " + target.getAbsolutePath(), e);
+            e.printStackTrace();
             return false;
         }
         finally {
@@ -152,19 +149,15 @@ public abstract class FileUtil {
                 }
                 else if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
                     // Workaround for Kitkat ext SD card
-                return MediaStoreHack.getOutputStream(context,target.getPath());
+                    return MediaStoreHack.getOutputStream(context,target.getPath());
                 }
-
-
-
             }
         }
         catch (Exception e) {
-            Log.e("AmazeFileUtils",
-                    "Error when copying file from " +  target.getAbsolutePath(), e);
+           e.printStackTrace();
         }
-      return outStream;
-        }
+        return outStream;
+    }
     /**
      * Delete a file. May be even on external SD card.
      *
@@ -174,14 +167,15 @@ public abstract class FileUtil {
      */
     public static final boolean deleteFile(@NonNull final File file,Context context) {
         // First try the normal deletion.
-        if(file==null) return true;
-        boolean fileDelete = deleteFilesInFolder(file, context);
-        if (file.delete() || fileDelete)
+        if(file==null) {
             return true;
-
+        }
+        boolean fileDelete = deleteFilesInFolder(file, context);
+        if (file.delete() || fileDelete) {
+            return true;
+        }
         // Try with Storage Access Framework.
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP && FileUtil.isOnExtSdCard(file, context)) {
-
             DocumentFile document = getDocumentFile(file, false,context);
             return document.delete();
         }
@@ -196,11 +190,11 @@ public abstract class FileUtil {
                 return !file.exists();
             }
             catch (Exception e) {
-                Log.e("AmazeFileUtils", "Error when deleting file " + file.getAbsolutePath(), e);
+               // Log.e("AmazeFileUtils", "Error when deleting file " + file.getAbsolutePath(), e);
+                e.printStackTrace();
                 return false;
             }
         }
-
         return !file.exists();
     }
 
@@ -233,7 +227,7 @@ public abstract class FileUtil {
         }
 
         // Try the manual way, moving files individually.
-        if (!mkdir(target,context)) {
+        if (! mkdir(target,context) ) {
             return false;
         }
 
@@ -282,8 +276,9 @@ public abstract class FileUtil {
      * @return True if creation was successful.
      */
     public static boolean mkdir(final File file,Context context) {
-        if(file==null)
+        if(file==null) {
             return false;
+        }
         if (file.exists()) {
             // nothing to create.
             return file.isDirectory();
@@ -300,21 +295,20 @@ public abstract class FileUtil {
             // getDocumentFile implicitly creates the directory.
             return document.exists();
         }
-
         // Try the Kitkat workaround.
         if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
             try {
-            return    MediaStoreHack.mkdir(context,file);
+                return  MediaStoreHack.mkdir(context,file);
             } catch (IOException e) {
                 return false;
             }
         }
-
         return false;
     }
     public static boolean mkfile(final File file,Context context) throws IOException {
-        if(file==null)
+        if(file==null) {
             return false;
+        }
         if (file.exists()) {
             // nothing to create.
             return !file.isDirectory();
@@ -334,7 +328,7 @@ public abstract class FileUtil {
             DocumentFile document = getDocumentFile(file.getParentFile(), true,context);
             // getDocumentFile implicitly creates the directory.
             try {
-                b=document.createFile(MimeTypes.getMimeType(file),file.getName())!=null;
+                b= ( document.createFile(MimeTypes.getMimeType(file),file.getName())!=null );
                 return b;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -344,7 +338,7 @@ public abstract class FileUtil {
 
         if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
             try {
-                return    MediaStoreHack.mkfile(context, file);
+                return  MediaStoreHack.mkfile(context, file);
             } catch (Exception e) {
                 return false;
             }
@@ -359,20 +353,25 @@ public abstract class FileUtil {
      *
      * @return true if successful.
      */
-    public static boolean rmdir1(final File file,Context context){
-        if(file==null)
+    public static boolean removeDirectoryRecursive(final File file,Context context){
+        if(file==null) {
             return false;
+        }
         boolean b = true;
-        for (File file1 : file.listFiles()) {
-            if (file1.isDirectory()) {
-                if (!rmdir1(file1, context)) b = false;
+        for (File fileItem : file.listFiles()) {
+            if (fileItem.isDirectory()) {
+                if (! removeDirectoryRecursive(fileItem, context)) {
+                    b = false;
+                }
             } else {
-                if (!deleteFile(file1, context)) b = false;
+                if (!deleteFile(fileItem, context)) {
+                    b = false;
+                }
             }
         }
         return b;
     }
-    public static boolean rmdir(final File file,Context context) {
+    public static boolean removeDirectory(final File file,Context context) {
         if(file==null)
             return false;
         if (!file.exists()) {
@@ -384,7 +383,7 @@ public abstract class FileUtil {
         String[] fileList = file.list();
         if (fileList != null && fileList.length > 0) {
             //  empty the folder.
-               rmdir1(file,context);
+            removeDirectoryRecursive(file,context);
         }
         String[] fileList1 = file.list();
         if (fileList1 != null && fileList1.length > 0) {
@@ -426,19 +425,21 @@ public abstract class FileUtil {
      */
     public static final boolean deleteFilesInFolder(final File folder,Context context) {
         boolean totalSuccess = true;
-        if(folder==null)
+        if(folder==null) {
             return false;
+        }
         if (folder.isDirectory()) {
             for (File child : folder.listFiles()) {
                 deleteFilesInFolder(child, context);
             }
-
-            if (!folder.delete())
+            if (!folder.delete()) {
                 totalSuccess = false;
-        } else {
-
-            if (!folder.delete())
+            }
+        }
+        else {
+            if (!folder.delete()) {
                 totalSuccess = false;
+            }
         }
         return totalSuccess;
     }
@@ -454,13 +455,14 @@ public abstract class FileUtil {
      *            Commands to be executed after success.
      */
     public static void rmdirAsynchronously(final Activity activity, final File file, final Runnable postActions, final Context context) {
-        if(file==null)
+        if(file==null) {
             return;
+        }
         new Thread() {
             @Override
             public void run() {
                 int retryCounter = 5; // MAGIC_NUMBER
-                while (!FileUtil.rmdir(file,context) && retryCounter > 0) {
+                while (!FileUtil.removeDirectory(file,context) && retryCounter > 0) {
                     try {
                         Thread.sleep(100); // MAGIC_NUMBER
                     }
@@ -469,14 +471,9 @@ public abstract class FileUtil {
                     }
                     retryCounter--;
                 }
-                if (file.exists()) {
-           /*         DialogUtil.displayError(activity, R.string.message_dialog_failed_to_delete_folder, false,
-                            file.getAbsolutePath());
-           */     }
-                else {
+                if ( ! file.exists()) {
                     activity.runOnUiThread(postActions);
                 }
-
             }
         }.start();
     }
@@ -489,8 +486,9 @@ public abstract class FileUtil {
      * @return true if the file is writable.
      */
     public static final boolean isWritable(final File file) {
-        if(file==null)
+        if(file==null) {
             return false;
+        }
         boolean isExisting = file.exists();
 
         try {
@@ -499,10 +497,11 @@ public abstract class FileUtil {
                 output.close();
             }
             catch (IOException e) {
-                // do nothing.
+                e.printStackTrace();
             }
         }
         catch (FileNotFoundException e) {
+            e.printStackTrace();
             return false;
         }
         boolean result = file.canWrite();
@@ -537,10 +536,9 @@ public abstract class FileUtil {
         int i = 0;
         File file;
         do {
-            String fileName = "AugendiagnoseDummyFile" + (++i);
+            String fileName = "dummy" + (++i);
             file = new File(folder, fileName);
-        }
-        while (file.exists());
+        } while (file.exists());
 
         // First check regular writability
         if (isWritable(file)) {
@@ -583,12 +581,15 @@ public abstract class FileUtil {
                     }
                     catch (IOException e) {
                         // Keep non-canonical path.
+                        e.printStackTrace();
                     }
                     paths.add(path);
                 }
             }
         }
-        if(paths.isEmpty())paths.add("/storage/sdcard1");
+        if( paths.isEmpty() ) {
+            paths.add("/storage/sdcard1");
+        }
         return paths.toArray(new String[0]);
     }
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -612,7 +613,9 @@ public abstract class FileUtil {
                 }
             }
         }
-        if(paths.isEmpty())paths.add("/storage/sdcard1");
+        if(paths.isEmpty()) {
+            paths.add("/storage/sdcard1");
+        }
         return paths.toArray(new String[0]);
     }
     /**
@@ -671,9 +674,12 @@ public abstract class FileUtil {
         String relativePath = null;
         try {
             String fullPath = file.getCanonicalPath();
-            if(!baseFolder.equals(fullPath))
-            relativePath = fullPath.substring(baseFolder.length() + 1);
-            else originalDirectory=true;
+            if(!baseFolder.equals(fullPath)) {
+                relativePath = fullPath.substring(baseFolder.length() + 1);
+            }
+            else {
+                originalDirectory=true;
+            }
         }
         catch (IOException e) {
             return null;
@@ -685,14 +691,18 @@ public abstract class FileUtil {
         String as=PreferenceManager.getDefaultSharedPreferences(context).getString("URI",null);
 
         Uri treeUri =null;
-        if(as!=null)treeUri=Uri.parse(as);
+        if( as!=null ) {
+            treeUri=Uri.parse(as);
+        }
         if (treeUri == null) {
             return null;
         }
 
         // start with root of SD card and then parse through document tree.
         DocumentFile document = DocumentFile.fromTreeUri(context, treeUri);
-        if(originalDirectory)return document;
+        if( originalDirectory ) {
+            return document;
+        }
         String[] parts = relativePath.split("\\/");
         for (int i = 0; i < parts.length; i++) {
             DocumentFile nextDocument = document.findFile(parts[i]);
@@ -780,7 +790,8 @@ public abstract class FileUtil {
 
         }
         catch (IOException e) {
-            Log.e("AmazeFileUtils", "Could not copy dummy files.", e);
+            //Log.e("AmazeFileUtils", "Could not copy dummy files.", e);
+            e.printStackTrace();
             return null;
         }
     }

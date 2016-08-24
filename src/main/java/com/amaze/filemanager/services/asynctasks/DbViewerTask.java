@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.webkit.WebView;
 
-import com.amaze.filemanager.fragments.DbViewerFragment;
+import com.amaze.filemanager.fragments.frmDbViewer;
 
 import java.util.ArrayList;
 
@@ -17,12 +17,12 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
     Cursor schemaCursor, contentCursor;
     ArrayList<String> schemaList;
     ArrayList<String[]> contentList;
-    DbViewerFragment dbViewerFragment;
+    frmDbViewer dbViewerFragment;
     StringBuilder stringBuilder;
     WebView webView;
     String htmlInit;
 
-    public DbViewerTask (Cursor schemaCursor, Cursor contentCursor, WebView webView, DbViewerFragment dbViewerFragment) {
+    public DbViewerTask (Cursor schemaCursor, Cursor contentCursor, WebView webView, frmDbViewer dbViewerFragment) {
         this.schemaCursor = schemaCursor;
         this.contentCursor = contentCursor;
         this.webView = webView;
@@ -34,12 +34,10 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        if (dbViewerFragment.dbViewer.theme1==1) {
-
+        if (dbViewerFragment.dbViewer.baseTheme == 1 ) {
             htmlInit = "<html><body>" +
                     "<table border='1' style='width:100%;color:#ffffff'>";
         } else {
-
             htmlInit = "<html><body>" +
                     "<table border='1' style='width:100%;color:#000000'>";
         }
@@ -50,7 +48,6 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-
         dbViewerFragment.loadingText.setText(values[0] + " records loaded");
     }
 

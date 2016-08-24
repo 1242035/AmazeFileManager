@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.amaze.filemanager.fragments.preference_fragments;
+package com.amaze.filemanager.fragments;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -36,7 +36,7 @@ import com.amaze.filemanager.ui.views.CheckBx;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.stericson.RootTools.RootTools;
 
-public class Preffrag extends PreferenceFragment{
+public class frmPreference extends PreferenceFragment{
 
     private static final CharSequence PREFERENCE_KEY_ABOUT = Constant.ABOUT;
 

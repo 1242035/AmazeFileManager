@@ -28,4 +28,7 @@
     <dimen name="material_generic_title">16sp</dimen>
     <dimen name="material_generic_title_summary">12sp</dimen>
     <dimen name="material_generic_list_item">72dp</dimen>
+    <dimen name="drawer_header_height_with_padding">100dp</dimen>
+    <dimen name="drawer_header_height">10dp</dimen>
+
 </resources>
